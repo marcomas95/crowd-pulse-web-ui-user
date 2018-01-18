@@ -1,0 +1,99 @@
+<div ngClass.gt-sm="main-content-page" fxLayout.xs="column" fxLayout.sm="column" fxLayout="row" fxLayoutWrap>
+
+  <div fxFlex.lt-md="35" fxFlex.lt-sm="100" fxFlex="20" fxLayout="column">
+
+    <!-- select visualization -->
+    <mat-card class="filter-card">
+      <h3>Custom</h3>
+      <mat-form-field class="filter-container">
+        <mat-select [(ngModel)]="selected.visualization" (ngModelChange)="clearFilter()" placeholder="Visualization">
+          <mat-option><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp; None</mat-option>
+          <mat-option *ngFor="let vis of visualizations" [value]="vis">
+            {{ vis.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="selected.visualization && selected.visualization.types.length > 1"
+                      class="filter-container">
+        <mat-select [(ngModel)]="selected.type" (ngModelChange)="updateChart()" placeholder="Type">
+          <mat-option *ngFor="let type of selected.visualization.types" [value]="type">
+            {{ type.name | uppercase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </mat-card>
+
+    <!-- filters -->
+    <div fxFlex.lt-md="35" fxFlex.lt-sm="100" fxFlex="20" *ngIf="selected.visualization && selected.type">
+      <mat-card class="filter-card" *ngFor="let filter of selected.type.filters">
+
+        <!-- filter by date -->
+        <div *ngIf="filter == filters.filterDate">
+          <h3>{{filter}}</h3>
+          <mat-form-field class="filter-container">
+            <input matInput [matDatepicker]="fromDate" placeholder="From Date" (ngModelChange)="updateChart()">
+            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+            <mat-datepicker #fromDate></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="filter-container">
+            <input matInput [matDatepicker]="toDate" placeholder="To Date" (ngModelChange)="updateChart()">
+            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+            <mat-datepicker #toDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- filter by category -->
+        <div *ngIf="filter == filters.filterCategory" class="filter-container">
+          <mat-checkbox (ngModelChange)="updateChart()">{{filter}}</mat-checkbox>
+        </div>
+
+        <!-- filter by range map -->
+        <div *ngIf="filter == filters.filterCoordinate">
+          <h3>{{filter}}</h3>
+          <mat-form-field class="filter-container">
+            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Latitude">
+          </mat-form-field>
+          <mat-form-field class="filter-container">
+            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Longitude">
+          </mat-form-field>
+          <mat-form-field class="filter-container">
+            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Radius">
+          </mat-form-field>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- charts -->
+  <div fxFlex.lt-md="65" fxFlex.lt-sm="100" fxFlex="80">
+    <mat-card *ngIf="!selected.visualization && defaultCharts.length == 0 && chartsLoading"
+              fxLayoutAlign="center" class="stats-card">
+      <mat-spinner></mat-spinner>
+    </mat-card>
+
+    <!-- custom chart -->
+    <mat-card *ngIf="selected.visualization && customChart" class="stats-card">
+      <h2>{{selected.visualization.name}}</h2>
+      <div [chart]="customChart"></div>
+    </mat-card>
+
+    <!-- default charts -->
+    <div *ngIf="!selected.visualization && defaultCharts.length > 0; else noCharts"
+         fxLayout.xs="column" fxLayout.sm="column" fxLayout="row" fxLayoutWrap>
+      <mat-card *ngFor="let chartInfo of defaultCharts" fxFlex="45" class="stats-card">
+        <h2>{{ chartInfo.name }}</h2>
+        <div [chart]="chartInfo.chart"></div>
+      </mat-card>
+    </div>
+
+    <!-- no charts -->
+    <ng-template #noCharts>
+      <mat-card *ngIf="!customChart && !chartsLoading" class="stats-card">
+        <p>No visualization selected!</p>
+      </mat-card>
+    </ng-template>
+  </div>
+
+</div>

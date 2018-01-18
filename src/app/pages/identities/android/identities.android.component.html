@@ -1,0 +1,99 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="page-title-header">
+  <i class="fa fa-android fa-4x" aria-hidden="true"></i>
+</div>
+
+<div class="main-content-page">
+
+  <div *ngIf="user && user.identities && user.identities.devices && user.identities.devices.length > 0; else noDevice">
+    <div fxLayout="column">
+      <h2>Android devices</h2>
+      <mat-input-container>
+        <mat-select [(ngModel)]="selectedDeviceId" (ngModelChange)="onDeviceIdSelected()"
+                    placeholder="Please select a device">
+          <mat-option *ngFor="let device of user.identities.devices" [value]="device.deviceId">
+            {{ device.brand }} - {{ device.model }} - ID: {{ device.deviceId }}
+          </mat-option>
+        </mat-select>
+      </mat-input-container>
+    </div>
+
+    <div *ngIf="selectedDeviceId && loginSuccess">
+      <div fxLayout="column" *ngIf="user.identities.configs.devicesConfig && selectedDeviceConfig">
+
+        <mat-card class="device-config-card" *ngFor="let config of selectedDeviceConfig">
+          <h2>
+            {{config.id}}
+          </h2>
+          <mat-card-content fxLayout fxLayout.lt-md="column" fxLayoutWrap fxLayoutAlign="space-around center">
+
+            <div fxFlex="10" fxLayout="column">
+              <mat-slide-toggle [(ngModel)]="config.read"
+                                (change)="onSlideToggle(config)"
+                                aria-label="{{config.id}}">
+                Read
+              </mat-slide-toggle>
+
+              <mat-slide-toggle [(ngModel)]="config.share"
+                                (change)="onSlideToggle(config)"
+                                aria-label="{{config.id}}">
+                Share
+              </mat-slide-toggle>
+            </div>
+
+            <mat-slider fxFlex="65" fxFlex.lt-md="100" *ngIf="config.sliderOptions"
+                        [(ngModel)]="config.time"
+                        [thumb-label]="true"
+                        [disabled]="!config.read"
+                        [step]="1"
+                        [max]="config.sliderOptions.valueAllowed[config.sliderOptions.valueAllowed.length - 1]"
+                        [min]="config.sliderOptions.valueAllowed[0]"
+                        (ngModelChange)="onSliderMoved(config)">
+            </mat-slider>
+
+            <mat-slider fxFlex="65" *ngIf="!config.sliderOptions"
+                        [tick-interval]="'auto'"
+                        [disabled]="true">
+            </mat-slider>
+
+            <div fxFlex="15" fxLayoutAlign="center center">
+              <div *ngIf="config.sliderOptions && config.read">
+                get {{config.id}} data every {{config.time}} {{config.sliderOptions.format}}
+              </div>
+              <div *ngIf="!config.sliderOptions && config.read">
+                get {{config.id}} data
+              </div>
+              <div *ngIf="!config.read">
+                don't get {{config.id}} data
+              </div>
+            </div>
+
+            <div fxFlex="5" fxLayoutAlign="end center" fxLayoutAlign.lt-md="center center">
+              <mat-icon (click)="openInfoDialog(config.info)">info_outline</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- save configuration button-->
+      <button mat-raised-button color="primary" (click)="sendConfiguration()">Save</button>
+
+      <!-- get data button -->
+      <button mat-raised-button color="primary" (click)="getDataFromDevice()">
+        <mat-icon aria-label="get_data">get_app</mat-icon>
+        Get Data from this Device
+      </button>
+
+      <div *ngIf="!selectedDeviceConfig || selectedDeviceConfig == ''">
+        <p>Error! No configuration stored for this device.</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noDevice>
+    <h2>No linked device</h2>
+    <p>Linking your devices with App.</p>
+    <button mat-raised-button color="primary">Download the App.</button>
+  </ng-template>
+
+</div>
+

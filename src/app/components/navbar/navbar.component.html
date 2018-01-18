@@ -1,0 +1,32 @@
+<mat-toolbar color="primary" class="mat-elevation-z6 app-navbar">
+
+
+  <span><img fxLayout fxLayoutAlign="center center" src="../../../assets/images/logo-youware-140x56.png"></span>
+  <!--
+  <span>{{appName}}</span>
+  -->
+  <span class="spacer"></span>
+  <div fxLayout.gt-xs="row">
+
+    <div fxHide.lt-sm="row">
+      <a *ngFor="let item of navbarItems" mat-button [routerLink]="item.path" routerLinkActive #rla="routerLinkActive">
+        {{item.name}}
+      </a>
+      <a mat-button (click)="logout()">Logout</a>
+    </div>
+
+    <!-- menu visible on mobile devices -->
+    <div fxShow="false" fxShow.lt-sm="column">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu fxLayout="column" #menu="matMenu">
+        <button mat-menu-item *ngFor="let item of navbarItems" (click)="router.navigateByUrl(item.path)">{{item.name}}</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>
+
+  </div>
+</mat-toolbar>
+
+
