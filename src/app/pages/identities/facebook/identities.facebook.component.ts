@@ -4,7 +4,9 @@ import {isNullOrUndefined} from 'util';
 import {ToastrService} from 'ngx-toastr';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
-import {MatTableDataSource} from '@angular/material';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+import {ConfirmDialogComponent} from '../../../components/confirm-dialog/confirm-dialog.component';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   styleUrls: ['./identities.facebook.component.scss'],
@@ -44,6 +46,7 @@ export class IdentitiesFacebookComponent implements OnInit {
     private toast: ToastrService,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   /**
@@ -174,11 +177,21 @@ export class IdentitiesFacebookComponent implements OnInit {
    * Delete Facebook information account, including posts and likes.
    */
   deleteAccount() {
-    this.facebookService.deleteAccount().subscribe((res) => {
-      if (res.auth) {
-        this.user.identities.facebook = null;
-      } else {
-        this.toast.error('Something went wrong.');
+    const dialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        infoText: 'Are you sure? All data related to your Facebook account will be deleted from ' + environment.appName
+      }
+    });
+
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.facebookService.deleteAccount().subscribe((res) => {
+          if (res.auth) {
+            this.user.identities.facebook = null;
+          } else {
+            this.toast.error('Something went wrong.');
+          }
+        });
       }
     });
   }

@@ -14,6 +14,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartModule } from 'angular-highcharts';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +22,14 @@ import { AppRoutingModule } from '../app-routing.module';
     NavbarComponent,
     SignupComponent,
     InfoDialogComponent,
+    ConfirmDialogComponent,
   ],
   exports: [
     LoginComponent,
     NavbarComponent,
     SignupComponent,
     InfoDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -47,6 +50,7 @@ import { AppRoutingModule } from '../app-routing.module';
   ],
   entryComponents: [
     InfoDialogComponent,
+    ConfirmDialogComponent,
   ],
   providers: [
     AuthService,

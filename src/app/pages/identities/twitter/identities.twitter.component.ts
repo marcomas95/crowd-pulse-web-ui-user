@@ -4,7 +4,9 @@ import {ToastrService} from 'ngx-toastr';
 import {isNullOrUndefined} from 'util';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
-import {MatTableDataSource} from '@angular/material';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+import {environment} from '../../../../environments/environment';
+import {ConfirmDialogComponent} from '../../../components/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -41,6 +43,7 @@ export class IdentitiesTwitterComponent implements OnInit {
     private toast: ToastrService,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   /**
@@ -150,13 +153,24 @@ export class IdentitiesTwitterComponent implements OnInit {
    * Delete Twitter information account, including tweets.
    */
   deleteAccount() {
-    this.twitterService.deleteAccount().subscribe((res) => {
-      if (res.auth) {
-        this.user.identities.twitter = null;
-      } else {
-        this.toast.error('Something went wrong.');
+    const dialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        infoText: 'Are you sure? All data related to your Twitter account will be deleted from ' + environment.appName
       }
     });
+
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.twitterService.deleteAccount().subscribe((res) => {
+          if (res.auth) {
+            this.user.identities.twitter = null;
+          } else {
+            this.toast.error('Something went wrong.');
+          }
+        });
+      }
+    });
+
   }
 
   /**
