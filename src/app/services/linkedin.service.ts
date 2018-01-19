@@ -6,16 +6,23 @@ import {Observable} from 'rxjs/Observable';
 const API_LOGIN_DIALOG = 'api/linkedin/login_dialog';
 const API_REQUEST_TOKEN = 'api/linkedin/request_token';
 const API_USER_PROFILE = 'api/linkedin/profile';
+const API_DELETE_ACCOUNT = 'api/linkedin/delete';
+
+const FIVE_MINUTES_MILLIS = 5 * 60 * 1000;
 
 @Injectable()
 export class LinkedinService {
 
   private url: string;
 
+  // timeout variables
+  private lastUpdateProfile: number;
+
   constructor(
     private http: HttpClient,
   ) {
     this.url = environment.api;
+    this.lastUpdateProfile = Date.now() - FIVE_MINUTES_MILLIS;
   }
 
   /**
@@ -44,14 +51,24 @@ export class LinkedinService {
 
   /**
    * Get user profile information.
-   * @param accessToken: the access token
    * @return{Observable<Object>}: LinkedIn user profile information
    */
-  userProfile(accessToken: string): Observable<any> {
-    const postParams = {
-      accessToken: accessToken,
-    };
-    return this.http.post(this.url + API_USER_PROFILE, postParams);
+  userProfile(): Observable<any> {
+
+    // timeout
+    if (Date.now() - this.lastUpdateProfile >= FIVE_MINUTES_MILLIS) {
+      this.lastUpdateProfile = Date.now();
+      return this.http.get(this.url + API_USER_PROFILE);
+    } else {
+      return Observable.of(false);
+    }
   }
 
+  /**
+   * Delete user LinkedIn account.
+   * @return {Observable<Object>}
+   */
+  deleteAccount(): Observable<any> {
+    return this.http.delete(`${this.url}${API_DELETE_ACCOUNT}`);
+  }
 }

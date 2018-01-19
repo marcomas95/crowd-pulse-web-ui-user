@@ -2,9 +2,49 @@
   <i class="fa fa-linkedin fa-4x" aria-hidden="true"></i>
 </div>
 
-<div class="main-content-page">
-  <h2>No associated account</h2>
-  <p>Associating account you let the application to read basic information from LinkedIn.</p>
-  <button mat-raised-button (click)="associate()" color="primary">Associate Account</button>
+<div class="main-content-page" fxLayout="row" fxLayoutAlign="center center" *ngIf="loading; else content">
+  <mat-spinner></mat-spinner>
 </div>
 
+<ng-template #content>
+  <div class="main-content-page"  *ngIf="!user || !user.identities || !user.identities.linkedIn; else linkedInData">
+    <h2>No associated account</h2>
+    <p>Associating account you let the application to read basic information from LinkedIn.</p>
+    <button mat-raised-button (click)="associate()" color="primary">Associate Account</button>
+  </div>
+
+  <ng-template #linkedInData>
+    <div ngClass.gt-sm="main-content-page">
+      <h1 fxHide.lt-sm>LinkedIn Account</h1>
+
+      <div class="linkedIn-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
+        <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
+      </div>
+
+      <mat-card class="linkedIn-card">
+        <mat-card-title>Profile Data</mat-card-title>
+        <mat-table #table [dataSource]="dataSource">
+          <ng-container matColumnDef="dataName">
+            <mat-header-cell *cdkHeaderCellDef> Data </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.dataName | uppercase }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="dataValue">
+            <mat-header-cell *cdkHeaderCellDef> Value </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.dataValue }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <br>
+        <button mat-raised-button color="primary" (click)="updateProfile(true)">
+          <mat-icon aria-label="get_data">cached</mat-icon>
+          Update Profile
+        </button>
+      </mat-card>
+    </div>
+  </ng-template>
+
+</ng-template>
