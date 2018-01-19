@@ -2,12 +2,12 @@
   <i class="fa fa-android fa-4x" aria-hidden="true"></i>
 </div>
 
-<div class="main-content-page">
+<div ngClass.gt-sm="main-content-page">
 
   <div *ngIf="user && user.identities && user.identities.devices && user.identities.devices.length > 0; else noDevice">
     <div fxLayout="column">
-      <h2>Android devices</h2>
-      <mat-input-container>
+      <h2 fxHide.lt-md>Android devices</h2>
+      <mat-input-container ngClass.lt-md="device-select">
         <mat-select [(ngModel)]="selectedDeviceId" (ngModelChange)="onDeviceIdSelected()"
                     placeholder="Please select a device">
           <mat-option *ngFor="let device of user.identities.devices" [value]="device.deviceId">
@@ -24,9 +24,9 @@
           <h2>
             {{config.id}}
           </h2>
-          <mat-card-content fxLayout fxLayout.lt-md="column" fxLayoutWrap fxLayoutAlign="space-around center">
+          <mat-card-content fxLayout fxLayoutWrap fxLayoutAlign="space-around center">
 
-            <div fxFlex="10" fxLayout="column">
+            <div fxFlex="10" fxFlex.lt-md="100" fxLayout="column">
               <mat-slide-toggle [(ngModel)]="config.read"
                                 (change)="onSlideToggle(config)"
                                 aria-label="{{config.id}}">
@@ -50,12 +50,12 @@
                         (ngModelChange)="onSliderMoved(config)">
             </mat-slider>
 
-            <mat-slider fxFlex="65" *ngIf="!config.sliderOptions"
+            <mat-slider fxFlex="65" fxFlex.lt-md="100" *ngIf="!config.sliderOptions"
                         [tick-interval]="'auto'"
                         [disabled]="true">
             </mat-slider>
 
-            <div fxFlex="15" fxLayoutAlign="center center">
+            <div fxFlex="15" fxFlex.lt-md="100" fxLayoutAlign="center center">
               <div *ngIf="config.sliderOptions && config.read">
                 get {{config.id}} data every {{config.time}} {{config.sliderOptions.format}}
               </div>
@@ -67,21 +67,20 @@
               </div>
             </div>
 
-            <div fxFlex="5" fxLayoutAlign="end center" fxLayoutAlign.lt-md="center center">
+            <div fxFlex="5" fxFlex.lt-md="100" fxLayoutAlign="end center" fxLayoutAlign.lt-md="center center">
               <mat-icon (click)="openInfoDialog(config.info)">info_outline</mat-icon>
             </div>
           </mat-card-content>
         </mat-card>
       </div>
 
-      <!-- save configuration button-->
-      <button mat-raised-button color="primary" (click)="sendConfiguration()">Save</button>
-
-      <!-- get data button -->
-      <button mat-raised-button color="primary" (click)="getDataFromDevice()">
-        <mat-icon aria-label="get_data">get_app</mat-icon>
-        Get Data from this Device
-      </button>
+      <div fxLayout.lt-md="column">
+        <button class="actions-button" fxFlex="20" fxFlex.lt-md="90" mat-raised-button color="primary" (click)="sendConfiguration()">Save</button>
+        <button class="actions-button" fxFlex="40" fxFlex.lt-md="90" mat-raised-button color="primary" (click)="getDataFromDevice()">
+          <mat-icon aria-label="get_data">get_app</mat-icon>
+          Get Data from this Device
+        </button>
+      </div>
 
       <div *ngIf="!selectedDeviceConfig || selectedDeviceConfig == ''">
         <p>Error! No configuration stored for this device.</p>

@@ -8,6 +8,7 @@ import {MatDialog, MatTableDataSource} from '@angular/material';
 import {environment} from '../../../../environments/environment';
 import {ConfirmDialogComponent} from '../../../components/confirm-dialog/confirm-dialog.component';
 
+const DELAY_TIMEOUT = 3500; // milliseconds
 
 @Component({
   styleUrls: ['./identities.twitter.component.scss'],
@@ -24,6 +25,11 @@ export class IdentitiesTwitterComponent implements OnInit {
    * True if something is loading.
    */
   loading = true;
+
+  /**
+   * True if tweets are loading.
+   */
+  loadingTweets = false;
 
   /**
    * Tweets array.
@@ -131,22 +137,28 @@ export class IdentitiesTwitterComponent implements OnInit {
    * @param showToast: if you want to show the toast messages
    */
   updateTweets(messagesToRead?: Number, showToast?: boolean) {
-    this.twitterService.timeline(messagesToRead).subscribe((res) => {
-      if (res) {
-        if (showToast) {
-          this.toast.success('Tweets Updated');
+    this.loadingTweets = true;
+    this.twitterService.timeline(messagesToRead).subscribe(
+      (res) => {
+        this.loadingTweets = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Tweets Updated');
+          }
+          if (res.messages && res.messages.length > 0) {
+            this.tweets = res.messages;
+          } else if (!messagesToRead) {
+            this.loadingTweets = true;
+            setTimeout(() => this.updateTweets(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        if (res.messages && res.messages.length > 0) {
-          this.tweets = res.messages;
-        } else if (!messagesToRead) {
-          this.updateTweets(10);
-        }
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      }, (err) => {
+        this.loadingTweets = false;
+      });
   }
 
   /**

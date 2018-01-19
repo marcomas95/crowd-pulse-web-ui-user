@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {APP_ROUTES} from '../../app-routes';
 import {Router} from '@angular/router';
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   styleUrls: ['./identities.component.scss'],
@@ -27,7 +27,7 @@ export class IdentitiesComponent implements OnInit {
   /**
    * User image.
    */
-  userImage: string;
+  userImage = './../../../../assets/images/user-image.png';
 
   /**
    * Current logged user.

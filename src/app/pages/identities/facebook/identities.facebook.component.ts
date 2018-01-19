@@ -8,6 +8,8 @@ import {MatDialog, MatTableDataSource} from '@angular/material';
 import {ConfirmDialogComponent} from '../../../components/confirm-dialog/confirm-dialog.component';
 import {environment} from '../../../../environments/environment';
 
+const DELAY_TIMEOUT = 3500; // milliseconds
+
 @Component({
   styleUrls: ['./identities.facebook.component.scss'],
   templateUrl: './identities.facebook.component.html',
@@ -23,6 +25,16 @@ export class IdentitiesFacebookComponent implements OnInit {
    * True if something is loading.
    */
   loading = true;
+
+  /**
+   * True if posts are loading.
+   */
+  loadingPosts = false;
+
+  /**
+   * True if likes are loading.
+   */
+  loadingLikes = false;
 
   /**
    * Posts array.
@@ -131,22 +143,29 @@ export class IdentitiesFacebookComponent implements OnInit {
    * @param showToast: if you want to show the toast messages
    */
   updatePosts(messagesToRead?: number, showToast?: boolean) {
-    this.facebookService.userPosts(messagesToRead).subscribe((res) => {
-      if (res) {
-        if (showToast) {
-          this.toast.success('Posts Updated');
+    this.loadingPosts = true;
+    this.facebookService.userPosts(messagesToRead).subscribe(
+      (res) => {
+        this.loadingPosts = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Posts Updated');
+          }
+          if (res.messages && res.messages.length > 0) {
+            this.posts = res.messages;
+          } else if (!messagesToRead) {
+            this.loadingPosts = true;
+            setTimeout(() => this.updatePosts(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        if (res.messages && res.messages.length > 0) {
-          this.posts = res.messages;
-        } else if (!messagesToRead) {
-          this.updatePosts(10);
-        }
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingPosts = false;
+      });
   }
 
   /**
@@ -155,22 +174,29 @@ export class IdentitiesFacebookComponent implements OnInit {
    * @param showToast: if you want to show the toast messages
    */
   updateLikes(likesToRead?: number, showToast?: boolean) {
-    this.facebookService.likes(likesToRead).subscribe((res) => {
-      if (res) {
-        if (showToast) {
-          this.toast.success('Likes Updated');
+    this.loadingLikes = true;
+    this.facebookService.likes(likesToRead).subscribe(
+      (res) => {
+        this.loadingLikes = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Likes Updated');
+          }
+          if (res.likes && res.likes.length > 0) {
+            this.likes = res.likes;
+          } else if (!likesToRead) {
+            this.loadingLikes = true;
+            setTimeout(() => this.updateLikes(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        if (res.likes && res.likes.length > 0) {
-          this.likes = res.likes;
-        } else if (!likesToRead) {
-          this.updateLikes(10);
-        }
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingLikes = false;
+      });
   }
 
   /**

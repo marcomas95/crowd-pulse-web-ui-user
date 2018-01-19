@@ -7,7 +7,8 @@
     <mat-nav-list>
 
       <div fxLayout="row" fxLayoutAlign="center center">
-        <img fxFlex [routerLink]="appRoutes.identities.root" class="user-image" src="{{userImage}}">
+        <img fxFlex [routerLink]="appRoutes.identities.root" class="user-image" ngClass.lt-sm="user-image-small"
+             src="{{userImage}}">
       </div>
 
       <nav>
@@ -59,14 +60,14 @@
         <h1>Identities</h1>
       </div>
 
-      <div class="main-content-page" *ngIf="user">
+      <div ngClass.gt-sm="main-content-page" *ngIf="user">
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutWrap="row">
 
           <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.twitter">
             <mat-card-title>Twitter</mat-card-title>
             <div fxLayout fxLayoutAlign="start center">
-              <img fxFlex class="identities-user-image" src="{{user.identities.twitter.profile_image_url}}">
-              <div fxFlex="80">
+              <img class="identities-user-image" src="{{user.identities.twitter.profile_image_url}}">
+              <div>
                 <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.twitter">Settings</button>
               </div>
             </div>
@@ -75,9 +76,19 @@
           <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.facebook">
             <mat-card-title>Facebook</mat-card-title>
             <div fxLayout fxLayoutAlign="start center">
-              <img fxFlex class="identities-user-image" src="{{user.identities.facebook.picture}}">
-              <div fxFlex="80">
+              <img class="identities-user-image" src="{{user.identities.facebook.picture}}">
+              <div>
                 <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.facebook">Settings</button>
+              </div>
+            </div>
+          </mat-card>
+
+          <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.linkedIn">
+            <mat-card-title>LinkedIn</mat-card-title>
+            <div fxLayout fxLayoutAlign="start center">
+              <img class="identities-user-image" src="{{user.identities.linkedIn.pictureUrl}}">
+              <div>
+                <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.linkedin">Settings</button>
               </div>
             </div>
           </mat-card>
@@ -85,8 +96,8 @@
           <mat-card fxFlex="30" fxFlex.lt-md="100" *ngFor="let device of user.identities.devices" class="identities-card">
             <mat-card-title>Device Android</mat-card-title>
             <div fxLayout fxLayoutAlign="start center">
-              <span fxFlex class="fa fa-android fa-fw fa-5x identities-user-image" aria-hidden="true"></span>
-              <div fxFlex="80">
+              <span class="fa fa-android fa-fw fa-5x identities-user-image" aria-hidden="true"></span>
+              <div>
                 <p>{{ device.brand }} - {{ device.model }} - ID: {{ device.deviceId }}</p>
                 <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.android">Settings</button>
               </div>

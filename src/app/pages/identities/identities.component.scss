@@ -31,27 +31,33 @@
 }
 
 .identities-card {
-  margin-bottom: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   height: 236px;
 }
 
 .user-image {
   border-radius: 50%;
-  width: 70%;
+  width: 168px;
   background-color: rgba(74, 74, 74, 0.50);
-  margin: 24px;
+  margin: 16px;
+  margin-bottom: 32px;
+}
+
+.user-image-small {
+  border-radius: 50%;
+  width: 44px;
+  background-color: rgba(74, 74, 74, 0.50);
+  margin: 4px;
+  margin-bottom: 8px;
 }
 
 .identities-user-image {
-  border-radius: 70%;
+  border-radius: 50%;
   width: 100px;
   margin-bottom: 32px;
   margin-right: 32px;
   margin-top: 32px;
-}
-
-.user-image-div {
-  text-align: center;
 }
 
 .spacer {

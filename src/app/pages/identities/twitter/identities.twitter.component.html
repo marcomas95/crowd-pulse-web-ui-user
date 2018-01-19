@@ -15,11 +15,11 @@
   </div>
 
   <ng-template #twitterData>
-    <div class="main-content-page">
-      <h1>Twitter Account</h1>
+    <div ngClass.gt-sm="main-content-page">
+      <h1 fxHide.lt-sm>Twitter Account</h1>
 
-      <div class="twitter-actions-div" fxLayout fxLayoutAlign="end center">
-        <button fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
+      <div class="twitter-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
+        <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
 
       <mat-card class="twitter-card">
@@ -46,28 +46,33 @@
         </button>
       </mat-card>
 
-      <mat-card class="twitter-card" *ngIf="tweets.length > 0; else noTweets">
-        <mat-card-title>Your last Tweets</mat-card-title>
-        <div class="tweets-div" *ngFor="let tweet of tweets">
-          <p> {{ tweet.text }} </p>
-          <mat-divider></mat-divider>
-        </div>
-        <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
-          <mat-icon aria-label="get_data">cached</mat-icon>
-          Update Tweets
-        </button>
+      <mat-card fxLayoutAlign="center center" *ngIf="loadingTweets; else tweetsCard">
+        <mat-spinner></mat-spinner>
       </mat-card>
-      <ng-template #noTweets>
-        <mat-card>
-          <mat-card-title>No Tweets Acquired</mat-card-title>
-          <mat-card-content>
-            In this section will be shown your tweet.
-          </mat-card-content>
+      <ng-template #tweetsCard>
+        <mat-card class="twitter-card" *ngIf="tweets.length > 0; else noTweets">
+          <mat-card-title>Your last Tweets</mat-card-title>
+          <div class="tweets-div" *ngFor="let tweet of tweets">
+            <p> {{ tweet.text }} </p>
+            <mat-divider></mat-divider>
+          </div>
           <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
-            <mat-icon aria-label="get_data">get_app</mat-icon>
-            Get Tweets
+            <mat-icon aria-label="get_data">cached</mat-icon>
+            Update Tweets
           </button>
         </mat-card>
+        <ng-template #noTweets>
+          <mat-card class="twitter-card">
+            <mat-card-title>No Tweets Acquired</mat-card-title>
+            <mat-card-content>
+              In this section will be shown your tweet.
+            </mat-card-content>
+            <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
+              <mat-icon aria-label="get_data">get_app</mat-icon>
+              Get Tweets
+            </button>
+          </mat-card>
+        </ng-template>
       </ng-template>
 
     </div>
