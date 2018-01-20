@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
    * @override
    */
   ngOnInit() {
-    this.userImage = './../../../../assets/images/user-image.png';
+    this.userImage = 'assets/images/user-image.png';
 
     // reading username from the URL
     this.getUsernameParam().then((username) => {
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
         (user) => {
           this.router.navigateByUrl(`${APP_ROUTES.profile.root}/${username}/${APP_ROUTES.profile.general}`);
           this.user = user;
-          this.userImage = user.pictureUrl ? user.pictureUrl : './../../../../assets/images/user-image.png';
+          this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
         },
         (err) => {
           this.toast.error('Cannot load user data. Try again later.');

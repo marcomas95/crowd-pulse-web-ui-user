@@ -27,7 +27,7 @@ export class IdentitiesComponent implements OnInit {
   /**
    * User image.
    */
-  userImage = './../../../../assets/images/user-image.png';
+  userImage = 'assets/images/user-image.png';
 
   /**
    * Current logged user.
@@ -45,7 +45,7 @@ export class IdentitiesComponent implements OnInit {
   ngOnInit() {
     this.authService.getUser().then(user => {
       this.user = user;
-      this.userImage = user.pictureUrl ? user.pictureUrl : './../../../../assets/images/user-image.png';
+      this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
     });
     this.routedPage = this.router;
   }
