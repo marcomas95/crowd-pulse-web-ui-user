@@ -13,11 +13,16 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileDataComponent } from './pages/profile/profile-data/profile-data.component';
 import { ProfileStatsComponent } from './pages/profile/profile-stats/profile-stats.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 const routes: Routes = [
   {
     path: APP_ROUTES.home,
     component: HomeComponent
+  },
+  {
+    path: APP_ROUTES.error,
+    component: ErrorComponent
   },
   {
     path: APP_ROUTES.identities.root,

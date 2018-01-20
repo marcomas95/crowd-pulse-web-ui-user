@@ -24,10 +24,12 @@ import { ChartModule } from 'angular-highcharts';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CdkTableModule } from '@angular/cdk/table';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
+    ErrorComponent,
     PrivacyComponent,
     IdentitiesComponent,
     IdentitiesTwitterComponent,

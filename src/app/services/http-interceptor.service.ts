@@ -10,6 +10,7 @@ import 'rxjs/add/operator/do';
 import {Router} from '@angular/router';
 import {APP_ROUTES} from '../app-routes';
 import {ToastrService} from 'ngx-toastr';
+import {ErrorService} from './error.service';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -18,6 +19,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private router: Router,
     private injector: Injector,
     private toast: ToastrService,
+    private errorService: ErrorService,
   ) {}
 
   /**
@@ -42,6 +44,11 @@ export class HttpInterceptorService implements HttpInterceptor {
           authService.logout();
           this.router.navigateByUrl(APP_ROUTES.home);
           this.toast.error('Session expired!');
+        } else {
+
+          // generic error page
+          this.errorService.genericError = true;
+          this.router.navigateByUrl(APP_ROUTES.error);
         }
       }
     });

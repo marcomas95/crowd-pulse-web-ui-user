@@ -10,6 +10,7 @@ import { FacebookService } from './facebook.service';
 import { LinkedinService } from './linkedin.service';
 import { AndroidSocketService } from './android-socket.service';
 import { ProfileService } from './profile.service';
+import { ErrorService } from './error.service';
 
 @NgModule({
   declarations: [],
@@ -32,6 +33,7 @@ import { ProfileService } from './profile.service';
     StatsService,
     LocalStorageService,
     ProfileService,
+    ErrorService,
   ],
 })
 export class ServicesModule {}

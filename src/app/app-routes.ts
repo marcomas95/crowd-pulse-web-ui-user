@@ -4,6 +4,7 @@
 export const APP_ROUTES = {
   home: '',
   control_panel: 'control_panel',
+  error: 'error',
   identities: {
     root: 'identities',
     twitter: 'twitter',
