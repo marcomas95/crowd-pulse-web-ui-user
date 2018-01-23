@@ -8,15 +8,15 @@
 
 <ng-template #content>
   <div class="main-content-page" *ngIf="!user || !user.identities || !user.identities.twitter; else twitterData">
-    <h2>No associated account</h2>
-    <p>Associating account let the application to read your Tweets and extract interests from them.
-      (TODO change description)</p>
-    <button mat-raised-button color="primary" (click)="associate()">Associate Account</button>
+    <h2>No Linked Account</h2>
+    <p>By linking your Twitter account, you agree that {{appName}} will be able to read your basic profile information
+      and your tweets.</p>
+    <button mat-raised-button color="primary" (click)="associate()">Link Account</button>
   </div>
 
   <ng-template #twitterData>
     <div ngClass.gt-sm="main-content-page">
-      <h1 fxHide.lt-sm>Twitter Account</h1>
+      <h1 fxHide.sm>Twitter Account</h1>
 
       <div class="twitter-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>

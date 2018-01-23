@@ -46,6 +46,11 @@ export class IdentitiesFacebookComponent implements OnInit {
    */
   likes: any[] = [];
 
+  /**
+   * Application name.
+   */
+  appName: string;
+
   // data source containing user Facebook profile data
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
@@ -59,7 +64,9 @@ export class IdentitiesFacebookComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.appName = environment.appName;
+  }
 
   /**
    * @override

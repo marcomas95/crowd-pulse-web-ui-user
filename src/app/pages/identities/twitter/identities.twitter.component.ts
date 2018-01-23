@@ -36,6 +36,11 @@ export class IdentitiesTwitterComponent implements OnInit {
    */
   tweets: any[] = [];
 
+  /**
+   * Application name.
+   */
+  appName: string;
+
   // data source containing user Twitter profile data
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
@@ -50,7 +55,9 @@ export class IdentitiesTwitterComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.appName = environment.appName;
+  }
 
   /**
    * @override

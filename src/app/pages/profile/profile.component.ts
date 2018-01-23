@@ -10,6 +10,9 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class ProfileComponent implements OnInit {
 
+  /**
+   * Tab menu items.
+   */
   profileTabItems = [
     {
       name: 'General',
@@ -23,7 +26,14 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
+  /**
+   * User image path.
+   */
   userImage: string;
+
+  /**
+   * The current logged user.
+   */
   user: any;
 
   constructor(
@@ -46,6 +56,10 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  /**
+   * Read username from url.
+   * @return {Promise<String>}: the username
+   */
   private getUsernameParam(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(params => {
@@ -60,23 +74,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * Get user information. If the user is not the current logged one, retrieve the information of the user with specified
+   * username in the URL.
+   * @param username: the user name
+   */
   private getUserInfo(username: string) {
-
-    /*
-     TODO use the username to look up user information calling a specific Web API that understand if the user
-     is the current logged user
-     */
-
     if (username === this.authService.getUserame()) {
       this.authService.getUser().then(
         (user) => {
           this.router.navigateByUrl(`${APP_ROUTES.profile.root}/${username}/${APP_ROUTES.profile.general}`);
           this.user = user;
           this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
-        },
-        (err) => {
-          this.toast.error('Cannot load user data. Try again later.');
-          this.router.navigateByUrl(APP_ROUTES.home);
         }
       );
     } else {

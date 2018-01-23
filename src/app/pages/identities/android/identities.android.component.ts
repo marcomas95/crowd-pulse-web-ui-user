@@ -68,10 +68,11 @@ export class IdentitiesAndroidComponent implements OnInit {
           this.selectedDeviceConfig = configs[i];
           this.socketLogin();
           this.refactorConfigObject();
-          break;
+          return;
         }
       }
     }
+    this.selectedDeviceConfig = null;
   }
 
   /**

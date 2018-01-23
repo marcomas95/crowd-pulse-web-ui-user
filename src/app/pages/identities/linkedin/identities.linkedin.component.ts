@@ -24,6 +24,11 @@ export class IdentitiesLinkedinComponent implements OnInit {
    */
   loading = true;
 
+  /**
+   * Application name.
+   */
+  appName: string;
+
   // data source containing user LinkedIn profile data
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
@@ -36,7 +41,9 @@ export class IdentitiesLinkedinComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.appName = environment.appName;
+  }
 
   /**
    * @override

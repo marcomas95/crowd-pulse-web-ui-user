@@ -8,14 +8,15 @@
 
 <ng-template #content>
   <div class="main-content-page" *ngIf="!user || !user.identities || !user.identities.facebook; else facebookData">
-    <h2>No associated account</h2>
-    <p>Associating account you let the application to read your Facebook Posts and demographics data.</p>
-    <button mat-raised-button (click)="associate()" color="primary">Associate Account</button>
+    <h2>No Linked Account</h2>
+    <p>By linking your account, you agree that {{appName}} will be able to read your Facebook profile information,
+      as well as your posts and the pages you like.</p>
+    <button mat-raised-button (click)="associate()" color="primary">Link Account</button>
   </div>
 
   <ng-template #facebookData>
     <div ngClass.gt-sm="main-content-page">
-      <h1 fxHide.lt-sm>Facebook Account</h1>
+      <h1 fxHide.sm>Facebook Account</h1>
 
       <div class="facebook-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
