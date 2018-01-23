@@ -4,6 +4,7 @@ import {AndroidSocketService} from '../../../services/android-socket.service';
 import {MatDialog} from '@angular/material';
 import {InfoDialogComponent} from '../../../components/info-dialog/info-dialog.component';
 import {ToastrService} from 'ngx-toastr';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   styleUrls: ['./identities.android.component.scss'],
@@ -36,6 +37,7 @@ export class IdentitiesAndroidComponent implements OnInit {
     private androidSocketService: AndroidSocketService,
     private dialog: MatDialog,
     private toast: ToastrService,
+    private route: ActivatedRoute,
   ) {}
 
   /**
@@ -53,6 +55,19 @@ export class IdentitiesAndroidComponent implements OnInit {
           this.androidSocketService.loginResponse(this.socketLoginCallback, this);
           this.androidSocketService.readConfig(this.socketConfigCallback, this);
           this.androidSocketService.sendDataResponse(this.socketSendDataCallback, this);
+
+          // reading device ID
+          this.route.queryParams.subscribe(params => {
+            const deviceId = params['deviceId'];
+
+            // clean the URL
+            window.history.replaceState(null, null, window.location.pathname);
+            
+            if (deviceId) {
+              this.selectedDeviceId = deviceId;
+              this.onDeviceIdSelected();
+            }
+          });
         }
       });
   }

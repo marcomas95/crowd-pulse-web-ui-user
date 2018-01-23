@@ -99,7 +99,8 @@
               <span class="fa fa-android fa-fw fa-5x identities-user-image" aria-hidden="true"></span>
               <div>
                 <p>{{ device.brand }} - {{ device.model }} - ID: {{ device.deviceId }}</p>
-                <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.android">Settings</button>
+                <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.android"
+                        [queryParams]="{deviceId:  device.deviceId}">Settings</button>
               </div>
             </div>
           </mat-card>
