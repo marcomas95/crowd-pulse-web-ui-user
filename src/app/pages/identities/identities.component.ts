@@ -34,6 +34,11 @@ export class IdentitiesComponent implements OnInit {
    */
   user: any;
 
+  /**
+   * True if there are no identities linked for the current logged user.
+   */
+  noIdentitiesLinked: boolean;
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -46,6 +51,8 @@ export class IdentitiesComponent implements OnInit {
     this.authService.getUser().then(user => {
       this.user = user;
       this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
+      this.noIdentitiesLinked = !user.identities.twitter && !user.identities.linkedin && !user.identities.facebook
+        && (user.identities.devices.length == 0);
     });
     this.routedPage = this.router;
   }
