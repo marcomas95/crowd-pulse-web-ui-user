@@ -24,8 +24,8 @@ export class StatsService {
    * @return: stats object as [{name: string, value: number}]
    */
   getPersonalDataSourceStats(): Promise<any> {
-    const getParams = `?db=${this.username}`;
-    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_SOURCE}${getParams}`).toPromise();
+    const params = `?db=${this.username}`;
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_SOURCE}${params}`).toPromise();
   }
 
 }

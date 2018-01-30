@@ -16,9 +16,11 @@
 
   <ng-template #twitterData>
     <div ngClass.gt-sm="main-content-page">
-      <h1 fxHide.sm>Twitter Account</h1>
+      <h1 fxHide.lt-sm fxHide.sm>Twitter Account</h1>
 
       <div class="twitter-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
+        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="10" [(ngModel)]="share" (change)="updateShareOption()">Share</mat-slide-toggle>
+        <span fxFlex.gt-sm="65"></span>
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
 
@@ -46,34 +48,73 @@
         </button>
       </mat-card>
 
-      <mat-card fxLayoutAlign="center center" *ngIf="loadingTweets; else tweetsCard">
-        <mat-spinner></mat-spinner>
-      </mat-card>
-      <ng-template #tweetsCard>
-        <mat-card class="twitter-card" *ngIf="tweets.length > 0; else noTweets">
-          <mat-card-title>Your last Tweets</mat-card-title>
-          <div class="tweets-div" *ngFor="let tweet of tweets">
-            <p> {{ tweet.text }} </p>
-            <mat-divider></mat-divider>
-          </div>
-          <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
-            <mat-icon aria-label="get_data">cached</mat-icon>
-            Update Tweets
-          </button>
+      <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutWrap>
+
+        <!-- tweets -->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="twitter-card"
+                  *ngIf="loadingTweets; else tweetsCard">
+          <mat-spinner></mat-spinner>
         </mat-card>
-        <ng-template #noTweets>
-          <mat-card class="twitter-card">
-            <mat-card-title>No Tweets Acquired</mat-card-title>
-            <mat-card-content>
-              In this section will be shown your tweet.
-            </mat-card-content>
-            <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
-              <mat-icon aria-label="get_data">get_app</mat-icon>
-              Get Tweets
-            </button>
+        <ng-template #tweetsCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="twitter-card">
+            <div *ngIf="tweets.length > 0; else noTweets">
+              <mat-card-title>Your last Tweets</mat-card-title>
+              <div class="tweets-div" *ngFor="let tweet of tweets">
+                <p> {{ tweet.text }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Tweets
+              </button>
+            </div>
+            <ng-template #noTweets>
+              <mat-card-title>No Tweets Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your tweet.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateTweets(null, true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Tweets
+              </button>
+            </ng-template>
           </mat-card>
         </ng-template>
-      </ng-template>
+
+        <!-- friends -->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="twitter-card"
+                  *ngIf="loadingFriends; else friendsCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #friendsCard>
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="twitter-card">
+            <div *ngIf="friends.length > 0; else noFriends">
+              <mat-card-title>Your Friends</mat-card-title>
+              <div class="tweets-div" *ngFor="let friend of friends">
+                <p> {{ friend.contactName }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <div *ngIf="friends.length == 10">
+                <p>Other friends not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Friends
+              </button>
+            </div>
+            <ng-template #noFriends>
+              <mat-card-title>No Friends Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your friends (followings).
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Friends
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+      </div>
 
     </div>
   </ng-template>

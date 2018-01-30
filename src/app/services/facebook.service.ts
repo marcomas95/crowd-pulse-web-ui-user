@@ -8,7 +8,9 @@ const API_REQUEST_TOKEN = 'api/facebook/request_token';
 const API_USER_PROFILE = 'api/facebook/profile';
 const API_USER_POSTS = 'api/facebook/posts';
 const API_USER_LIKES = 'api/facebook/likes';
+const API_USER_FRIENDS = 'api/facebook/friends';
 const API_DELETE_ACCOUNT = 'api/facebook/delete';
+const API_CONFIG = 'api/facebook/config';
 
 const FIVE_MINUTES_MILLIS = 5 * 60 * 1000;
 
@@ -21,6 +23,7 @@ export class FacebookService {
   private lastUpdateProfile: number;
   private lastUpdatePosts: number;
   private lastUpdateLikes: number;
+  private lastUpdateFriends: number;
 
   constructor(
     private http: HttpClient,
@@ -29,6 +32,7 @@ export class FacebookService {
     this.lastUpdateProfile = Date.now() - FIVE_MINUTES_MILLIS;
     this.lastUpdatePosts = Date.now() - FIVE_MINUTES_MILLIS;
     this.lastUpdateLikes = Date.now() - FIVE_MINUTES_MILLIS;
+    this.lastUpdateFriends = Date.now() - FIVE_MINUTES_MILLIS;
   }
 
   /**
@@ -39,7 +43,7 @@ export class FacebookService {
     const postParams = {
       callbackUrl: environment.facebookCallbackUrl,
     };
-    return this.http.post(this.url + API_LOGIN_DIALOG, postParams);
+    return this.http.post(`${this.url}${API_LOGIN_DIALOG}`, postParams);
   }
 
   /**
@@ -52,7 +56,7 @@ export class FacebookService {
       code: authorizationCode,
       callbackUrl: environment.facebookCallbackUrl,
     };
-    return this.http.post(this.url + API_REQUEST_TOKEN, postParams);
+    return this.http.post(`${this.url}${API_REQUEST_TOKEN}`, postParams);
   }
 
   /**
@@ -64,7 +68,7 @@ export class FacebookService {
     // timeout
     if (Date.now() - this.lastUpdateProfile >= FIVE_MINUTES_MILLIS) {
       this.lastUpdateProfile = Date.now();
-      return this.http.get(this.url + API_USER_PROFILE);
+      return this.http.get(`${this.url}${API_USER_PROFILE}`);
     } else {
       return Observable.of(false);
     }
@@ -88,7 +92,7 @@ export class FacebookService {
       const postParams = {
         messages: messagesToRead,
       };
-      return this.http.post(this.url + API_USER_POSTS, postParams);
+      return this.http.post(`${this.url}${API_USER_POSTS}`, postParams);
     } else {
       return Observable.of(false);
     }
@@ -112,10 +116,44 @@ export class FacebookService {
       const postParams = {
         likesNumber: likesToRead,
       };
-      return this.http.post(this.url + API_USER_LIKES, postParams);
+      return this.http.post(`${this.url}${API_USER_LIKES}`, postParams);
     } else {
       return Observable.of(false);
     }
+  }
+
+  /**
+   * Get user friends.
+   * @param friendsToRead the number of friends to retrieve from database. If not specified, update the user friends
+   * @return {Observable<Object>}: Facebook user friends if request was sent, false otherwise
+   */
+  friends(friendsToRead?: number): Observable<any> {
+
+    // timeout
+    if (friendsToRead || Date.now() - this.lastUpdateFriends >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!friendsToRead) {
+        this.lastUpdateFriends = Date.now();
+      }
+      const postParams = {
+        friendsNumber: friendsToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_FRIENDS}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+  /**
+   * Send Facebook configuration to update.
+   * @param share: true if the user want to share his Facebook profile
+   * @return {Observable<Object>}
+   */
+  configuration(share: boolean): Observable<any> {
+    let params = '?';
+    params += 'share=' + share;
+    return this.http.get(`${this.url}${API_CONFIG}${params}`);
   }
 
   /**

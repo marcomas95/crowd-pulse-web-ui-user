@@ -25,6 +25,11 @@ export class IdentitiesLinkedinComponent implements OnInit {
   loading = true;
 
   /**
+   * Share option.
+   */
+  share: boolean;
+
+  /**
    * Application name.
    */
   appName: string;
@@ -54,6 +59,8 @@ export class IdentitiesLinkedinComponent implements OnInit {
         this.loading = false;
         this.user = user;
         this.setupLinkedinProfileTable();
+
+        this.share = !!this.user.identities.configs.linkedInConfig.share;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -118,6 +125,19 @@ export class IdentitiesLinkedinComponent implements OnInit {
         if (showToast) {
           this.toast.warning('Timeout not elapsed. Retry in about five minutes');
         }
+      }
+    });
+  }
+
+  /**
+   * Update share option.
+   */
+  updateShareOption() {
+    this.linkedinService.configuration(this.share).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
       }
     });
   }

@@ -37,6 +37,11 @@ export class IdentitiesFacebookComponent implements OnInit {
   loadingLikes = false;
 
   /**
+   * True if friends are loading.
+   */
+  loadingFriends = false;
+
+  /**
    * Posts array.
    */
   posts: any[] = [];
@@ -45,6 +50,16 @@ export class IdentitiesFacebookComponent implements OnInit {
    * Likes array.
    */
   likes: any[] = [];
+
+  /**
+   * Friends array.
+   */
+  friends: any[] = [];
+
+  /**
+   * Share option.
+   */
+  share: boolean;
 
   /**
    * Application name.
@@ -79,6 +94,12 @@ export class IdentitiesFacebookComponent implements OnInit {
         this.setupFacebookProfileTable();
         this.updatePosts(10);
         this.updateLikes(10);
+        this.updateFriends(10);
+
+        this.share = !!this.user.identities.configs.facebookConfig.share;
+
+        // clean the URL
+        window.history.replaceState(null, null, window.location.pathname);
 
       } else {
 
@@ -204,6 +225,50 @@ export class IdentitiesFacebookComponent implements OnInit {
       (err) => {
         this.loadingLikes = false;
       });
+  }
+
+  /**
+   * Update user friends.
+   * @param friendsToRead: the friends number to retrieve
+   * @param showToast: if you want to show the toast messages
+   */
+  updateFriends(friendsToRead?: number, showToast?: boolean) {
+    this.loadingFriends = true;
+    this.facebookService.friends(friendsToRead).subscribe(
+      (res) => {
+        this.loadingFriends = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Friends Updated');
+          }
+          if (res.friends && res.friends.length > 0) {
+            this.friends = res.friends;
+          } else if (!friendsToRead) {
+            this.loadingFriends = true;
+            setTimeout(() => this.updateFriends(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingFriends = false;
+      });
+  }
+
+  /**
+   * Update share option.
+   */
+  updateShareOption() {
+    this.facebookService.configuration(this.share).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
   }
 
   /**

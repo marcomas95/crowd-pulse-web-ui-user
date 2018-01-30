@@ -62,7 +62,7 @@ export class IdentitiesAndroidComponent implements OnInit {
 
             // clean the URL
             window.history.replaceState(null, null, window.location.pathname);
-            
+
             if (deviceId) {
               this.selectedDeviceId = deviceId;
               this.onDeviceIdSelected();
@@ -253,7 +253,7 @@ export class IdentitiesAndroidComponent implements OnInit {
       currentComponent.refactorConfigObject();
       currentComponent.toast.success(response.description);
     } else if (response.config.deviceId === currentComponent.selectedDeviceId) {
-      currentComponent.toast.error(response.description);
+      currentComponent.toast.success(response.description);
     }
   }
 

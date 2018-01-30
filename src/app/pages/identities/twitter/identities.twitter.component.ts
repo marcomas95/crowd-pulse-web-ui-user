@@ -32,9 +32,24 @@ export class IdentitiesTwitterComponent implements OnInit {
   loadingTweets = false;
 
   /**
+   * True if friends are loading.
+   */
+  loadingFriends = false;
+
+  /**
    * Tweets array.
    */
   tweets: any[] = [];
+
+  /**
+   * Friends array.
+   */
+  friends: any[] = [];
+
+  /**
+   * Share option.
+   */
+  share: boolean;
 
   /**
    * Application name.
@@ -69,6 +84,9 @@ export class IdentitiesTwitterComponent implements OnInit {
         this.user = user;
         this.setupTwitterProfileTable();
         this.updateTweets(10);
+        this.updateFriends(10);
+
+        this.share = !!this.user.identities.configs.twitterConfig.share;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -166,6 +184,50 @@ export class IdentitiesTwitterComponent implements OnInit {
       }, (err) => {
         this.loadingTweets = false;
       });
+  }
+
+  /**
+   * Update user friends.
+   * @param friendsToRead: the friends number to retrieve
+   * @param showToast: if you want to show the toast messages
+   */
+  updateFriends(friendsToRead?: number, showToast?: boolean) {
+    this.loadingFriends = true;
+    this.twitterService.friends(friendsToRead).subscribe(
+      (res) => {
+        this.loadingFriends = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Friends Updated');
+          }
+          if (res.friends && res.friends.length > 0) {
+            this.friends = res.friends;
+          } else if (!friendsToRead) {
+            this.loadingFriends = true;
+            setTimeout(() => this.updateFriends(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingFriends = false;
+      });
+  }
+
+  /**
+   * Update share option.
+   */
+  updateShareOption() {
+    this.twitterService.configuration(this.share).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
   }
 
   /**

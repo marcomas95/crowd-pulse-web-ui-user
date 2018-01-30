@@ -7,6 +7,7 @@ const API_LOGIN_DIALOG = 'api/linkedin/login_dialog';
 const API_REQUEST_TOKEN = 'api/linkedin/request_token';
 const API_USER_PROFILE = 'api/linkedin/profile';
 const API_DELETE_ACCOUNT = 'api/linkedin/delete';
+const API_CONFIG = 'api/linkedin/config';
 
 const FIVE_MINUTES_MILLIS = 5 * 60 * 1000;
 
@@ -62,6 +63,17 @@ export class LinkedinService {
     } else {
       return Observable.of(false);
     }
+  }
+
+  /**
+   * Send LinkedIn configuration to update.
+   * @param share: true if the user want to share his LinkedIn profile
+   * @return {Observable<Object>}
+   */
+  configuration(share: boolean): Observable<any> {
+    let params = '?';
+    params += 'share=' + share;
+    return this.http.get(`${this.url}${API_CONFIG}${params}`);
   }
 
   /**

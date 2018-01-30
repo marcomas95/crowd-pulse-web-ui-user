@@ -9,6 +9,8 @@ const API_ACCESS_TOKEN = 'api/twitter/access_token';
 const API_USER_TIMELINE = 'api/twitter/user_timeline';
 const API_USER_PROFILE = 'api/twitter/profile';
 const API_DELETE_ACCOUNT = 'api/twitter/delete';
+const API_USER_FRIENDS = 'api/twitter/friends';
+const API_CONFIG = 'api/twitter/config';
 
 const FIVE_MINUTES_MILLIS = 5 * 60 * 1000;
 
@@ -20,6 +22,7 @@ export class TwitterService {
   // timeout variables
   private lastUpdateProfile: number;
   private lastUpdateTimeline: number;
+  private lastUpdateFriends: number;
 
   constructor(
     private http: HttpClient,
@@ -27,6 +30,7 @@ export class TwitterService {
     this.url = environment.api;
     this.lastUpdateProfile = Date.now() - FIVE_MINUTES_MILLIS;
     this.lastUpdateTimeline = Date.now() - FIVE_MINUTES_MILLIS;
+    this.lastUpdateFriends = Date.now() - FIVE_MINUTES_MILLIS;
   }
 
   /**
@@ -92,6 +96,40 @@ export class TwitterService {
     } else {
       return Observable.of(false);
     }
+  }
+
+  /**
+   * Get user friends.
+   * @param friendsToRead the number of friends to retrieve from database. If not specified, update the user friends
+   * @return {Observable<Object>}: Twitter user friends if request was sent, false otherwise
+   */
+  friends(friendsToRead?: number): Observable<any> {
+
+    // timeout
+    if (friendsToRead || Date.now() - this.lastUpdateFriends >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!friendsToRead) {
+        this.lastUpdateFriends = Date.now();
+      }
+      const postParams = {
+        friendsNumber: friendsToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_FRIENDS}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+  /**
+   * Send Twitter configuration to update.
+   * @param share: true if the user want to share his Twitter profile
+   * @return {Observable<Object>}
+   */
+  configuration(share: boolean): Observable<any> {
+    let params = '?';
+    params += 'share=' + share;
+    return this.http.get(`${this.url}${API_CONFIG}${params}`);
   }
 
   /**

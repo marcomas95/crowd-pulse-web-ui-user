@@ -16,9 +16,11 @@
 
   <ng-template #facebookData>
     <div ngClass.gt-sm="main-content-page">
-      <h1 fxHide.sm>Facebook Account</h1>
+      <h1 fxHide.lt-sm fxHide.sm>Facebook Account</h1>
 
       <div class="facebook-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
+        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="10" [(ngModel)]="share" (change)="updateShareOption()">Share</mat-slide-toggle>
+        <span fxFlex.gt-sm="65"></span>
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
 
@@ -47,14 +49,15 @@
       </mat-card>
 
       <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutWrap>
+
+        <!-- posts -->
         <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="facebook-card"
                   *ngIf="loadingPosts; else postsCard">
           <mat-spinner></mat-spinner>
         </mat-card>
-
         <ng-template #postsCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="facebook-card">
-            <div  *ngIf="posts.length > 0; else noPosts">
+            <div *ngIf="posts.length > 0; else noPosts">
               <mat-card-title>Your last Posts</mat-card-title>
               <div class="post-like-div" *ngFor="let post of posts">
                 <p *ngIf="post.story">Story: {{ post.story }}</p>
@@ -79,11 +82,11 @@
           </mat-card>
         </ng-template>
 
+        <!-- likes -->
         <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="facebook-card"
                   *ngIf="loadingLikes; else likesCard">
           <mat-spinner></mat-spinner>
         </mat-card>
-
         <ng-template #likesCard>
           <mat-card fxFlex="48" fxFlex.lt-md="100" class="facebook-card">
             <div *ngIf="likes.length > 0; else noLikes">
@@ -109,6 +112,42 @@
             </ng-template>
           </mat-card>
         </ng-template>
+
+        <!-- friends -->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="facebook-card"
+                  *ngIf="loadingFriends; else friendsCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #friendsCard>
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="facebook-card">
+            <div *ngIf="friends.length > 0; else noFriends">
+              <mat-card-title>Your Friends</mat-card-title>
+              <div class="post-like-div" *ngFor="let friend of friends">
+                <p>{{ friend.contactName }}</p>
+                <mat-divider></mat-divider>
+              </div>
+              <div *ngIf="friends.length == 10">
+                <p>Other friends not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Friends
+              </button>
+            </div>
+            <ng-template #noFriends>
+              <mat-card-title>No Friends Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your Facebook friends that use the App.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Friends
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+
       </div>
     </div>
   </ng-template>
