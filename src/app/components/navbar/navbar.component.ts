@@ -30,8 +30,8 @@ export class NavbarComponent {
       path: `${APP_ROUTES.profile.root}/${this.authService.getUserame()}`,
     },
     {
-      name: 'Community',
-      path: APP_ROUTES.identities.root,
+      name: 'People',
+      path: APP_ROUTES.people,
     },
     {
       name: 'Privacy',

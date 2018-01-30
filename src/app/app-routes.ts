@@ -18,5 +18,6 @@ export const APP_ROUTES = {
     general: 'general',
     stats: 'stats',
   },
+  people: 'people',
   privacy: 'privacy'
 };
