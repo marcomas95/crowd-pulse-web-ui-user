@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  appName: 'YOUware',
+  appName: 'Myrror',
   api: 'http://192.168.1.5:5000/',
   socket: 'http://192.168.1.5:5000/',
   twitterCallbackUrl: 'http://192.168.1.5:4200/identities/twitter',
