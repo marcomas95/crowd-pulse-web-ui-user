@@ -82,6 +82,10 @@ export class AndroidSocketService {
    * @param config: the device configuration to update
    */
   updateConfig(config: any) {
+
+    // append meta-info about the client
+    config.client = CLIENT;
+
     this.socket.emit(SOCKET_CONFIG, config);
   }
 
