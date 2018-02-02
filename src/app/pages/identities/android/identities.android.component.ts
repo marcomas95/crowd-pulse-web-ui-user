@@ -150,7 +150,7 @@ export class IdentitiesAndroidComponent implements OnInit {
     if (this.selectedDeviceConfig) {
       this.selectedDeviceConfig = [
         {
-          id: 'Accounts',
+          id: 'Mobile Application Accounts',
           info: 'Accounts data are user\'s accounts information (application package and user name) ' +
           'stored in the smartphone.',
           read: this.selectedDeviceConfig.readAccounts == 1,
@@ -162,7 +162,7 @@ export class IdentitiesAndroidComponent implements OnInit {
           }
         },
         {
-          id: 'Activity',
+          id: 'User Activities',
           info: 'User activity (running, walking, etc).',
           read: this.selectedDeviceConfig.readActivity == 1,
           time: parseInt(this.selectedDeviceConfig.timeReadActivity, 10) / (60 * 1000),
@@ -173,7 +173,7 @@ export class IdentitiesAndroidComponent implements OnInit {
           },
         },
         {
-          id: 'AppInfo',
+          id: 'App Usage',
           info: 'Information about the applications installed on the device.',
           read: this.selectedDeviceConfig.readAppInfo == 1,
           time: this.selectedDeviceConfig.timeReadAppInfo,
@@ -181,7 +181,7 @@ export class IdentitiesAndroidComponent implements OnInit {
           sliderOptions: null,
         },
         {
-          id: 'Contact',
+          id: 'Contacts',
           info: 'User\'s contacts information stored in the smartphone (with phone numbers).',
           read: this.selectedDeviceConfig.readContact == 1,
           time: parseInt(this.selectedDeviceConfig.timeReadContact, 10) / (3600 * 1000),
@@ -192,7 +192,7 @@ export class IdentitiesAndroidComponent implements OnInit {
           },
         },
         {
-          id: 'Display',
+          id: 'Display Statistics',
           info: 'On/Off display total time.',
           read: this.selectedDeviceConfig.readDisplay == 1,
           time: this.selectedDeviceConfig.timeReadDisplay,
@@ -211,7 +211,7 @@ export class IdentitiesAndroidComponent implements OnInit {
           },
         },
         {
-          id: 'NetStats',
+          id: 'Network Statistics',
           info: 'Network traffic statistics in terms of bytes transmitted and received ' +
           'over mobile net and Wifi.\nThese statistics may not be available on all platforms.',
           read: this.selectedDeviceConfig.readNetStats == 1,
@@ -299,27 +299,27 @@ export class IdentitiesAndroidComponent implements OnInit {
       };
       for (const config of this.selectedDeviceConfig) {
         switch (config.id) {
-          case 'Accounts':
+          case 'Mobile Application Accounts':
             deviceConfigToSend.readAccounts = config.read ? '1' : '0';
             deviceConfigToSend.shareAccounts = config.share ? '1' : '0';
             deviceConfigToSend.timeReadAccounts = config.time * (3600 * 1000);
             break;
-          case 'Activity':
+          case 'User Activities':
             deviceConfigToSend.readActivity = config.read ? '1' : '0';
             deviceConfigToSend.shareActivity = config.share ? '1' : '0';
             deviceConfigToSend.timeReadActivity = config.time * (60 * 1000);
             break;
-          case 'AppInfo':
+          case 'App Usage':
             deviceConfigToSend.readAppInfo = config.read ? '1' : '0';
             deviceConfigToSend.shareAppInfo = config.share ? '1' : '0';
             deviceConfigToSend.timeReadAppInfo = config.time;
             break;
-          case 'Contact':
+          case 'Contacts':
             deviceConfigToSend.readContact = config.read ? '1' : '0';
             deviceConfigToSend.shareContact = config.share ? '1' : '0';
             deviceConfigToSend.timeReadContact = config.time * (3600 * 1000);
             break;
-          case 'Display':
+          case 'Display Statistics':
             deviceConfigToSend.readDisplay = config.read ? '1' : '0';
             deviceConfigToSend.shareDisplay = config.share ? '1' : '0';
             break;
@@ -328,7 +328,7 @@ export class IdentitiesAndroidComponent implements OnInit {
             deviceConfigToSend.shareGPS = config.share ? '1' : '0';
             deviceConfigToSend.timeReadGPS = config.time * (60 * 1000);
             break;
-          case 'NetStats':
+          case 'Network Statistics':
             deviceConfigToSend.readNetStats = config.read ? '1' : '0';
             deviceConfigToSend.shareNetStats = config.share ? '1' : '0';
             deviceConfigToSend.timeReadNetStats = config.time * (3600 * 1000);

@@ -91,7 +91,7 @@
             <div *ngIf="friends.length > 0; else noFriends">
               <mat-card-title>Your Friends</mat-card-title>
               <div class="tweets-div" *ngFor="let friend of friends">
-                <p> {{ friend.contactName }} </p>
+                <p> {{ friend.contactName }} - {{ friend.type }} </p>
                 <mat-divider></mat-divider>
               </div>
               <div *ngIf="friends.length == 10">

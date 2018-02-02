@@ -8,6 +8,8 @@ import { PagesModule } from './pages/pages.module';
 import { ToastrModule } from 'ngx-toastr';
 import { ComponentModule } from './components/component.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgProgressModule } from '@ngx-progressbar/core';
+import { NgProgressHttpModule } from '@ngx-progressbar/http';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       maxOpened: 3,
       preventDuplicates: true,
     }),
+    NgProgressModule.forRoot(),
+    NgProgressHttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
