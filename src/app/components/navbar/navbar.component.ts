@@ -39,11 +39,20 @@ export class NavbarComponent {
     },
   ];
 
+  /**
+   * True if user is developer.
+   */
+  isDeveloper = false;
+
   constructor(
     private authService: AuthService,
     public router: Router,
   ) {
     this.appName = environment.appName;
+
+    this.authService.isDeveloper().then(value => {
+      this.isDeveloper = value;
+    });
   }
 
   /**

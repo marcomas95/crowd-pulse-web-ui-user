@@ -25,6 +25,8 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ErrorComponent } from './error/error.component';
+import { DeveloperComponent } from './developer/developer.component';
+import { ClipboardModule } from "ngx-clipboard";
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { ErrorComponent } from './error/error.component';
     ProfileComponent,
     ProfileDataComponent,
     ProfileStatsComponent,
+    DeveloperComponent,
   ],
   imports: [
     ComponentModule,
@@ -68,6 +71,7 @@ import { ErrorComponent } from './error/error.component';
     MatTableModule,
     CdkTableModule,
     ChartModule,
+    ClipboardModule,
   ],
   providers: [],
 })

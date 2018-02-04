@@ -14,6 +14,7 @@ import { ProfileDataComponent } from './pages/profile/profile-data/profile-data.
 import { ProfileStatsComponent } from './pages/profile/profile-stats/profile-stats.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { ErrorComponent } from './pages/error/error.component';
+import { DeveloperComponent } from './pages/developer/developer.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,11 @@ const routes: Routes = [
   {
     path: APP_ROUTES.privacy,
     component: PrivacyComponent,
+  },
+  {
+    path: APP_ROUTES.developer,
+    canActivate: [AuthGuardService],
+    component: DeveloperComponent,
   },
 
   // leave this path to the end

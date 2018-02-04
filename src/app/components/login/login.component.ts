@@ -34,7 +34,13 @@ export class LoginComponent {
     } else {
       this.authService.authentication(this.email, this.password).then(
         (res) => {
-          this.router.navigateByUrl(APP_ROUTES.identities.root);
+          this.authService.isDeveloper().then(value => {
+            if (value) {
+              this.router.navigateByUrl(APP_ROUTES.developer);
+            } else {
+              this.router.navigateByUrl(APP_ROUTES.identities.root);
+            }
+          });
         },
         (err) => {
           if (!isNullOrUndefined(err.error.message)) {

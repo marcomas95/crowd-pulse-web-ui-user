@@ -9,9 +9,11 @@
   <div fxLayout.gt-xs="row">
 
     <div fxHide.lt-sm="row">
-      <a *ngFor="let item of navbarItems" mat-button [routerLink]="item.path" routerLinkActive #rla="routerLinkActive">
-        {{item.name}}
-      </a>
+      <span *ngIf="!isDeveloper">
+        <a *ngFor="let item of navbarItems" mat-button [routerLink]="item.path" routerLinkActive #rla="routerLinkActive">
+          {{item.name}}
+        </a>
+      </span>
       <a mat-button (click)="logout()">Logout</a>
     </div>
 
@@ -21,7 +23,9 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu fxLayout="column" #menu="matMenu">
-        <button mat-menu-item *ngFor="let item of navbarItems" (click)="router.navigateByUrl(item.path)">{{item.name}}</button>
+        <span *ngIf="!isDeveloper">
+          <button mat-menu-item *ngFor="let item of navbarItems" (click)="router.navigateByUrl(item.path)">{{item.name}}</button>
+        </span>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </div>

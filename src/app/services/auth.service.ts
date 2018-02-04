@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {LocalStorageService} from './local-storage.service';
+import {isNullOrUndefined} from 'util';
 
 const SESSION_TOKEN = 'SESSION';
 const USERNAME = 'USERNAME';
@@ -16,6 +17,9 @@ export class AuthService {
   private url: string;
   private user: any;
   private username: string;
+
+  // roles (add here more roles variables)
+  private developer: boolean;
 
   // boolean wrapper to pass value for reference (not for value!)
   private authenticated: {value: boolean} = {
@@ -55,10 +59,36 @@ export class AuthService {
    * @return {string|null}: the user name
    */
   getUserame(): string {
-    if (this.username) {
+    if (!isNullOrUndefined(this.username)) {
       return this.username;
     }
     return this.localStorage.getItem(USERNAME);
+  }
+
+  /**
+   * Returns the user status (developer or not).
+   * @return {boolean}: true if the user is developer
+   */
+  isDeveloper(): Promise<boolean> {
+
+    // if status variable is defined
+    if (!isNullOrUndefined(this.developer)) {
+      return Promise.resolve(this.developer);
+    }
+
+    // else get user roles reading profile information
+    if (this.user) {
+      this.developer = !!this.user.applicationDescription;
+      return Promise.resolve(this.developer);
+    } else {
+
+      // retrieve profile information from server
+      return this.getUser().then(user => {
+        this.user = user;
+        this.developer = !!this.user.applicationDescription;
+        return Promise.resolve(this.developer);
+      });
+    }
   }
 
   /**
@@ -75,6 +105,7 @@ export class AuthService {
       (res) => {
         this.authenticated.value = true;
         this.username = res['username'];
+        this.developer = res['developer'];
         this.localStorage.setItem(SESSION_TOKEN, res['token']);
         this.localStorage.setItem(USERNAME, res['username']);
         return Promise.resolve(true);
@@ -86,17 +117,20 @@ export class AuthService {
    * @param email: the user email
    * @param username: the user name
    * @param password: the user password
+   * @param applicationDescription: developer application description
    */
-  signUp(email: string, username: string, password: string): Promise<any> {
+  signUp(email: string, username: string, password: string, applicationDescription?: string): Promise<any> {
     const postParams = {
       email: email,
       username: username,
-      password: password
+      password: password,
+      applicationDescription: applicationDescription,
     };
     return this.http.post(`${this.url}${API_SIGNUP}`, postParams).toPromise().then(
       (res) => {
         this.authenticated.value = true;
         this.username = username;
+        this.developer = res['developer'];
         this.localStorage.setItem(SESSION_TOKEN, res['token']);
         this.localStorage.setItem(USERNAME, username);
         return Promise.resolve(true);
@@ -137,6 +171,7 @@ export class AuthService {
   logout(): Promise<boolean> {
     this.authenticated.value = false;
     this.username = null;
+    this.developer = null;
     try {
       this.localStorage.removeItem(SESSION_TOKEN);
       this.localStorage.removeItem(USERNAME);

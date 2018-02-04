@@ -15,6 +15,11 @@ export class HomeComponent implements OnInit {
   loginForm: boolean;
 
   /**
+   * True if the Sign Up form is for developers.
+   */
+  developerSignUp: boolean;
+
+  /**
    * APP_ROUTES used in the UI.
    */
   appRoutes = APP_ROUTES;
@@ -24,6 +29,7 @@ export class HomeComponent implements OnInit {
     private authService: AuthService
   ) {
     this.loginForm = true;
+    this.developerSignUp = false;
   }
 
   /**
@@ -31,11 +37,20 @@ export class HomeComponent implements OnInit {
    */
   ngOnInit() {
 
-    // user is not authenticated in
+    // user is authenticated
     if (this.authService.getSessionToken()) {
 
-      // login page
-      this.router.navigateByUrl(APP_ROUTES.identities.root);
+      this.authService.isDeveloper().then(value => {
+        if (value) {
+
+          // user is developer
+          this.router.navigateByUrl(APP_ROUTES.developer);
+        } else {
+
+          // normal user root page
+          this.router.navigateByUrl(APP_ROUTES.identities.root);
+        }
+      });
     }
   }
 
@@ -50,8 +65,10 @@ export class HomeComponent implements OnInit {
   /**
    * Shows the signup form.
    * @param isLoginForm: value given by the login component on the 'Sign Up' button
+   * @param isDeveloper: true if the Sign Up form is for developers
    */
-  showSignupForm(isLoginForm) {
+  showSignupForm(isLoginForm, isDeveloper) {
+    this.developerSignUp = isDeveloper;
     this.loginForm = !isLoginForm;
   }
 }

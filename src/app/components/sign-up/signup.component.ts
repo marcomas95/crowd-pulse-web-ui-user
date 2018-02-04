@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {ToastrService} from 'ngx-toastr';
 import {isNullOrUndefined} from 'util';
@@ -22,8 +22,11 @@ export class SignupComponent {
   email: string;
   password: string;
   confirmPassword: string;
+  applicationDescription: string;
 
   @Output() loginForm = new EventEmitter<boolean>();
+
+  @Input() isDeveloper: boolean;
 
   constructor(
     private authService: AuthService,
@@ -49,9 +52,15 @@ export class SignupComponent {
     } else if (!EMAIL_REGEX.test(this.email)) {
       this.toast.warning('Email should be the real one.');
     } else {
-      this.authService.signUp(this.email, this.username, this.password).then(
+      this.authService.signUp(this.email, this.username, this.password, this.applicationDescription).then(
         (res) => {
-          this.router.navigateByUrl(APP_ROUTES.identities.root);
+          this.authService.isDeveloper().then(value => {
+            if (value) {
+              this.router.navigateByUrl(APP_ROUTES.developer);
+            } else {
+              this.router.navigateByUrl(APP_ROUTES.identities.root);
+            }
+          });
         },
         (err) => {
           if (!isNullOrUndefined(err.error.message)) {
@@ -68,7 +77,11 @@ export class SignupComponent {
    * @return {boolean}: true if all required fields are given
    */
   private checkRequiredFields(): boolean {
-    return !isNullOrUndefined(this.email)
+    let result = true;
+    if (this.isDeveloper) {
+      result = !isNullOrUndefined(this.applicationDescription) && this.applicationDescription !== '';
+    }
+    return result && !isNullOrUndefined(this.email)
       && !isNullOrUndefined(this.password)
       && !isNullOrUndefined(this.confirmPassword)
       && !isNullOrUndefined(this.username)
