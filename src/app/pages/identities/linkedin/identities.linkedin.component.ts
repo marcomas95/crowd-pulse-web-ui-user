@@ -175,16 +175,12 @@ export class IdentitiesLinkedinComponent implements OnInit {
 
     // array used to populate the data source object
     const linkedInProfile: {dataName: string, dataValue: any}[] = [];
-
-    for (const dataName in linkedIn) {
-      if (linkedIn.hasOwnProperty(dataName)) {
-        if (linkedIn[dataName] instanceof Object) {
-          linkedInProfile.push({dataName: dataName, dataValue: JSON.stringify(linkedIn[dataName], null, 2)});
-        } else {
-          linkedInProfile.push({dataName: dataName, dataValue: linkedIn[dataName]});
-        }
-      }
-    }
+    linkedInProfile.push({dataName: 'Name', dataValue: linkedIn['firstName']});
+    linkedInProfile.push({dataName: 'Surname', dataValue: linkedIn['lastName']});
+    linkedInProfile.push({dataName: 'Picture', dataValue: linkedIn['pictureUrl']});
+    linkedInProfile.push({dataName: 'Location', dataValue: linkedIn['location']});
+    linkedInProfile.push({dataName: 'Industry', dataValue: linkedIn['industry']});
+    linkedInProfile.push({dataName: 'Connections', dataValue: linkedIn['numConnections']});
     this.dataSource = new MatTableDataSource(linkedInProfile);
   }
 

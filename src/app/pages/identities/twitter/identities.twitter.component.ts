@@ -264,12 +264,11 @@ export class IdentitiesTwitterComponent implements OnInit {
 
     // array used to populate the data source object
     const twitterProfile: {dataName: string, dataValue: any}[] = [];
-
-    for (const dataName in twitter) {
-      if (twitter.hasOwnProperty(dataName)) {
-        twitterProfile.push({dataName: dataName, dataValue: twitter[dataName]});
-      }
-    }
+    twitterProfile.push({dataName: 'Full Name', dataValue: twitter['screen_name']});
+    twitterProfile.push({dataName: 'Picture', dataValue: twitter['profile_image_url']});
+    twitterProfile.push({dataName: 'Location', dataValue: twitter['location']});
+    twitterProfile.push({dataName: 'Followers', dataValue: twitter['followers_count']});
+    twitterProfile.push({dataName: 'Followings', dataValue: twitter['friends_count']});
     this.dataSource = new MatTableDataSource(twitterProfile);
   }
 

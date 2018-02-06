@@ -304,16 +304,10 @@ export class IdentitiesFacebookComponent implements OnInit {
 
     // array used to populate the data source object
     const facebookProfile: {dataName: string, dataValue: any}[] = [];
-
-    for (const dataName in facebook) {
-      if (facebook.hasOwnProperty(dataName)) {
-        if (facebook[dataName] instanceof Object) {
-          facebookProfile.push({dataName: dataName, dataValue: JSON.stringify(facebook[dataName]).replace(/"/gi, '')});
-        } else {
-          facebookProfile.push({dataName: dataName, dataValue: facebook[dataName]});
-        }
-      }
-    }
+    facebookProfile.push({dataName: 'Full Name', dataValue: facebook['name']});
+    facebookProfile.push({dataName: 'Picture', dataValue: facebook['picture']});
+    facebookProfile.push({dataName: 'Gender', dataValue: facebook['gender']});
+    facebookProfile.push({dataName: 'Languages', dataValue: facebook['languages']});
     this.dataSource = new MatTableDataSource(facebookProfile);
   }
 }

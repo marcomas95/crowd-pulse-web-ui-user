@@ -1,4 +1,4 @@
-<div class="home-div" fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="!authenticated.value" class="home-div" fxLayout="column" fxLayoutAlign="center center">
 
   <div class="logo-div" fxFlex fxLayout="row" fxLayoutAlign="center center">
     <img fxFlex="90" src="assets/images/logo-myrror.png">

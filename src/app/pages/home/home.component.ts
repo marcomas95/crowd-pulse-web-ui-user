@@ -24,12 +24,18 @@ export class HomeComponent implements OnInit {
    */
   appRoutes = APP_ROUTES;
 
+  /**
+   * Status variable.
+   */
+  authenticated: any;
+
   constructor(
     private router: Router,
     private authService: AuthService
   ) {
     this.loginForm = true;
     this.developerSignUp = false;
+    this.authenticated = authService.isAuthenticated();
   }
 
   /**
@@ -37,8 +43,9 @@ export class HomeComponent implements OnInit {
    */
   ngOnInit() {
 
+
     // user is authenticated
-    if (this.authService.getSessionToken()) {
+    if (this.authenticated.value) {
 
       this.authService.isDeveloper().then(value => {
         if (value) {
