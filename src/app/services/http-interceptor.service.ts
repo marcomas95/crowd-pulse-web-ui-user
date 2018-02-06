@@ -43,7 +43,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (err.status === 401) {
           authService.logout();
           this.router.navigateByUrl(APP_ROUTES.home);
-          this.toast.error('Session expired!');
+          this.toast.error('You are not logged in');
         } else if (err.status !== 409) {
 
           // generic error page, not 409 for wrong login credentials

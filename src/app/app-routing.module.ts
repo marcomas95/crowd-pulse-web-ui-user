@@ -65,7 +65,6 @@ const routes: Routes = [
   },
   {
     path: APP_ROUTES.developer,
-    canActivate: [AuthGuardService],
     component: DeveloperComponent,
   },
 

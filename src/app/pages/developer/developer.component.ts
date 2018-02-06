@@ -30,6 +30,11 @@ export class DeveloperComponent implements OnInit {
    */
   user: any;
 
+  /**
+   * Status variable used in the template to show page content.
+   */
+  developer = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -40,6 +45,7 @@ export class DeveloperComponent implements OnInit {
       this.user = user;
       this.accessToken = user.accessToken;
       this.authService.isDeveloper().then(value => {
+        this.developer = value;
         if (!value) {
 
           // normal user root page
