@@ -67,12 +67,12 @@ export class LinkedinService {
 
   /**
    * Send LinkedIn configuration to update.
-   * @param share: true if the user want to share his LinkedIn profile
+   * @param shareProfile: true if the user want to share his LinkedIn profile
    * @return {Observable<Object>}
    */
-  configuration(share: boolean): Observable<any> {
+  configuration(shareProfile: boolean): Observable<any> {
     let params = '?';
-    params += 'share=' + share;
+    params += 'shareProfile=' + shareProfile;
     return this.http.get(`${this.url}${API_CONFIG}${params}`);
   }
 

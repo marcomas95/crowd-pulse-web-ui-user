@@ -3,6 +3,7 @@ import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import {isNullOrUndefined} from 'util';
 
 const API_REQUEST_TOKEN = 'api/twitter/request_token';
 const API_ACCESS_TOKEN = 'api/twitter/access_token';
@@ -123,12 +124,24 @@ export class TwitterService {
 
   /**
    * Send Twitter configuration to update.
-   * @param share: true if the user want to share his Twitter profile
+   * @param option: share options
    * @return {Observable<Object>}
    */
-  configuration(share: boolean): Observable<any> {
+  configuration(option: {shareProfile?: boolean, shareMessages?: boolean, shareFriends?: boolean}): Observable<any> {
     let params = '?';
-    params += 'share=' + share;
+
+    if (!isNullOrUndefined(option.shareProfile)) {
+      params += 'shareProfile=' + option.shareProfile;
+    }
+
+    if (!isNullOrUndefined(option.shareMessages)) {
+      params += 'shareMessages=' + option.shareMessages;
+    }
+
+    if (!isNullOrUndefined(option.shareFriends)) {
+      params += 'shareFriends=' + option.shareFriends;
+    }
+
     return this.http.get(`${this.url}${API_CONFIG}${params}`);
   }
 

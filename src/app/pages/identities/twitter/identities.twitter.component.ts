@@ -47,9 +47,20 @@ export class IdentitiesTwitterComponent implements OnInit {
   friends: any[] = [];
 
   /**
-   * Share option.
+   * Share profile option.
    */
-  share: boolean;
+  shareProfile: boolean;
+
+  /**
+   * Share messages option.
+   */
+  shareMessages: boolean;
+
+  /**
+   * Share friends option.
+   */
+
+  shareFriends: boolean;
 
   /**
    * Application name.
@@ -86,7 +97,10 @@ export class IdentitiesTwitterComponent implements OnInit {
         this.updateTweets(10);
         this.updateFriends(10);
 
-        this.share = !!this.user.identities.configs.twitterConfig.share;
+        // set share values
+        this.shareProfile = this.user.identities.configs.twitterConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.twitterConfig.shareMessages;
+        this.shareFriends = this.user.identities.configs.twitterConfig.shareFriends;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -147,6 +161,12 @@ export class IdentitiesTwitterComponent implements OnInit {
           this.toast.success('Profile Updated');
         }
         this.user = res.user;
+
+        // set share values
+        this.shareProfile = this.user.identities.configs.twitterConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.twitterConfig.shareMessages;
+        this.shareFriends = this.user.identities.configs.twitterConfig.shareFriends;
+
         this.setupTwitterProfileTable();
       } else {
         if (showToast) {
@@ -218,10 +238,36 @@ export class IdentitiesTwitterComponent implements OnInit {
   }
 
   /**
-   * Update share option.
+   * Update share profile.
    */
-  updateShareOption() {
-    this.twitterService.configuration(this.share).subscribe((res) => {
+  updateShareProfile() {
+    this.twitterService.configuration({shareProfile: this.shareProfile}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Update share messages.
+   */
+  updateShareMessages() {
+    this.twitterService.configuration({shareMessages: this.shareMessages}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Update share friends.
+   */
+  updateShareFriends() {
+    this.twitterService.configuration({shareFriends: this.shareFriends}).subscribe((res) => {
       if (res && res.auth) {
         this.toast.success('Configuration updated');
       } else {

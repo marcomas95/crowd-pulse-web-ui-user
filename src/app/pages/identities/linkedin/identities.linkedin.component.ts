@@ -25,9 +25,9 @@ export class IdentitiesLinkedinComponent implements OnInit {
   loading = true;
 
   /**
-   * Share option.
+   * Share profile option.
    */
-  share: boolean;
+  shareProfile: boolean;
 
   /**
    * Application name.
@@ -60,7 +60,8 @@ export class IdentitiesLinkedinComponent implements OnInit {
         this.user = user;
         this.setupLinkedinProfileTable();
 
-        this.share = !!this.user.identities.configs.linkedInConfig.share;
+        // set share value
+        this.shareProfile = this.user.identities.configs.linkedInConfig.shareProfile;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -120,6 +121,10 @@ export class IdentitiesLinkedinComponent implements OnInit {
           this.toast.success('Profile Updated');
         }
         this.user = res.user;
+
+        // set share value
+        this.shareProfile = this.user.identities.configs.linkedInConfig.shareProfile;
+
         this.setupLinkedinProfileTable();
       } else {
         if (showToast) {
@@ -130,10 +135,10 @@ export class IdentitiesLinkedinComponent implements OnInit {
   }
 
   /**
-   * Update share option.
+   * Update share profile.
    */
-  updateShareOption() {
-    this.linkedinService.configuration(this.share).subscribe((res) => {
+  updateShareProfile() {
+    this.linkedinService.configuration(this.shareProfile).subscribe((res) => {
       if (res && res.auth) {
         this.toast.success('Configuration updated');
       } else {

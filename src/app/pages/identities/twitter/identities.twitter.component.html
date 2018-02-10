@@ -19,8 +19,12 @@
       <h1 fxHide.lt-sm fxHide.sm>Twitter Account</h1>
 
       <div class="twitter-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
-        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="10" [(ngModel)]="share" (change)="updateShareOption()">Share</mat-slide-toggle>
-        <span fxFlex.gt-sm="65"></span>
+        <div fxFlex fxFlex.gt-sm="60" fxLayout fxLayout.lt-md="column">
+          <mat-slide-toggle fxFlex [(ngModel)]="shareProfile" (change)="updateShareProfile()">Share Profile</mat-slide-toggle>
+          <mat-slide-toggle fxFlex [(ngModel)]="shareMessages" (change)="updateShareMessages()">Share Messages</mat-slide-toggle>
+          <mat-slide-toggle fxFlex [(ngModel)]="shareFriends" (change)="updateShareFriends()">Share Friends</mat-slide-toggle>
+        </div>
+        <span fxFlex.gt-sm="25"></span>
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
 

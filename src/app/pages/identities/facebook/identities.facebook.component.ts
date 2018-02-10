@@ -57,9 +57,25 @@ export class IdentitiesFacebookComponent implements OnInit {
   friends: any[] = [];
 
   /**
-   * Share option.
+   * Share profile option.
    */
-  share: boolean;
+  shareProfile: boolean;
+
+  /**
+   * Share messages option.
+   */
+  shareMessages: boolean;
+
+  /**
+   * Share friends option.
+   */
+
+  shareFriends: boolean;
+
+  /**
+   * Share likes option.
+   */
+  shareLikes: boolean;
 
   /**
    * Application name.
@@ -96,7 +112,11 @@ export class IdentitiesFacebookComponent implements OnInit {
         this.updateLikes(10);
         this.updateFriends(10);
 
-        this.share = !!this.user.identities.configs.facebookConfig.share;
+        // set share values
+        this.shareProfile = this.user.identities.configs.facebookConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.facebookConfig.shareMessages;
+        this.shareFriends = this.user.identities.configs.facebookConfig.shareFriends;
+        this.shareLikes = this.user.identities.configs.facebookConfig.shareLikes;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -156,6 +176,13 @@ export class IdentitiesFacebookComponent implements OnInit {
           this.toast.success('Profile Updated');
         }
         this.user = res.user;
+
+        // set share values
+        this.shareProfile = this.user.identities.configs.facebookConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.facebookConfig.shareMessages;
+        this.shareFriends = this.user.identities.configs.facebookConfig.shareFriends;
+        this.shareLikes = this.user.identities.configs.facebookConfig.shareLikes;
+
         this.setupFacebookProfileTable();
       } else {
         if (showToast) {
@@ -259,10 +286,50 @@ export class IdentitiesFacebookComponent implements OnInit {
   }
 
   /**
-   * Update share option.
+   * Update share profile.
    */
-  updateShareOption() {
-    this.facebookService.configuration(this.share).subscribe((res) => {
+  updateShareProfile() {
+    this.facebookService.configuration({shareProfile: this.shareProfile}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Update share messages.
+   */
+  updateShareMessages() {
+    this.facebookService.configuration({shareMessages: this.shareMessages}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Update share friends.
+   */
+  updateShareFriends() {
+    this.facebookService.configuration({shareFriends: this.shareFriends}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+
+  /**
+   * Update share likes.
+   */
+  updateShareLikes() {
+    this.facebookService.configuration({shareLikes: this.shareLikes}).subscribe((res) => {
       if (res && res.auth) {
         this.toast.success('Configuration updated');
       } else {

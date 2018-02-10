@@ -19,7 +19,7 @@
       <h1 fxHide.lt-sm fxHide.sm>LinkedIn Account</h1>
 
       <div class="linkedIn-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
-        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="10" [(ngModel)]="share" (change)="updateShareOption()">Share</mat-slide-toggle>
+        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="20" [(ngModel)]="shareProfile" (change)="updateShareProfile()">Share Profile</mat-slide-toggle>
         <span fxFlex.gt-sm="65"></span>
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
