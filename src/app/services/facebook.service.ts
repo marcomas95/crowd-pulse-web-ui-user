@@ -155,19 +155,19 @@ export class FacebookService {
     let params = '?';
 
     if (!isNullOrUndefined(option.shareProfile)) {
-      params += 'shareProfile=' + option.shareProfile;
+      params += 'shareProfile=' + option.shareProfile + '&';
     }
 
     if (!isNullOrUndefined(option.shareMessages)) {
-      params += 'shareMessages=' + option.shareMessages;
+      params += 'shareMessages=' + option.shareMessages + '&';
     }
 
     if (!isNullOrUndefined(option.shareFriends)) {
-      params += 'shareFriends=' + option.shareFriends;
+      params += 'shareFriends=' + option.shareFriends + '&';
     }
 
     if (!isNullOrUndefined(option.shareLikes)) {
-      params += 'shareLikes=' + option.shareLikes;
+      params += 'shareLikes=' + option.shareLikes + '&';
     }
 
     return this.http.get(`${this.url}${API_CONFIG}${params}`);

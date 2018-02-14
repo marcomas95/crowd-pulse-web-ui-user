@@ -15,6 +15,7 @@ import { ProfileStatsComponent } from './pages/profile/profile-stats/profile-sta
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { DeveloperComponent } from './pages/developer/developer.component';
+import { ProfileSettingsComponent } from './pages/profile/profile-settings/profile-settings.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,9 @@ const routes: Routes = [
     }, {
       path: APP_ROUTES.profile.stats,
       component: ProfileStatsComponent,
+    }, {
+      path: APP_ROUTES.profile.settings,
+      component: ProfileSettingsComponent,
     }]
   },
   {

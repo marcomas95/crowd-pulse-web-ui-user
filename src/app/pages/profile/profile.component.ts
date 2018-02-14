@@ -24,6 +24,11 @@ export class ProfileComponent implements OnInit {
       icon: 'fa fa-bar-chart fa-1x',
       path: APP_ROUTES.profile.stats
     },
+    {
+      name: 'Settings',
+      icon: 'fa fa-cogs fa-1x',
+      path: APP_ROUTES.profile.settings
+    },
   ];
 
   /**

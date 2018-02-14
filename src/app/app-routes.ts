@@ -17,6 +17,7 @@ export const APP_ROUTES = {
     root: 'profile',
     general: 'general',
     stats: 'stats',
+    settings: 'settings',
   },
   developer: 'developer',
   people: 'people',

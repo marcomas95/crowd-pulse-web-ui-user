@@ -17,7 +17,9 @@
          [active]="rla.isActive">
         <i class="{{item.icon}}" aria-hidden="true"></i>
         &nbsp;
-        {{item.name | uppercase }}
+        <div ngClass.lt-sm="show-text">
+          {{item.name | uppercase }}
+        </div>
       </a>
     </nav>
   </div>

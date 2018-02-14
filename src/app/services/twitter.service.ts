@@ -131,15 +131,15 @@ export class TwitterService {
     let params = '?';
 
     if (!isNullOrUndefined(option.shareProfile)) {
-      params += 'shareProfile=' + option.shareProfile;
+      params += 'shareProfile=' + option.shareProfile + '&';
     }
 
     if (!isNullOrUndefined(option.shareMessages)) {
-      params += 'shareMessages=' + option.shareMessages;
+      params += 'shareMessages=' + option.shareMessages + '&';
     }
 
     if (!isNullOrUndefined(option.shareFriends)) {
-      params += 'shareFriends=' + option.shareFriends;
+      params += 'shareFriends=' + option.shareFriends + '&';
     }
 
     return this.http.get(`${this.url}${API_CONFIG}${params}`);

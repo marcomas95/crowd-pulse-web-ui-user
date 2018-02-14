@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {LocalStorageService} from './local-storage.service';
 import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs/Observable';
 
 const SESSION_TOKEN = 'SESSION';
 const USERNAME = 'USERNAME';
@@ -10,6 +11,7 @@ const USERNAME = 'USERNAME';
 const API_LOGIN = 'auth/login';
 const API_SIGNUP = 'auth/signup';
 const API_GET_USER = 'api/user';
+const API_CONFIG = 'api/user/config';
 
 @Injectable()
 export class AuthService {
@@ -162,6 +164,50 @@ export class AuthService {
    */
   getCachedUser(): any {
     return this.user;
+  }
+
+  /**
+   * Send holistic profile configuration to update.
+   * @param option: share options
+   * @return {Observable<Object>}
+   */
+  holisticProfileConfiguration(option: {
+    shareDemographics?: boolean, shareInterest?: boolean, shareAffects?: boolean, shareCognitiveAspects?: boolean,
+    shareBehavior?: boolean, shareSocialRelations?: boolean, sharePhysicalState?: boolean
+  }): Observable<any> {
+
+    let params = '?';
+    const username = this.getUserame();
+
+    if (!isNullOrUndefined(option.shareDemographics)) {
+      params += 'shareDemographics=' + option.shareDemographics + '&';
+    }
+
+    if (!isNullOrUndefined(option.shareInterest)) {
+      params += 'shareInterest=' + option.shareInterest + '&';
+    }
+
+    if (!isNullOrUndefined(option.shareAffects)) {
+      params += 'shareAffects=' + option.shareAffects + '&';
+    }
+
+    if (!isNullOrUndefined(option.shareCognitiveAspects)) {
+      params += 'shareCognitiveAspects=' + option.shareCognitiveAspects + '&';
+    }
+
+    if (!isNullOrUndefined(option.shareBehavior)) {
+      params += 'shareBehavior=' + option.shareBehavior + '&';
+    }
+
+    if (!isNullOrUndefined(option.shareSocialRelations)) {
+      params += 'shareSocialRelations=' + option.shareSocialRelations + '&';
+    }
+
+    if (!isNullOrUndefined(option.sharePhysicalState)) {
+      params += 'sharePhysicalState=' + option.sharePhysicalState + '&';
+    }
+
+    return this.http.post(`${this.url}${API_CONFIG}${params}`, {username: username});
   }
 
   /**

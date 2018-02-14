@@ -20,6 +20,7 @@ import { IdentitiesFitbitComponent } from './identities/fitbit/identities.fitbit
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileDataComponent } from './profile/profile-data/profile-data.component';
 import { ProfileStatsComponent } from './profile/profile-stats/profile-stats.component';
+import { ProfileSettingsComponent } from './profile/profile-settings/profile-settings.component';
 import { ChartModule } from 'angular-highcharts';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,6 +43,7 @@ import { ClipboardModule } from 'ngx-clipboard';
     ProfileComponent,
     ProfileDataComponent,
     ProfileStatsComponent,
+    ProfileSettingsComponent,
     DeveloperComponent,
   ],
   imports: [
