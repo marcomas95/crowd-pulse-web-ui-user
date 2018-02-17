@@ -15,20 +15,33 @@ export class ProfileStatsComponent implements OnInit {
   user: any;
 
   /**
-   * All filters.
+   * All filters. The same filter cab be used in more visualization type.
    */
   filters = {
-    filterDate: 'Filter by Date',
-    filterCategory: 'Group by Category',
-    filterCoordinate: 'Filter by Coordinate'
+    filterDate: {
+      name: 'Filter by Date',
+      dateFrom: new Date(),
+      dateTo: new Date(),
+    },
+    filterCategory: {
+      name: 'Group by Category',
+      groupBy: false,
+    },
+    filterCoordinate: {
+      name: 'Filter by Coordinate',
+      latitude: 0,
+      longitude: 0,
+      radius: 0,
+    },
+
+    // TODO add here new filters
   };
 
   /**
    * All available visualization.
    * Add here new visualizations to display them on the view.
    */
-  visualizations = [
-    {
+  visualizations = [{
       name: 'Personal Data Summary',
       id: 'personaldata-source',
       types: [
@@ -37,8 +50,7 @@ export class ProfileStatsComponent implements OnInit {
           filters: [],
         },
       ]
-    },
-    {
+    }, {
       name: 'Net Stat',
       id: 'personaldata-netstat',
       types: [
@@ -51,8 +63,7 @@ export class ProfileStatsComponent implements OnInit {
           filters: [this.filters.filterDate, this.filters.filterCategory],
         },
       ]
-    },
-    {
+    }, {
       name: 'App Info',
       id: 'personaldata-appinfo',
       types: [
@@ -65,8 +76,7 @@ export class ProfileStatsComponent implements OnInit {
           filters: [this.filters.filterDate, this.filters.filterCategory, this.filters.filterCoordinate],
         },
       ]
-    },
-    {
+    }, {
       name: 'GPS Position',
       id: 'personaldata-gps',
       types: [
@@ -75,7 +85,9 @@ export class ProfileStatsComponent implements OnInit {
           filters: [this.filters.filterCoordinate],
         },
       ]
-    }
+    },
+
+    // TODO add here new visualization
   ];
 
   /**
@@ -121,6 +133,8 @@ export class ProfileStatsComponent implements OnInit {
         this.defaultCharts.push({name: 'Android Data Summary', chart: chart});
       }
     });
+
+    // TODO add here new default visualization building methods
   }
 
   /**
@@ -150,7 +164,10 @@ export class ProfileStatsComponent implements OnInit {
           this.customChart = chart;
         });
         break;
-      case '':
+      case 'personaldata-gps':
+        this.buildGPSPositionChart().then((chart) => {
+          this.customChart = chart;
+        });
         break;
       default:
         break;
@@ -159,6 +176,7 @@ export class ProfileStatsComponent implements OnInit {
 
   /**
    * Build a pie chart with the personal data source type frequency.
+   * @param type: the chart type.
    */
   private buildPersonalDataSourceChart(type?: string): Promise<Chart | any> {
     return this.statsService.getPersonalDataSourceStats().then(
@@ -186,10 +204,13 @@ export class ProfileStatsComponent implements OnInit {
       });
   }
 
-  private buildGPSPositionChart() {
-  }
+  /**
+   * Build a map with the user GPS positions.
+   */
+  private buildGPSPositionChart(): Promise<Chart> {
 
-  private buildTestChart() {
+    // TODO create chart here
+    return Promise.reject(null);
   }
 
 }

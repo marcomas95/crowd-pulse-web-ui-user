@@ -28,6 +28,14 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { ErrorComponent } from './error/error.component';
 import { DeveloperComponent } from './developer/developer.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ProfileDataDemographicsComponent } from './profile/profile-data/profile-data-demographics/profile-data-demographics.component';
+import { PeopleComponent } from './people/people.component';
+import { ProfileDataAffectsComponent } from './profile/profile-data/profile-data-affects/profile-data-affects.component';
+import { ProfileDataSocialRelationsComponent } from './profile/profile-data/profile-data-social-relations/profile-data-social-relations.component';
+import { ProfileDataBehaviorComponent } from './profile/profile-data/profile-data-behavior/profile-data-behavior.component';
+import { ProfileDataPhysicalStateComponent } from './profile/profile-data/profile-data-physical-state/profile-data-physical-state.component';
+import { ProfileDataInterestComponent } from './profile/profile-data/profile-data-interests/profile-data-interests.component';
+import { ProfileDataCognitiveAspectsComponent } from './profile/profile-data/profile-data-cognitive-aspects/profile-data-cognitive-aspects.component';
 
 @NgModule({
   declarations: [
@@ -42,9 +50,17 @@ import { ClipboardModule } from 'ngx-clipboard';
     IdentitiesFitbitComponent,
     ProfileComponent,
     ProfileDataComponent,
+    ProfileDataDemographicsComponent,
+    ProfileDataAffectsComponent,
+    ProfileDataBehaviorComponent,
+    ProfileDataPhysicalStateComponent,
+    ProfileDataInterestComponent,
+    ProfileDataCognitiveAspectsComponent,
+    ProfileDataSocialRelationsComponent,
     ProfileStatsComponent,
     ProfileSettingsComponent,
     DeveloperComponent,
+    PeopleComponent,
   ],
   imports: [
     ComponentModule,

@@ -27,7 +27,7 @@ export class NavbarComponent {
     },
     {
       name: 'Profile',
-      path: `${APP_ROUTES.profile.root}/${this.authService.getUserame()}`,
+      path: `${APP_ROUTES.profile.root}/${this.authService.getUserame()}/${APP_ROUTES.profile.data}`,
     },
     {
       name: 'People',

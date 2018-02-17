@@ -16,6 +16,14 @@ import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { DeveloperComponent } from './pages/developer/developer.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings/profile-settings.component';
+import { ProfileDataDemographicsComponent } from './pages/profile/profile-data/profile-data-demographics/profile-data-demographics.component';
+import { PeopleComponent } from './pages/people/people.component';
+import { ProfileDataAffectsComponent } from './pages/profile/profile-data/profile-data-affects/profile-data-affects.component';
+import { ProfileDataInterestComponent } from './pages/profile/profile-data/profile-data-interests/profile-data-interests.component';
+import { ProfileDataCognitiveAspectsComponent } from './pages/profile/profile-data/profile-data-cognitive-aspects/profile-data-cognitive-aspects.component';
+import { ProfileDataPhysicalStateComponent } from './pages/profile/profile-data/profile-data-physical-state/profile-data-physical-state.component';
+import { ProfileDataBehaviorComponent } from './pages/profile/profile-data/profile-data-behavior/profile-data-behavior.component';
+import { ProfileDataSocialRelationsComponent } from './pages/profile/profile-data/profile-data-social-relations/profile-data-social-relations.component';
 
 const routes: Routes = [
   {
@@ -53,8 +61,30 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     component: ProfileComponent,
     children: [{
-      path: APP_ROUTES.profile.general,
+      path: APP_ROUTES.profile.data,
       component: ProfileDataComponent,
+      children: [{
+        path: APP_ROUTES.profile.demographics,
+        component: ProfileDataDemographicsComponent,
+      }, {
+        path: APP_ROUTES.profile.affects,
+        component: ProfileDataAffectsComponent,
+      }, {
+        path: APP_ROUTES.profile.interest,
+        component: ProfileDataInterestComponent,
+      }, {
+        path: APP_ROUTES.profile.cognitiveAspects,
+        component: ProfileDataCognitiveAspectsComponent,
+      }, {
+        path: APP_ROUTES.profile.physicalState,
+        component: ProfileDataPhysicalStateComponent,
+      }, {
+        path: APP_ROUTES.profile.behavior,
+        component: ProfileDataBehaviorComponent,
+      }, {
+        path: APP_ROUTES.profile.socialRelations,
+        component: ProfileDataSocialRelationsComponent,
+      }]
     }, {
       path: APP_ROUTES.profile.stats,
       component: ProfileStatsComponent,
@@ -62,6 +92,11 @@ const routes: Routes = [
       path: APP_ROUTES.profile.settings,
       component: ProfileSettingsComponent,
     }]
+  },
+  {
+    path: APP_ROUTES.people,
+    canActivate: [AuthGuardService],
+    component: PeopleComponent,
   },
   {
     path: APP_ROUTES.privacy,

@@ -18,7 +18,7 @@ app-navbar {
 }
 
 // theme created from pre-built palette
-$main-theme: mat-dark-theme(mat-palette($mat-blue-grey),  mat-palette($mat-pink));
+$main-theme: mat-dark-theme(mat-palette($mat-indigo),  mat-palette($mat-pink));
 $primary: map-get($main-theme, primary);
 $accent: map-get($main-theme, accent);
 $warn: map-get($main-theme, warn);

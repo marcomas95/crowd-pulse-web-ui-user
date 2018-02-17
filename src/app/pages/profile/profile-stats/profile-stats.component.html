@@ -31,14 +31,16 @@
 
         <!-- filter by date -->
         <div *ngIf="filter == filters.filterDate">
-          <h3>{{filter}}</h3>
+          <h3>{{filter.name}}</h3>
           <mat-form-field class="filter-container">
-            <input matInput [matDatepicker]="fromDate" placeholder="From Date" (ngModelChange)="updateChart()">
+            <input matInput [(ngModel)]="filter.dateFrom" [matDatepicker]="fromDate" placeholder="From Date"
+                   (ngModelChange)="updateChart()">
             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
             <mat-datepicker #fromDate></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="filter-container">
-            <input matInput [matDatepicker]="toDate" placeholder="To Date" (ngModelChange)="updateChart()">
+            <input matInput [(ngModel)]="filter.dateTo" [matDatepicker]="toDate" placeholder="To Date"
+                   (ngModelChange)="updateChart()">
             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
             <mat-datepicker #toDate></mat-datepicker>
           </mat-form-field>
@@ -46,20 +48,20 @@
 
         <!-- filter by category -->
         <div *ngIf="filter == filters.filterCategory" class="filter-container">
-          <mat-checkbox (ngModelChange)="updateChart()">{{filter}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="filter.groupBy" (ngModelChange)="updateChart()">{{filter.name}}</mat-checkbox>
         </div>
 
         <!-- filter by range map -->
         <div *ngIf="filter == filters.filterCoordinate">
-          <h3>{{filter}}</h3>
+          <h3>{{filter.name}}</h3>
           <mat-form-field class="filter-container">
-            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Latitude">
+            <input matInput [(ngModel)]="filter.latitude" type="number" (ngModelChange)="updateChart()" placeholder="Latitude">
           </mat-form-field>
           <mat-form-field class="filter-container">
-            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Longitude">
+            <input matInput [(ngModel)]="filter.longitude" type="number" (ngModelChange)="updateChart()" placeholder="Longitude">
           </mat-form-field>
           <mat-form-field class="filter-container">
-            <input matInput type="number" (ngModelChange)="updateChart()" placeholder="Radius">
+            <input matInput [(ngModel)]="filter.radius" type="number" (ngModelChange)="updateChart()" placeholder="Radius">
           </mat-form-field>
         </div>
       </mat-card>

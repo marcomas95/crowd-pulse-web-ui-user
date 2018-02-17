@@ -1,8 +1,82 @@
-<!-- sidenav container used only for Angular Material CSS text style -->
-<mat-sidenav-container>
+<mat-sidenav-container class="profile-data-sidenav-container">
+  <mat-sidenav [mode]="'side'" opened="true"
+               class="profile-data-sidenav mat-elevation-z3"
+               ngClass.lt-sm="profile-data-sidenav-small mat-elevation-z3">
+
+    <mat-nav-list>
+      <nav>
+        <a mat-list-item [routerLink]="appRoutes.profile.demographics" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-address-card fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Demographics
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.interest" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-thumbs-up fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Interests
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.affects" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-smile-o fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Affects
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.cognitiveAspects" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-lightbulb-o fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Cognitive Aspects
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.behavior" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-child fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Behavior
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.socialRelations" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-users fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Social Relations
+        </span>
+        </a>
+
+        <a mat-list-item [routerLink]="appRoutes.profile.physicalState" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-heart fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Physical State
+        </span>
+        </a>
+      </nav>
+    </mat-nav-list>
+
+  </mat-sidenav>
+
   <mat-sidenav-content>
-    <div class="main-content-page">
-      <p>TODO create endpoints to get demographics user data.</p>
+
+    <div *ngIf="routedPage.url == rootPage" class="main-content-page">
+      <h2>Your Bio</h2>
+
+      <div *ngIf="user && user.demographics; else noContent">
+        <p>Hi {{ bioFields.name }}<span *ngIf="bioFields.location "> of {{ bioFields.location }}</span>.</p>
+        <p>You are {{ bioFields.gender }}.</p>
+        <p>You can speak {{ bioFields.language }}.</p>
+        <p *ngIf="bioFields.email">Yours emails: {{ bioFields.email }}.</p>
+      </div>
+
+      <ng-template #noContent>
+        <p>No data available yet.</p>
+      </ng-template>
     </div>
+
+    <!-- holistic profile fields sub-pages -->
+    <router-outlet></router-outlet>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,6 +1,9 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 import {ToastrService} from 'ngx-toastr';
+import {ProfileService} from '../../../services/profile.service';
+import {Router} from '@angular/router';
+import {APP_ROUTES} from '../../../app-routes';
 
 @Component({
   styleUrls: ['./profile-settings.component.scss'],
@@ -56,28 +59,38 @@ export class ProfileSettingsComponent {
 
   constructor(
     private authService: AuthService,
+    private profileService: ProfileService,
     private toast: ToastrService,
+    private router: Router,
   ) {
-    authService.getUser().then((user) => {
-      this.user = user;
-      this.privacyOptions.forEach((option) => {
-        if (option.id === 'shareDemographics') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareDemographics;
-        } else if (option.id === 'shareInterest') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareInterest;
-        } else if (option.id === 'shareAffects') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareAffects;
-        } else if (option.id === 'shareCognitiveAspects') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareCognitiveAspects;
-        } else if (option.id === 'shareBehavior') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareBehavior;
-        } else if (option.id === 'shareSocialRelations') {
-          option.value = this.user.identities.configs.holisticProfileConfig.shareSocialRelations;
-        } else if (option.id === 'sharePhysicalState') {
-          option.value = this.user.identities.configs.holisticProfileConfig.sharePhysicalState;
-        }
+
+    // hide this page to not logged user
+    if (!profileService.isLoggedUser()) {
+
+      // navigate to home page
+      this.router.navigateByUrl(APP_ROUTES.home);
+    } else {
+      authService.getUser().then((user) => {
+        this.user = user;
+        this.privacyOptions.forEach((option) => {
+          if (option.id === 'shareDemographics') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareDemographics;
+          } else if (option.id === 'shareInterest') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareInterest;
+          } else if (option.id === 'shareAffects') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareAffects;
+          } else if (option.id === 'shareCognitiveAspects') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareCognitiveAspects;
+          } else if (option.id === 'shareBehavior') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareBehavior;
+          } else if (option.id === 'shareSocialRelations') {
+            option.value = this.user.identities.configs.holisticProfileConfig.shareSocialRelations;
+          } else if (option.id === 'sharePhysicalState') {
+            option.value = this.user.identities.configs.holisticProfileConfig.sharePhysicalState;
+          }
+        });
       });
-    });
+    }
   }
 
   /**

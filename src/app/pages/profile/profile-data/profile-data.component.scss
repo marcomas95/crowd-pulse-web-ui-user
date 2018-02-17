@@ -1,0 +1,23 @@
+@import "../../../../styles.scss";
+
+.profile-data-sidenav-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - #{$navbar-height});
+  z-index: 1;
+}
+
+.profile-data-sidenav {
+  display: flex;
+  width: 246px;
+  padding: 16px;
+}
+
+.profile-data-sidenav-small {
+  width: 56px;
+  padding: 2px;
+}
+
+.spacer {
+  margin-left: 32px;
+}
