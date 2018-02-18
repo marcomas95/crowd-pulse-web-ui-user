@@ -27,7 +27,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ErrorComponent } from './error/error.component';
 import { DeveloperComponent } from './developer/developer.component';
-import { ClipboardModule } from 'ngx-clipboard';
 import { ProfileDataDemographicsComponent } from './profile/profile-data/profile-data-demographics/profile-data-demographics.component';
 import { PeopleComponent } from './people/people.component';
 import { ProfileDataAffectsComponent } from './profile/profile-data/profile-data-affects/profile-data-affects.component';
@@ -89,7 +88,6 @@ import { ProfileDataCognitiveAspectsComponent } from './profile/profile-data/pro
     MatTableModule,
     CdkTableModule,
     ChartModule,
-    ClipboardModule,
   ],
   providers: [],
 })

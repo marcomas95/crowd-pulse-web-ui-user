@@ -23,7 +23,7 @@ h2 {
   margin-bottom: 0;
 }
 
-input[type=text] {
+input[type=text], textarea {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -32,4 +32,5 @@ input[type=text] {
   border-radius: 4px;
   background-color: rgba(74,74,74,0.50);
   color: white;
+  resize: none;
 }

@@ -8,8 +8,7 @@
 
     <label>Access Token</label>
     <div fxLayout>
-      <input type="text" [(ngModel)]="accessToken" disabled>
-      <button mat-button  ngxClipboard [cbContent]="accessToken"><i class="fa fa-copy fa-2x"></i></button>
+      <textarea type="text" [(ngModel)]="accessToken" disabled></textarea>
     </div>
     <label>Api URL</label>
     <input type="text" value="{{apiUrl}}api" disabled>
