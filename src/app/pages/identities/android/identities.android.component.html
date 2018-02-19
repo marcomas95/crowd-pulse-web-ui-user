@@ -8,7 +8,8 @@
     <mat-input-container ngClass.lt-md="device-select">
       <mat-select [(ngModel)]="selectedDeviceId" (ngModelChange)="onDeviceIdSelected()"
                   placeholder="Please select a device">
-        <mat-option *ngFor="let device of user.identities.devices" [value]="device.deviceId">
+        <mat-option *ngFor="let device of user.identities.devices" [value]="device.deviceId"
+                    [routerLink]="" [queryParams]="{ deviceId: device.deviceId }">
           {{ device.brand }} - {{ device.model }} - ID: {{ device.deviceId }}
         </mat-option>
       </mat-select>

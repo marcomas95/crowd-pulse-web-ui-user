@@ -366,7 +366,7 @@ export class IdentitiesFacebookComponent implements OnInit {
    */
   private setupFacebookProfileTable() {
 
-    // user Twitter data
+    // user Facebook data
     const facebook = this.user.identities.facebook;
 
     // array used to populate the data source object

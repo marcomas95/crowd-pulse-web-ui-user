@@ -59,10 +59,6 @@ export class IdentitiesAndroidComponent implements OnInit {
           // reading device ID
           this.route.queryParams.subscribe(params => {
             const deviceId = params['deviceId'];
-
-            // clean the URL
-            window.history.replaceState(null, null, window.location.pathname);
-
             if (deviceId) {
               this.selectedDeviceId = deviceId;
               this.onDeviceIdSelected();
