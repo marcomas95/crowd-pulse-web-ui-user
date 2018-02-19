@@ -63,28 +63,6 @@ const routes: Routes = [
     children: [{
       path: APP_ROUTES.profile.data,
       component: ProfileDataComponent,
-      children: [{
-        path: APP_ROUTES.profile.demographics,
-        component: ProfileDataDemographicsComponent,
-      }, {
-        path: APP_ROUTES.profile.affects,
-        component: ProfileDataAffectsComponent,
-      }, {
-        path: APP_ROUTES.profile.interest,
-        component: ProfileDataInterestComponent,
-      }, {
-        path: APP_ROUTES.profile.cognitiveAspects,
-        component: ProfileDataCognitiveAspectsComponent,
-      }, {
-        path: APP_ROUTES.profile.physicalState,
-        component: ProfileDataPhysicalStateComponent,
-      }, {
-        path: APP_ROUTES.profile.behavior,
-        component: ProfileDataBehaviorComponent,
-      }, {
-        path: APP_ROUTES.profile.socialRelations,
-        component: ProfileDataSocialRelationsComponent,
-      }]
     }, {
       path: APP_ROUTES.profile.stats,
       component: ProfileStatsComponent,

@@ -31,6 +31,11 @@ export class ProfileDataComponent implements OnInit {
   user: any;
 
   /**
+   * Selected sub-page (demographics, interest, etc).
+   */
+  selected = '';
+
+  /**
    * Bio fields used in the UI to make the user bio.
    */
   bioFields: {
@@ -59,7 +64,6 @@ export class ProfileDataComponent implements OnInit {
    */
   ngOnInit() {
 
-
     if (this.profileService.getCachedProfile()) {
       this.user = this.profileService.getCachedProfile();
     } else {
@@ -67,8 +71,17 @@ export class ProfileDataComponent implements OnInit {
     }
     this.rootPage = `/${APP_ROUTES.profile.root}/${this.user.username}/${APP_ROUTES.profile.data}`;
     this.routedPage = this.router;
-    this.buildBioFields();
 
+    // reading sub-page id
+    this.route.queryParams.subscribe(params => {
+      const dataId = params['show'];
+
+      if (dataId) {
+        this.selected = dataId;
+      }
+    });
+
+    this.buildBioFields();
   }
 
   /**
@@ -99,7 +112,7 @@ export class ProfileDataComponent implements OnInit {
         const emailSortedArray = demographics.email.sort((a, b) => b.timestamp - a.timestamp);
         for (const email of emailSortedArray) {
 
-          // only the last emails with the same timestamps
+          // only the last emails with the same timestamp
           if (email.timestamp === emailSortedArray[0].timestamp) {
             emails += email.value + ', ';
           }
@@ -124,7 +137,7 @@ export class ProfileDataComponent implements OnInit {
 
         for (const language of languageSortedArray) {
 
-          // only the last language with the same timestamps and different value
+          // only the last languages with the same timestamp and different value
           if (language.timestamp === languageSortedArray[0].timestamp ) {
             languages += language.value + ', ';
           }

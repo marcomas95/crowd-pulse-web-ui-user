@@ -5,49 +5,56 @@
 
     <mat-nav-list>
       <nav>
-        <a mat-list-item [routerLink]="appRoutes.profile.demographics" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.demographics }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-address-card fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Demographics
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.interest" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.interest }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-thumbs-up fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Interests
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.affects" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.affects }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-smile-o fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Affects
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.cognitiveAspects" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.cognitiveAspects }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-lightbulb-o fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Cognitive Aspects
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.behavior" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.behavior }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-child fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Behavior
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.socialRelations" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.socialRelations }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-users fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Social Relations
         </span>
         </a>
 
-        <a mat-list-item [routerLink]="appRoutes.profile.physicalState" routerLinkActive #rla="routerLinkActive">
+        <a mat-list-item [routerLink]="" [queryParams]="{ show: appRoutes.profile.physicalState }"
+           routerLinkActive #rla="routerLinkActive">
           <i class="fa fa-heart fa-fw fa-1x" aria-hidden="true"></i>
           <span fxHide.lt-sm>
             <span class="spacer"></span> Physical State
@@ -60,7 +67,7 @@
 
   <mat-sidenav-content>
 
-    <div *ngIf="routedPage.url == rootPage" class="main-content-page">
+    <div *ngIf="routedPage.url == rootPage; else showSubPages" class="main-content-page">
       <h2>Your Bio</h2>
 
       <div *ngIf="user && user.demographics; else noContent">
@@ -76,7 +83,35 @@
     </div>
 
     <!-- holistic profile fields sub-pages -->
-    <router-outlet></router-outlet>
+    <ng-template #showSubPages>
+      <div *ngIf="selected === appRoutes.profile.demographics">
+        <app-profile-demographics [user]="user"></app-profile-demographics>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.interest">
+        <app-profile-interests [user]="user"></app-profile-interests>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.affects">
+        <app-profile-affects [user]="user"></app-profile-affects>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.cognitiveAspects">
+        <app-profile-cognitive-aspects [user]="user"></app-profile-cognitive-aspects>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.behavior">
+        <app-profile-behavior [user]="user"></app-profile-behavior>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.physicalState">
+        <app-profile-physical-state [user]="user"></app-profile-physical-state>
+      </div>
+
+      <div *ngIf="selected === appRoutes.profile.socialRelations">
+        <app-profile-social-relations [user]="user"></app-profile-social-relations>
+      </div>
+    </ng-template>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
