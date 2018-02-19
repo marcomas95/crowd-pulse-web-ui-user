@@ -91,7 +91,6 @@ export class ProfileComponent implements OnInit {
     this.profileService.getProfile(username).then(
       (user) => {
         if (user) {
-          this.router.navigateByUrl(`${APP_ROUTES.profile.root}/${username}/${APP_ROUTES.profile.data}`);
           this.user = user;
           this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
           this.loggedUser = this.profileService.isLoggedUser();
