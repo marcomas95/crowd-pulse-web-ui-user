@@ -37,7 +37,7 @@ export class ProfileSettingsComponent {
     },
     {
       id: 'shareBehavior',
-      name: 'Share Behavior',
+      name: 'Share Behaviors',
       value: true,
     },
     {
@@ -47,7 +47,7 @@ export class ProfileSettingsComponent {
     },
     {
       id: 'sharePhysicalState',
-      name: 'Share Physical State',
+      name: 'Share Physical States',
       value: true,
     }
   ];
