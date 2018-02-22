@@ -1,4 +1,51 @@
-<div class="main-content-page">
-  <h2>Interests</h2>
-  <p>Your interests will be shown here.</p>
+<div ngClass.gt-sm="main-content-page">
+
+  <div *ngIf="!data">
+    <h2>Interests</h2>
+    <p>Your interests will be shown here.</p>
+  </div>
+
+  <div *ngIf="data">
+    <mat-card class="interest-filters">
+      <h3>Filters</h3>
+
+      <div fxLayout.lt-md="column">
+
+        <!-- filter by date -->
+        <mat-form-field fxFlex class="filter-date">
+          <input matInput [(ngModel)]="filter.dateFrom" [matDatepicker]="fromDate" placeholder="From Date"
+                 (ngModelChange)="updateChart()">
+          <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+          <mat-datepicker #fromDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex class="filter-date">
+          <input matInput [(ngModel)]="filter.dateTo" [matDatepicker]="toDate" placeholder="To Date"
+                 (ngModelChange)="updateChart()">
+          <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+          <mat-datepicker #toDate></mat-datepicker>
+        </mat-form-field>
+
+        <!-- filter by source -->
+        <mat-form-field>
+          <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+            <mat-option *ngFor="let source of sources" [value]="source.id">
+              {{ source.name | uppercase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </mat-card>
+
+    <mat-card *ngIf="data.length > 0">
+      <h2>Interests</h2>
+      <angular-tag-cloud
+        [data]="data"
+        [width]="options.width"
+        [overflow]="options.overflow">
+      </angular-tag-cloud>
+    </mat-card>
+
+  </div>
+
 </div>

@@ -35,6 +35,7 @@ import { ProfileDataBehaviorComponent } from './profile/profile-data/profile-dat
 import { ProfileDataPhysicalStateComponent } from './profile/profile-data/profile-data-physical-state/profile-data-physical-state.component';
 import { ProfileDataInterestComponent } from './profile/profile-data/profile-data-interests/profile-data-interests.component';
 import { ProfileDataCognitiveAspectsComponent } from './profile/profile-data/profile-data-cognitive-aspects/profile-data-cognitive-aspects.component';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { ProfileDataCognitiveAspectsComponent } from './profile/profile-data/pro
     MatTableModule,
     CdkTableModule,
     ChartModule,
+    TagCloudModule,
   ],
   providers: [],
 })

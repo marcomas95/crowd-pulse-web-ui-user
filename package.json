@@ -29,6 +29,7 @@
     "@ngx-progressbar/core": "^4.0.1",
     "@ngx-progressbar/http": "^4.0.1",
     "angular-highcharts": "^5.2.0",
+    "angular-tag-cloud-module": "^2.4.0",
     "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.4.1",
     "express": "^4.16.2",
