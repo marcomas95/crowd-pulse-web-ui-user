@@ -26,7 +26,7 @@
         </mat-form-field>
 
         <!-- filter by source -->
-        <mat-form-field>
+        <mat-form-field fxFlex class="filter-date">
           <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
             <mat-option *ngFor="let source of sources" [value]="source.id">
               {{ source.name | uppercase }}
@@ -37,7 +37,7 @@
 
     </mat-card>
 
-    <mat-card *ngIf="data.length > 0">
+    <mat-card *ngIf="data.length > 0; else noInterest">
       <h2>Interests</h2>
       <angular-tag-cloud
         [data]="data"
@@ -45,6 +45,13 @@
         [overflow]="options.overflow">
       </angular-tag-cloud>
     </mat-card>
+
+    <ng-template #noInterest>
+      <mat-card>
+        <h2>Interests</h2>
+        <p>No interests found.</p>
+      </mat-card>
+    </ng-template>
 
   </div>
 

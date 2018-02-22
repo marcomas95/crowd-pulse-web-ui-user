@@ -46,10 +46,7 @@ export class ProfileDataInterestComponent implements OnInit {
   }, {
     id: 'app_category',
     name: 'App Category',
-  }, {
-    id: 'manually_added',
-    name: 'FOR TEST',
-  }
+  },
 
     // TODO add here new source type
   ];
