@@ -11,6 +11,7 @@ import { LinkedinService } from './linkedin.service';
 import { AndroidSocketService } from './android-socket.service';
 import { ProfileService } from './profile.service';
 import { ErrorService } from './error.service';
+import {FitbitService} from './fitbit.service';
 
 @NgModule({
   declarations: [],
@@ -34,6 +35,7 @@ import { ErrorService } from './error.service';
     LocalStorageService,
     ProfileService,
     ErrorService,
+    FitbitService,
   ],
 })
 export class ServicesModule {}

@@ -11,4 +11,5 @@ export const environment = {
   twitterCallbackUrl: 'http://localhost:4200/identities/twitter',
   facebookCallbackUrl: 'http://localhost:4200/identities/facebook',
   linkedinCallbackUrl: 'http://localhost:4200/identities/linkedin',
+  fitbitCallbackUrl: 'http://localhost:4200/identities/fitbit',
 };
