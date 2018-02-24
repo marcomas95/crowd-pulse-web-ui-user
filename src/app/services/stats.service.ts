@@ -8,7 +8,7 @@ const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
-const API_STATS_EMOTION_TIMELINE = '/stats/emotion/timeline';
+const API_STATS_EMOTION_TIMELINE = 'api/stats/emotion/timeline';
 
 @Injectable()
 export class StatsService {
