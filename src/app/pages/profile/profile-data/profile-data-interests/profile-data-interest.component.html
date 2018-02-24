@@ -1,12 +1,12 @@
 <div ngClass.gt-sm="main-content-page">
 
-  <div *ngIf="!data">
+  <mat-card class="card-spacer" *ngIf="!data">
     <h2>Interests</h2>
     <p>Your interests will be shown here.</p>
-  </div>
+  </mat-card>
 
   <div *ngIf="data">
-    <mat-card class="filters-space">
+    <mat-card class="card-spacer">
       <h3>Filters</h3>
 
       <div fxLayout.lt-md="column">

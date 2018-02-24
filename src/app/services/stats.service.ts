@@ -7,19 +7,18 @@ import {isNullOrUndefined} from 'util';
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
+const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
 
 @Injectable()
 export class StatsService {
 
   private url: string;
-  private username: string;
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
   ) {
     this.url = environment.api;
-    this.username = this.authService.getUserame();
   }
 
   /**
@@ -27,7 +26,7 @@ export class StatsService {
    * @return: stats object as [{name: string, value: number}]
    */
   getPersonalDataSourceStats(): Promise<any> {
-    const params = `?db=${this.username}`;
+    const params = `?db=${this.authService.getUserame()}`;
     return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_SOURCE}${params}`).toPromise();
   }
 
@@ -37,7 +36,7 @@ export class StatsService {
    * @return: stats object as [{value: string, weight: number}]
    */
   getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string}): Promise<any> {
-    let params = `?db=${this.username}&`;
+    let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
@@ -60,7 +59,7 @@ export class StatsService {
    * @return: contacts stats object as [{name: string, value: number}]
    */
   getAndroidContactStats(filter?: {limitResults?: number}): Promise<any> {
-    let params = `?db=${this.username}&`;
+    let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.limitResults)) {
@@ -71,4 +70,26 @@ export class StatsService {
     return this.http.get(`${this.url}${API_STATS_CONTACT_ANDROID}${params}`).toPromise();
   }
 
+  /**
+   * Get sentiment timeline.
+   * @param filter: the filters
+   * @return: timeline stats object as [{values: [{date: Date, value: number}], name: string}]
+   */
+  getSentimentTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom + '&';
+      }
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo + '&';
+      }
+      if (!isNullOrUndefined(filter.source)) {
+        params += 'source=' + filter.source + '&';
+      }
+    }
+
+    return this.http.get(`${this.url}${API_STATS_SENTIMENT_TIMELINE}${params}`).toPromise();
+  }
 }

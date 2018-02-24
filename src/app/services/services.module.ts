@@ -32,7 +32,6 @@ import { ErrorService } from './error.service';
     AuthGuardService,
     StatsService,
     LocalStorageService,
-    ProfileService,
     ErrorService,
   ],
 })

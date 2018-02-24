@@ -5,7 +5,8 @@ import {ProfileService} from '../../services/profile.service';
 
 @Component({
   styleUrls: ['./profile.component.scss'],
-  templateUrl: './profile.component.html'
+  templateUrl: './profile.component.html',
+  providers: [ProfileService],
 })
 export class ProfileComponent implements OnInit {
 

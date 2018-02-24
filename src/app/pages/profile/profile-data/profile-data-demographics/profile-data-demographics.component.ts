@@ -18,23 +18,20 @@ export class ProfileDataDemographicsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
 
-  constructor(
-    private profileService: ProfileService
-  ) {}
 
   /**
    * @override
    */
   ngOnInit() {
     if (this.user.demographics) {
-      this.setupFacebookProfileTable();
+      this.setupDemographicsProfileTable();
     }
   }
 
   /**
    * Populate the dataSource object reading the demographics element from user profile.
    */
-  private setupFacebookProfileTable() {
+  private setupDemographicsProfileTable() {
     const demographics = this.user.demographics;
 
     // array used to populate the data source object

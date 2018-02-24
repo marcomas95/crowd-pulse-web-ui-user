@@ -6,7 +6,7 @@
   </div>
 
   <div *ngIf="data">
-    <mat-card class="filters-space">
+    <mat-card class="card-spacer">
       <h3>Filters</h3>
 
       <div fxLayout.lt-md="column">
@@ -33,7 +33,7 @@
 
           <ng-container matColumnDef="contatedTimes">
             <mat-header-cell *cdkHeaderCellDef> Contacted Times </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.contatedTimes }} </mat-cell>
+            <mat-cell *matCellDef="let element" style="text-align: center"> {{element.contatedTimes }} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
