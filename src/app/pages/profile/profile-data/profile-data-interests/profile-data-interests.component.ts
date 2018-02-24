@@ -4,7 +4,7 @@ import {CloudData, CloudOptions} from 'angular-tag-cloud-module';
 
 @Component({
   selector: 'app-profile-interests',
-  styleUrls: ['./profile-data-interest.component.scss'],
+  styleUrls: ['./../profile-data.component.scss'],
   templateUrl: './profile-data-interest.component.html'
 })
 export class ProfileDataInterestComponent implements OnInit {
@@ -55,9 +55,9 @@ export class ProfileDataInterestComponent implements OnInit {
    * Filter available.
    */
   filter = {
-    dateFrom: null,
-    dateTo: null,
-    source: this.sources[0].id,
+    dateFrom: new Date(),
+    dateTo: new Date(),
+    source: this.sources[3].id,
   };
 
 
@@ -71,7 +71,7 @@ export class ProfileDataInterestComponent implements OnInit {
   ngOnInit() {
 
     // get word cloud interests data
-    this.statsService.getInterestsStats().then((stats) => {
+    this.statsService.getInterestsStats(this.filter).then((stats) => {
       this.data = stats.map((data) => {
         return {
           weight: data.weight,

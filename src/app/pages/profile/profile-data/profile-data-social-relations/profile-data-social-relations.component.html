@@ -1,4 +1,54 @@
-<div class="main-content-page">
-  <h2>Social Relations</h2>
-  <p>Social relations will be shown here.</p>
+<div ngClass.gt-sm="main-content-page">
+
+  <div *ngIf="!data">
+    <h2>Social Relations</h2>
+    <p>Social relations will be shown here.</p>
+  </div>
+
+  <div *ngIf="data">
+    <mat-card class="filters-space">
+      <h3>Filters</h3>
+
+      <div fxLayout.lt-md="column">
+
+        <!-- filter by source -->
+        <mat-form-field fxFlex class="filter-date">
+          <mat-select [(ngModel)]="selectedSouce" (ngModelChange)="getFriends()" placeholder="Source">
+            <mat-option *ngFor="let source of sources" [value]="source.id">
+              {{ source.name | uppercase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </mat-card>
+
+    <mat-card *ngIf="data.length > 0; else noContacts">
+        <mat-card-title>Social Relations</mat-card-title>
+        <mat-table #table [dataSource]="dataSource">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.name | uppercase }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="contatedTimes">
+            <mat-header-cell *cdkHeaderCellDef> Contacted Times </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.contatedTimes }} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <br>
+    </mat-card>
+
+    <ng-template #noContacts>
+      <mat-card>
+        <h2>Social Relations</h2>
+        <p>No social relations found.</p>
+      </mat-card>
+    </ng-template>
+
+  </div>
+
 </div>

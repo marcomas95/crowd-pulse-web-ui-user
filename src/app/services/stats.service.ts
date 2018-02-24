@@ -6,6 +6,7 @@ import {isNullOrUndefined} from 'util';
 
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
+const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 
 @Injectable()
 export class StatsService {
@@ -32,6 +33,7 @@ export class StatsService {
 
   /**
    * Get interests data stats.
+   * @param filter: the filters
    * @return: stats object as [{value: string, weight: number}]
    */
   getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string}): Promise<any> {
@@ -50,6 +52,23 @@ export class StatsService {
     }
 
     return this.http.get(`${this.url}${API_STATS_INTERESTS_WORD_CLOUD}${params}`).toPromise();
+  }
+
+  /**
+   * Get Android contacts.
+   * @param filter: the filters
+   * @return: contacts stats object as [{name: string, value: number}]
+   */
+  getAndroidContactStats(filter?: {limitResults?: number}): Promise<any> {
+    let params = `?db=${this.username}&`;
+
+    if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.limitResults)) {
+        params += 'limitResults=' + filter.limitResults + '&';
+      }
+    }
+
+    return this.http.get(`${this.url}${API_STATS_CONTACT_ANDROID}${params}`).toPromise();
   }
 
 }
