@@ -8,6 +8,7 @@ const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
+const API_STATS_EMOTION_TIMELINE = '/stats/emotion/timeline';
 
 @Injectable()
 export class StatsService {
@@ -75,7 +76,7 @@ export class StatsService {
    * @param filter: the filters
    * @return: timeline stats object as [{values: [{date: Date, value: number}], name: string}]
    */
-  getSentimentTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string}): Promise<any> {
+  getSentimentTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
@@ -85,11 +86,28 @@ export class StatsService {
       if (!isNullOrUndefined(filter.dateTo)) {
         params += 'to=' + filter.dateTo + '&';
       }
-      if (!isNullOrUndefined(filter.source)) {
-        params += 'source=' + filter.source + '&';
-      }
     }
 
     return this.http.get(`${this.url}${API_STATS_SENTIMENT_TIMELINE}${params}`).toPromise();
+  }
+
+  /**
+   * Get emotion timeline.
+   * @param filter: the filters
+   * @return: timeline stats object as [{values: [{date: Date, value: number}], name: string}]
+   */
+  getEmotionTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom + '&';
+      }
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo + '&';
+      }
+    }
+
+    return this.http.get(`${this.url}${API_STATS_EMOTION_TIMELINE}${params}`).toPromise();
   }
 }

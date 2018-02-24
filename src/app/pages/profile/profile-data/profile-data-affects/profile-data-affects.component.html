@@ -46,12 +46,12 @@
 
       <mat-card *ngIf="data && data.length > 0 && selectedType.id == 'mood'">
         <h2>Mood</h2>
-        <div [chart]="moodTimelineChart"></div>
+        <div [chart]="chart"></div>
       </mat-card>
 
       <mat-card *ngIf="data && data.length > 0 && selectedType.id == 'emotions'">
         <h2>Emotions</h2>
-        <div [chart]="moodTimelineChart"></div>
+        <div [chart]="chart"></div>
       </mat-card>
 
     </div>

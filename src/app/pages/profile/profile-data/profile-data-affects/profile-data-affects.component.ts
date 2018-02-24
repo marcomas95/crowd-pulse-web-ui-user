@@ -20,9 +20,9 @@ export class ProfileDataAffectsComponent {
   data: any;
 
   /**
-   * Mood timeline chart.
+   * Mood/emotion timeline chart.
    */
-  moodTimelineChart: Chart;
+  chart: Chart;
 
   /**
    * Filter available.
@@ -65,52 +65,31 @@ export class ProfileDataAffectsComponent {
    * Update the selected chart.
    */
   updateChart() {
-    if (this.selectedType.id == 'mood') {
-      this.statsService.getSentimentTimelineStats(this.filter).then(
-        (res) => {
-          this.data = res;
-          this.mapStatToTimeline(res);
+    switch (this.selectedType.id) {
 
-          this.moodTimelineChart = new Chart({
-            chart: {
-              type: 'spline',
-            },
-            title: null,
-            xAxis: {
-              type: 'datetime',
-              dateTimeLabelFormats: {
-                month: '%e. %b',
-                year: '%b'
-              },
-              title: {
-                text: 'Date'
-              }
-            },
-            yAxis: {
-              title: {
-                text: 'Mood'
-              }
-            },
-            credits: {
-              enabled: false
-            },
-            exporting: {
-              buttons: {
-                contextButton: {
-                  enabled: false
-                }
-              }
-            },
-            legend: {
-              enabled: false
-            },
-            series: this.data
-          });
-        }
-      );
-    } else if (this.selectedType.id == 'emotions') {
+      case 'mood':
+        this.statsService.getSentimentTimelineStats(this.filter).then(
+          (res) => {
+            this.data = res;
+            this.mapSentimentStatToTimeline(res);
+            this.buildChart(this.selectedType.name);
+          }
+        );
+        break;
 
-      // TODO build emtotions timeline here
+      case 'emotions':
+        this.statsService.getEmotionTimelineStats(this.filter).then(
+          (res) => {
+            this.data = res;
+            this.mapEmotionStatToTimeline(res);
+            this.buildChart(this.selectedType.name);
+          }
+        );
+        break;
+
+      default:
+        this.data = null;
+        break;
     }
   }
 
@@ -118,7 +97,7 @@ export class ProfileDataAffectsComponent {
    * Convert sentiment stats result to timeline array for correct visualization.
    * @param stats: the sentiment stats
    */
-  private mapStatToTimeline(stats) {
+  private mapSentimentStatToTimeline(stats) {
     this.data = [];
     stats.forEach((stat) => {
       let color = '#000000';
@@ -138,6 +117,81 @@ export class ProfileDataAffectsComponent {
       };
 
       this.data.push(stat);
+    });
+  }
+
+  /**
+   * Convert emotion stats result to timeline array for correct visualization.
+   * @param stats: the emotion stats
+   */
+  private mapEmotionStatToTimeline(stats) {
+    this.data = [];
+    stats.forEach((stat) => {
+      let color = '#535353';
+      if (stat.name === 'joy') {
+        color = '#e6e44b';
+      } else if (stat.name === 'anger') {
+        color = '#b10000';
+      } else if (stat.name === 'fear') {
+        color = '#151741';
+      } else if (stat.name === 'disgust') {
+        color = '#865809';
+      } else if (stat.name === 'surprise') {
+        color = '#00e68b';
+      }
+
+      // override stat element
+      stat = {
+        name: stat.name,
+        data: stat.values.map(function(elem) {
+          return [(new Date(elem.date)).getTime(), elem.value];
+        }),
+        color: color
+      };
+
+      this.data.push(stat);
+    });
+  }
+
+  /**
+   * Build the chart.
+   * @param yAxisText: the y-axis title
+   */
+  private buildChart(yAxisText: string) {
+    this.chart = new Chart({
+      chart: {
+        type: 'spline',
+      },
+      title: null,
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+          month: '%e. %b',
+          year: '%b'
+        },
+        title: {
+          text: 'Date'
+        }
+      },
+      yAxis: {
+        title: {
+          text: yAxisText
+        }
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+            enabled: false
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      series: this.data
     });
   }
 
