@@ -8,11 +8,15 @@ import {MatTableDataSource} from '@angular/material';
 })
 export class ProfileDataCognitiveAspectsComponent implements OnInit {
 
-
   /**
    * The user profile (logged or not).
    */
   @Input() user: any;
+
+  /**
+   * User empathy.
+   */
+  empathy: string;
 
   // data source containing user personality data
   dataSource: MatTableDataSource<any>;
@@ -27,12 +31,22 @@ export class ProfileDataCognitiveAspectsComponent implements OnInit {
     if (personalities && personalities.length) {
       const personalitiesData: {dataName: string, dataValue: any}[] = [];
       const currentPersonality = personalities.sort((a, b) => b.timestamp - a.timestamp)[0];
-      personalitiesData.push({dataName: 'openness', dataValue: currentPersonality.openness});
-      personalitiesData.push({dataName: 'conscientiousness', dataValue: currentPersonality.conscientiousness});
-      personalitiesData.push({dataName: 'extroversion', dataValue: currentPersonality.extroversion});
-      personalitiesData.push({dataName: 'agreeableness', dataValue: currentPersonality.agreeableness});
-      personalitiesData.push({dataName: 'neuroticism', dataValue: currentPersonality.neuroticism});
+      personalitiesData.push({dataName: 'openness', dataValue: currentPersonality.openness.toFixed(2)});
+      personalitiesData.push({dataName: 'conscientiousness', dataValue: currentPersonality.conscientiousness.toFixed(2)});
+      personalitiesData.push({dataName: 'extroversion', dataValue: currentPersonality.extroversion.toFixed(2)});
+      personalitiesData.push({dataName: 'agreeableness', dataValue: currentPersonality.agreeableness.toFixed(2)});
+      personalitiesData.push({dataName: 'neuroticism', dataValue: currentPersonality.neuroticism.toFixed(2)});
       this.dataSource = new MatTableDataSource(personalitiesData);
+    }
+
+    if (this.user.empathies && this.user.empathies.length) {
+      const empathyValue = this.user.empathies.sort((a, b) => b.timestamp - a.timestamp)[0].value;
+      this.empathy = 'medium';
+      if (empathyValue <= 0.3) {
+        this.empathy = 'low';
+      } else if (empathyValue > 0.7) {
+        this.empathy = 'high';
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <div ngClass.gt-sm="main-content-page">
   <mat-card *ngIf="!dataSource; else showTable" class="card-spacer">
-    <h2>Cognitive Aspects</h2>
+    <h2>Personality</h2>
     <p>Data not available.</p>
   </mat-card>
 
@@ -24,6 +24,17 @@
     </mat-card>
   </ng-template>
 
+  <mat-card *ngIf="empathy; else noEmpathy">
+    <mat-card-title>Empathy</mat-card-title>
+    <p>Your empathy is {{empathy | uppercase }}</p>
+  </mat-card>
+
+  <ng-template #noEmpathy>
+    <mat-card>
+      <mat-card-title>Empathy</mat-card-title>
+      <p>Data not available.</p>
+    </mat-card>
+  </ng-template>
 </div>
 
 

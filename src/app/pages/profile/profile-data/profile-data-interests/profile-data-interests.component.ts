@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StatsService} from '../../../../services/stats.service';
-import {CloudData, CloudOptions} from 'angular-tag-cloud-module';
+import {CloudData, CloudOptions, ZoomOnHoverOptions} from 'angular-tag-cloud-module';
 
 @Component({
   selector: 'app-profile-interests',
@@ -25,7 +25,16 @@ export class ProfileDataInterestComponent implements OnInit {
   options: CloudOptions = {
     width : 1,
     height : 400,
-    overflow: true,
+    overflow: false,
+  };
+
+  /**
+   * Zoom WordCloud option.
+   */
+  zoomOnHoverOptions: ZoomOnHoverOptions = {
+    scale: 1.3,
+    transitionTime: 0.5,
+    delay: 0
   };
 
   /**
@@ -36,7 +45,10 @@ export class ProfileDataInterestComponent implements OnInit {
     name: 'All',
   }, {
     id: 'message_token',
-    name: 'Token',
+    name: 'Social Hashtag',
+  }, {
+    id: 'message_tag',
+    name: 'Tag',
   }, {
     id: 'message_tag_category',
     name: 'Tag Category',
@@ -57,7 +69,7 @@ export class ProfileDataInterestComponent implements OnInit {
   filter = {
     dateFrom: new Date(),
     dateTo: new Date(),
-    source: this.sources[3].id,
+    source: this.sources[4].id,
   };
 
 
