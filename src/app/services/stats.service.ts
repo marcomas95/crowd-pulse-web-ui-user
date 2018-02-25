@@ -4,6 +4,8 @@ import {environment} from '../../environments/environment';
 import {AuthService} from './auth.service';
 import {isNullOrUndefined} from 'util';
 
+const GlOBAL_DATABASE = 'globalData';
+
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
@@ -36,10 +38,13 @@ export class StatsService {
    * @param filter: the filters
    * @return: stats object as [{value: string, weight: number}]
    */
-  getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string}): Promise<any> {
+  getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string, global?: boolean}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.global) && filter.global) {
+        params = `?db=${GlOBAL_DATABASE}&`;
+      }
       if (!isNullOrUndefined(filter.dateFrom)) {
         params += 'from=' + filter.dateFrom + '&';
       }
@@ -76,10 +81,14 @@ export class StatsService {
    * @param filter: the filters
    * @return: timeline stats object as [{values: [{date: Date, value: number}], name: string}]
    */
-  getSentimentTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+  getSentimentTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date, global?: boolean}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.global) && filter.global) {
+        params = `?db=${GlOBAL_DATABASE}&`;
+        params += `type=${GlOBAL_DATABASE}&`;
+      }
       if (!isNullOrUndefined(filter.dateFrom)) {
         params += 'from=' + filter.dateFrom + '&';
       }
@@ -96,10 +105,14 @@ export class StatsService {
    * @param filter: the filters
    * @return: timeline stats object as [{values: [{date: Date, value: number}], name: string}]
    */
-  getEmotionTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+  getEmotionTimelineStats(filter?: {dateFrom?: Date, dateTo?: Date, global?: boolean}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.global) && filter.global) {
+        params = `?db=${GlOBAL_DATABASE}&`;
+        params += `type=${GlOBAL_DATABASE}&`;
+      }
       if (!isNullOrUndefined(filter.dateFrom)) {
         params += 'from=' + filter.dateFrom + '&';
       }
