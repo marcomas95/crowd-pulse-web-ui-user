@@ -33,7 +33,7 @@
 
           <ng-container matColumnDef="contatedTimes">
             <mat-header-cell *cdkHeaderCellDef> Contacted Times </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="text-align: center"> {{element.contatedTimes }} </mat-cell>
+            <mat-cell *matCellDef="let element" ngClass.lt-sm="text-alignment"> {{element.contatedTimes }} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

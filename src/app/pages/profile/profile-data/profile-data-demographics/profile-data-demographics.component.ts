@@ -14,7 +14,7 @@ export class ProfileDataDemographicsComponent implements OnInit {
    */
   @Input() user: any;
 
-  // data source containing user demographics user profile data
+  // data source containing user demographics data
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
 
