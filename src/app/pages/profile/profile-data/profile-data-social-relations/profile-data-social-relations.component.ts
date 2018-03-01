@@ -4,6 +4,8 @@ import {TwitterService} from '../../../../services/twitter.service';
 import {StatsService} from '../../../../services/stats.service';
 import {MatTableDataSource} from '@angular/material';
 
+const FRIENDS_NUMBER = 100;
+
 @Component({
   selector: 'app-profile-social-relations',
   styleUrls: ['./../profile-data.component.scss'],
@@ -19,7 +21,7 @@ export class ProfileDataSocialRelationsComponent {
   /**
    * Friends data.
    */
-  data: {name: string, contatedTimes: number}[] = [];
+  data: {name: string, interactions: number}[] = [];
 
   /**
    * Available contact types.
@@ -48,7 +50,7 @@ export class ProfileDataSocialRelationsComponent {
 
   // data source containing user friends data
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['name', 'contatedTimes'];
+  displayedColumns = ['name', 'interactions'];
 
 
   constructor(
@@ -64,21 +66,21 @@ export class ProfileDataSocialRelationsComponent {
     switch (this.selectedSouce) {
       case 'facebook':
         this.data = [];
-        this.getFacebookFriends(30);
+        this.getFacebookFriends(FRIENDS_NUMBER);
         break;
       case 'twitter':
         this.data = [];
-        this.getTwitterFriends(30);
+        this.getTwitterFriends(FRIENDS_NUMBER);
         break;
       case 'android':
         this.data = [];
-        this.getAndroidContacts(30);
+        this.getAndroidContacts(FRIENDS_NUMBER);
         break;
       default:
         this.data = [];
-        this.getFacebookFriends(30);
-        this.getTwitterFriends(30);
-        this.getAndroidContacts(30);
+        this.getFacebookFriends(FRIENDS_NUMBER);
+        this.getTwitterFriends(FRIENDS_NUMBER);
+        this.getAndroidContacts(FRIENDS_NUMBER);
         break;
     }
   }
@@ -92,9 +94,9 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.friends && res.friends.length > 0) {
           res.friends.forEach((friend) => {
-            this.data.push({name: friend.contactName, contatedTimes: 1});
+            this.data.push({name: friend.contactName, interactions: 1});
           });
-          this.data.sort((a, b) => b.contatedTimes - a.contatedTimes);
+          this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
         }
       }
@@ -110,9 +112,14 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.friends && res.friends.length > 0) {
           res.friends.forEach((friend) => {
-            this.data.push({name: friend.contactName, contatedTimes: 1});
+            const contact = this.data.find(x => x.name == friend.contactName);
+            if (contact) {
+              contact.interactions++;
+            } else {
+              this.data.push({name: friend.contactName, interactions: 1});
+            }
           });
-          this.data.sort((a, b) => b.contatedTimes - a.contatedTimes);
+          this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
         }
       }
@@ -128,9 +135,9 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.length) {
           res.forEach((contact) => {
-            this.data.push({name: contact.name, contatedTimes: contact.value});
+            this.data.push({name: contact.name, interactions: contact.value});
           });
-          this.data.sort((a, b) => b.contatedTimes - a.contatedTimes);
+          this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
         }
       }

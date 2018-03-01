@@ -31,9 +31,9 @@
             <mat-cell *matCellDef="let element"> {{element.name | uppercase }} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="contatedTimes">
-            <mat-header-cell *cdkHeaderCellDef> Contacted Times </mat-header-cell>
-            <mat-cell *matCellDef="let element" ngClass.lt-sm="text-alignment"> {{element.contatedTimes }} </mat-cell>
+          <ng-container matColumnDef="interactions">
+            <mat-header-cell *cdkHeaderCellDef> Interactions </mat-header-cell>
+            <mat-cell *matCellDef="let element" ngClass.lt-sm="text-alignment"> {{element.interactions }} </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
