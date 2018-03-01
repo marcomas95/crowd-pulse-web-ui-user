@@ -97,7 +97,7 @@
     </mat-card>
 
     <!-- map -->
-    <mat-card *ngIf="selected.visualization && selected.visualization == 'personaldata-map' && gpsCoordinate"
+    <mat-card *ngIf="selected.visualization && selected.visualization.id == 'personaldata-gps' && gpsCoordinate"
               class="stats-card">
       <h2>{{selected.visualization.name}}</h2>
       <agm-map [latitude]="gpsCoordinate[0].latitude" [longitude]="gpsCoordinate[0].longitude">
@@ -119,7 +119,7 @@
     </mat-card>
 
     <!-- messages -->
-    <mat-card *ngIf="selected.visualization && selected.visualization == 'messages-list'
+    <mat-card *ngIf="selected.visualization && selected.visualization.id == 'messages-list'
                      && socialMessages && socialMessages.length" class="stats-card">
       <h2>{{selected.visualization.name}}</h2>
       <div class="message-div" *ngFor="let message of socialMessages">

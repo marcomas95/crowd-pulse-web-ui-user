@@ -8,7 +8,9 @@
     "build": "ng build --prod && ng build --prod --app universal --output-hashing=none",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "compile@agmCore": "babel node_modules/@agm/core -d node_modules/@agm/core --presets es2015",
+    "postinstall": "npm run compile@agmCore"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +33,8 @@
     "@ngx-progressbar/http": "^4.0.1",
     "angular-highcharts": "^5.2.0",
     "angular-tag-cloud-module": "^2.4.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.4.1",
     "express": "^4.16.2",
