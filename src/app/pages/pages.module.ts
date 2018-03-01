@@ -43,6 +43,7 @@ import { PeopleBehaviorComponent } from './people/people-behavior/people-behavio
 import { PeopleSocialRelationsComponent } from './people/people-social-relations/people-social-relations.component';
 import { PeopleInterestComponent } from './people/people-interests/people-interests.component';
 import { PeopleCognitiveAspectsComponent } from './people/people-cognitive-aspects/people-cognitive-aspects.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,9 @@ import { PeopleCognitiveAspectsComponent } from './people/people-cognitive-aspec
     CdkTableModule,
     ChartModule,
     TagCloudModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDKoONUEVZK34qKI9ye5QLnplUIT7sFV6I',
+    }),
   ],
   providers: [],
 })

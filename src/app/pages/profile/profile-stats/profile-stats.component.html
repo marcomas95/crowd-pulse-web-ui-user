@@ -64,6 +64,21 @@
             <input matInput [(ngModel)]="filter.radius" type="number" (ngModelChange)="updateChart()" placeholder="Radius">
           </mat-form-field>
         </div>
+
+        <!-- filter by source (for messages) -->
+        <div *ngIf="filter == filters.filterMessage">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+              <mat-option *ngFor="let source of filter.sources" [value]="source">
+                {{ source | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="filter-container">
+            <input matInput [(ngModel)]="filter.limit" type="number" (ngModelChange)="updateChart()" placeholder="Limit">
+          </mat-form-field>
+        </div>
       </mat-card>
     </div>
   </div>
@@ -77,8 +92,41 @@
 
     <!-- custom chart -->
     <mat-card *ngIf="selected.visualization && customChart" class="stats-card">
+        <h2>{{selected.visualization.name}}</h2>
+        <div [chart]="customChart"></div>
+    </mat-card>
+
+    <!-- map -->
+    <mat-card *ngIf="selected.visualization && selected.visualization == 'personaldata-map' && gpsCoordinate"
+              class="stats-card">
       <h2>{{selected.visualization.name}}</h2>
-      <div [chart]="customChart"></div>
+      <agm-map [latitude]="gpsCoordinate[0].latitude" [longitude]="gpsCoordinate[0].longitude">
+
+        <agm-marker [latitude]="gpsCoordinate[0].latitude"
+                    [longitude]="gpsCoordinate[0].longitude"
+                    [label]="'S'"></agm-marker>
+
+        <agm-marker [latitude]="gpsCoordinate[gpsCoordinate.length - 1].latitude"
+                    [longitude]="gpsCoordinate[gpsCoordinate.length - 1].longitude"
+                    [label]="'E'"></agm-marker>
+
+        <agm-polyline [strokeColor]="'#FF0000'" [strokeWeight]="2" [geodesic]="true">
+          <agm-polyline-point *ngFor="let coor of gpsCoordinate" [latitude]="coor.latitude"
+                              [longitude]="coor.longitude">
+          </agm-polyline-point>
+        </agm-polyline>
+      </agm-map>
+    </mat-card>
+
+    <!-- messages -->
+    <mat-card *ngIf="selected.visualization && selected.visualization == 'messages-list'
+                     && socialMessages && socialMessages.length" class="stats-card">
+      <h2>{{selected.visualization.name}}</h2>
+      <div class="message-div" *ngFor="let message of socialMessages">
+        <p *ngIf="message.story">Story: {{ message.story }}</p>
+        <p *ngIf="message.text">Text: {{ message.text }} </p>
+        <mat-divider></mat-divider>
+      </div>
     </mat-card>
 
     <!-- default charts -->
@@ -92,8 +140,9 @@
 
     <!-- no charts -->
     <ng-template #noCharts>
-      <mat-card *ngIf="!customChart && !chartsLoading" class="stats-card">
-        <p>No visualization selected!</p>
+      <mat-card *ngIf="!customChart && !chartsLoading && !gpsCoordinate && (!socialMessages || !socialMessages.length)"
+                class="stats-card">
+        <p>No visualization selected or no data available!</p>
       </mat-card>
     </ng-template>
   </div>

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StatsService} from '../../../../services/stats.service';
 import {CloudData, CloudOptions, ZoomOnHoverOptions} from 'angular-tag-cloud-module';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-interests',
@@ -72,6 +73,10 @@ export class ProfileDataInterestComponent implements OnInit {
     source: this.sources[4].id,
   };
 
+  /**
+   * Application name.
+   */
+  appName = environment.appName;
 
   constructor(
     private statsService: StatsService,
