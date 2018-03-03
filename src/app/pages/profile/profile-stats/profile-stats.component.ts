@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Chart} from 'angular-highcharts';
 import {StatsService} from '../../../services/stats.service';
 import {AuthService} from '../../../services/auth.service';
@@ -9,7 +9,7 @@ import {FacebookService} from '../../../services/facebook.service';
   styleUrls: ['./profile-stats.component.scss'],
   templateUrl: './profile-stats.component.html',
 })
-export class ProfileStatsComponent implements OnInit {
+export class ProfileStatsComponent {
 
   /**
    * User data.
@@ -17,7 +17,7 @@ export class ProfileStatsComponent implements OnInit {
   user: any;
 
   /**
-   * All filters. The same filter cab be used in more visualization type.
+   * All filters. The same filter can be used in more visualization type.
    */
   filters = {
     filterDate: {
@@ -39,8 +39,16 @@ export class ProfileStatsComponent implements OnInit {
       name: 'Source',
       source: 'all',
       sources: ['all', 'facebook', 'twitter'],
-      limit: null,
     },
+    filterConnection: {
+      name: 'Source',
+      source: 'all',
+      sources: ['all', 'facebook', 'twitter', 'phone contact'],
+    },
+    filterLimit: {
+      name: 'Limit',
+      limit: null,
+    }
 
     // TODO add here new filters
   };
@@ -52,6 +60,7 @@ export class ProfileStatsComponent implements OnInit {
   visualizations = [{
     name: 'Personal Data Summary',
     id: 'personaldata-source',
+    description: 'This is a summary of the different kind of data we have extracted from your identities',
     types: [
       {
         name: 'pie',
@@ -62,6 +71,7 @@ export class ProfileStatsComponent implements OnInit {
   }, {
     name: 'Network Statistics',
     id: 'personaldata-netstat',
+    description: 'This view shows your network usage (bytes received, bytes transmitted, etc.)',
     types: [
       {
         name: 'timeline',
@@ -77,6 +87,7 @@ export class ProfileStatsComponent implements OnInit {
   }, {
     name: 'App Usage',
     id: 'personaldata-appinfo',
+    description: 'This view shows the apps you frequently use (foreground time)',
     types: [
       {
         name: 'timeline',
@@ -92,6 +103,7 @@ export class ProfileStatsComponent implements OnInit {
   }, {
     name: 'GPS Positions',
     id: 'personaldata-gps',
+    description: 'This view shows your movements, based on your GPS coordinates (S= Start Position, E=End Position)',
     types: [
       {
         name: 'map',
@@ -102,6 +114,7 @@ export class ProfileStatsComponent implements OnInit {
   }, {
     name: 'Display Statistics',
     id: 'personaldata-display',
+    description: 'This view shows some statistics about the usage of your devices (Total On/Off time)',
     types: [
       {
         name: 'barchart',
@@ -110,13 +123,36 @@ export class ProfileStatsComponent implements OnInit {
       },
     ]
   }, {
-    name: 'Social Messages',
+    name: 'Post',
     id: 'messages-list',
+    description: 'This view shows the posts your have shared on social networks',
     types: [
       {
         name: 'list',
         id: 'list',
-        filters: [this.filters.filterMessage],
+        filters: [this.filters.filterMessage, this.filters.filterLimit],
+      },
+    ]
+  }, {
+    name: 'Like',
+    id: 'likes-list',
+    description: 'This view shows the pages you like',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [this.filters.filterDate, this.filters.filterLimit],
+      },
+    ]
+  }, {
+    name: 'Connection',
+    id: 'connections-list',
+    description: 'This view shows the connections we have extracted from your device or your social networks',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [this.filters.filterConnection, this.filters.filterLimit],
       },
     ]
   },
@@ -132,11 +168,6 @@ export class ProfileStatsComponent implements OnInit {
     visualization: null,
     type: null,
   };
-
-  /**
-   * Default visualizations (with summary data).
-   */
-  defaultCharts: {name: string, chart: Chart}[] = [];
 
   /**
    * Custom chart.
@@ -158,6 +189,16 @@ export class ProfileStatsComponent implements OnInit {
    */
   socialMessages: any;
 
+  /**
+   * User likes.
+   */
+  likes: any;
+
+  /**
+   * User connections (Facebook friends, Twitter followings/followers, phone contacts, etc).
+   */
+  connections: any;
+
   constructor(
     private statsService: StatsService,
     private authService: AuthService,
@@ -165,40 +206,7 @@ export class ProfileStatsComponent implements OnInit {
     private twitterService: TwitterService,
   ) {
     this.user = authService.getCachedUser();
-    this.chartsLoading = true;
-  }
-
-  /**
-   * @override
-   */
-  ngOnInit() {
-
-    // build default visualization charts
-    this.buildPersonalDataSourceChart().then((chart) => {
-      if (chart) {
-        this.defaultCharts.push({name: 'Android Data Summary', chart: chart});
-      }
-    });
-
-    this.buildPersonalDataNetstatChart().then((chart) => {
-      if (chart) {
-        this.defaultCharts.push({name: 'Network Statistics', chart: chart});
-      }
-    });
-
-    this.buildPersonalDataAppinfoChart().then((chart) => {
-      if (chart) {
-        this.defaultCharts.push({name: 'Application Usage', chart: chart});
-      }
-    });
-
-    this.buildPersonalDataDisplayChart().then((chart) => {
-      if (chart) {
-        this.defaultCharts.push({name: 'Display Statistics', chart: chart});
-      }
-    });
-
-    // TODO add here new default visualization building methods
+    this.chartsLoading = false;
   }
 
   /**
@@ -210,6 +218,14 @@ export class ProfileStatsComponent implements OnInit {
       // set the first type as default
       this.selected.type = this.selected.visualization.types[0];
       this.updateChart();
+    } else {
+
+      // clear visualization
+      this.selected = {visualization: null, type: null};
+      this.customChart = null;
+      this.chartsLoading = false;
+      this.socialMessages = null;
+      this.gpsCoordinate = null;
     }
   }
 
@@ -222,6 +238,7 @@ export class ProfileStatsComponent implements OnInit {
   }
 
   private buildCustomChart() {
+    this.chartsLoading = true;
     switch (this.selected.visualization.id) {
       case 'personaldata-source':
         this.buildPersonalDataSourceChart(this.selected.type.id).then((chart) => {
@@ -249,7 +266,17 @@ export class ProfileStatsComponent implements OnInit {
           this.customChart = chart;
         });
         break;
+      case 'likes-list':
+        this.buildLikesList();
+        break;
+      case 'connections-list':
+        this.buildConnectionsList();
+        break;
       default:
+        this.customChart = null;
+        this.chartsLoading = false;
+        this.socialMessages = null;
+        this.gpsCoordinate = null;
         break;
     }
   }
@@ -619,12 +646,20 @@ export class ProfileStatsComponent implements OnInit {
    */
   private buildSocialMessagesList() {
     this.socialMessages = [];
-    const messagesNumber = this.filters.filterMessage.limit || 1000;
+    const messagesNumber = this.filters.filterLimit.limit || 1000;
 
     switch (this.filters.filterMessage.source) {
       case 'twitter':
         this.twitterService.timeline(messagesNumber).subscribe((res) => {
           if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                story: message.story,
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'twitter',
+              };
+            });
             this.socialMessages = res.messages;
           }
         });
@@ -632,6 +667,14 @@ export class ProfileStatsComponent implements OnInit {
       case 'facebook':
         this.facebookService.userPosts(messagesNumber).subscribe((res) => {
           if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                story: message.story,
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'facebook',
+              };
+            });
             this.socialMessages = res.messages;
           }
         });
@@ -639,6 +682,14 @@ export class ProfileStatsComponent implements OnInit {
       default:
         this.facebookService.userPosts(messagesNumber / 2).subscribe((res) => {
           if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                story: message.story,
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'facebook',
+              };
+            });
             res.messages.forEach((message) => {
               this.socialMessages.push(message);
             });
@@ -646,6 +697,14 @@ export class ProfileStatsComponent implements OnInit {
         });
         this.twitterService.timeline(messagesNumber / 2).subscribe((res) => {
           if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                story: message.story,
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'twitter',
+              };
+            });
             res.messages.forEach((message) => {
               this.socialMessages.push(message);
             });
@@ -723,8 +782,96 @@ export class ProfileStatsComponent implements OnInit {
           (err) => {
             this.chartsLoading = false;
           });
-      }
-
     }
+
+  }
+
+  /**
+   * Build the user likes list.
+   */
+  private buildLikesList() {
+    this.likes = [];
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+      limitResult: this.filters.filterLimit.limit,
+    };
+    this.facebookService.likes(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+      (res) => {
+        this.chartsLoading = false;
+        if (res.likes && res.likes.length) {
+          this.likes = res.likes;
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      }
+    );
+  }
+
+  /**
+   * Build the user connections list.
+   */
+  private buildConnectionsList() {
+    this.connections = [];
+    switch (this.filters.filterConnection.source) {
+      case 'facebook':
+        this.getFacebookFriends(this.filters.filterLimit.limit || 1000);
+        break;
+      case 'twitter':
+        this.getTwitterFriends(this.filters.filterLimit.limit || 1000);
+        break;
+      case 'android':
+        this.getAndroidContacts(this.filters.filterLimit.limit || 1000);
+        break;
+      default:
+        this.getFacebookFriends(this.filters.filterLimit.limit || 1000);
+        this.getTwitterFriends(this.filters.filterLimit.limit || 1000);
+        this.getAndroidContacts(this.filters.filterLimit.limit || 1000);
+        break;
+    }
+  }
+
+  /**
+   * Get Facebook friends.
+   * @param number: the friends number
+   */
+  private getFacebookFriends(number: number) {
+    this.facebookService.friends(number).subscribe(
+      (res) => {
+        if (res.friends && res.friends.length > 0) {
+          this.connections = res.friends;
+        }
+      }
+    );
+  }
+
+  /**
+   * Get Twitter friends (followers and followings)
+   * @param number: the friends number
+   */
+  private getTwitterFriends(number: number) {
+    this.twitterService.friends(number).subscribe(
+      (res) => {
+        if (res.friends && res.friends.length > 0) {
+          this.connections = res.friends;
+        }
+      }
+    );
+  }
+
+  /**
+   * Get Android contacts.
+   * @param number: the contacts number
+   */
+  private getAndroidContacts(number: number) {
+    this.statsService.getAndroidContactStats({limitResults: number}).then(
+      (res) => {
+        if (res.length) {
+          this.connections = res;
+        }
+      }
+    );
+  }
 
 }

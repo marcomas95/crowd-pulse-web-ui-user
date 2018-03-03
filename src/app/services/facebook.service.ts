@@ -103,9 +103,11 @@ export class FacebookService {
    * Get user likes.
    * @param likesToRead the number of likes to retrieve from database. If not specified, update the user likes
    *        with new ones
+   * @param dateFrom
+   * @param dateTo
    * @return {Observable<Object>}: Facebook user likes if request was sent, false otherwise
    */
-  likes(likesToRead?: number): Observable<any> {
+  likes(likesToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any> {
 
     // timeout
     if (likesToRead || Date.now() - this.lastUpdateLikes >= FIVE_MINUTES_MILLIS) {
@@ -116,6 +118,8 @@ export class FacebookService {
       }
       const postParams = {
         likesNumber: likesToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
       };
       return this.http.post(`${this.url}${API_USER_LIKES}`, postParams);
     } else {

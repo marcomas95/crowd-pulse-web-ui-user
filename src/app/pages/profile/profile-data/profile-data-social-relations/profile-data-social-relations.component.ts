@@ -4,7 +4,7 @@ import {TwitterService} from '../../../../services/twitter.service';
 import {StatsService} from '../../../../services/stats.service';
 import {MatTableDataSource} from '@angular/material';
 
-const FRIENDS_NUMBER = 100;
+const FRIENDS_NUMBER = 5000;
 
 @Component({
   selector: 'app-profile-social-relations',
