@@ -5,18 +5,22 @@ import {AuthService} from './auth.service';
 import {isNullOrUndefined} from 'util';
 
 const GlOBAL_DATABASE = 'globalData';
+const PROFILES_DATABASE = 'profiles';
 
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
 const API_STATS_EMOTION_TIMELINE = 'api/stats/emotion/timeline';
-const API_STATS_PERSONA_DATA_GPS = 'api/stats/personal_data/gps';
-const API_STATS_PERSONA_DATA_NETSTATS_BAR = 'api/stats/personal_data/netstat/bar';
-const API_STATS_PERSONA_DATA_NETSTATS_TIMELINE = 'api/stats/personal_data/netstat/timeline';
-const API_STATS_PERSONA_DATA_APPINFO_TIMELINE = 'api/stats/personal_data/appinfo/timeline';
-const API_STATS_PERSONA_DATA_APPINFO_BAR = 'api/stats/personal_data/appinfo/bar';
-const API_STATS_PERSONA_DATA_DISPLAY_BAR = 'api/stats/personal_data/display/bar';
+const API_STATS_PERSONAL_DATA_GPS = 'api/stats/personal_data/gps';
+const API_STATS_PERSONAL_DATA_NETSTATS_BAR = 'api/stats/personal_data/netstat/bar';
+const API_STATS_PERSONAL_DATA_NETSTATS_TIMELINE = 'api/stats/personal_data/netstat/timeline';
+const API_STATS_PERSONAL_DATA_APPINFO_TIMELINE = 'api/stats/personal_data/appinfo/timeline';
+const API_STATS_PERSONAL_DATA_APPINFO_BAR = 'api/stats/personal_data/appinfo/bar';
+const API_STATS_PERSONAL_DATA_DISPLAY_BAR = 'api/stats/personal_data/display/bar';
+const API_STATS_DEMOGRAPHICS_LOCATION = 'api/stats/demographics/location';
+const API_STATS_DEMOGRAPHICS_GENDER = 'api/stats/demographics/gender';
+const API_STATS_DEMOGRAPHICS_LANGUAGE = 'api/stats/demographics/language';
 
 @Injectable()
 export class StatsService {
@@ -159,7 +163,7 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_GPS}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_GPS}${params}`).toPromise();
   }
 
   /**
@@ -179,7 +183,7 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_NETSTATS_BAR}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_NETSTATS_BAR}${params}`).toPromise();
   }
 
   /**
@@ -199,7 +203,7 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_NETSTATS_TIMELINE}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_NETSTATS_TIMELINE}${params}`).toPromise();
   }
 
 
@@ -220,7 +224,7 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_APPINFO_TIMELINE}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_APPINFO_TIMELINE}${params}`).toPromise();
   }
 
   /**
@@ -243,7 +247,7 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_APPINFO_BAR}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_APPINFO_BAR}${params}`).toPromise();
   }
 
   /**
@@ -263,6 +267,34 @@ export class StatsService {
       }
     }
 
-    return this.http.get(`${this.url}${API_STATS_PERSONA_DATA_DISPLAY_BAR}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_DISPLAY_BAR}${params}`).toPromise();
   }
+
+  /**
+   * Get demographics location data for a pie chart visualization.
+   * @return use demographics location data as [{location: number}]
+   */
+  getDemographicsLocationStats():  Promise<any> {
+    const params = `?db=${PROFILES_DATABASE}&`;
+    return this.http.get(`${this.url}${API_STATS_DEMOGRAPHICS_LOCATION}${params}`).toPromise();
+  }
+
+  /**
+   * Get demographics gender data for a pie chart visualization.
+   * @return use demographics gender data as [{gender: number}]
+   */
+  getDemographicsLanguageStats():  Promise<any> {
+    const params = `?db=${PROFILES_DATABASE}&`;
+    return this.http.get(`${this.url}${API_STATS_DEMOGRAPHICS_LANGUAGE}${params}`).toPromise();
+  }
+
+  /**
+   * Get demographics language data for a pie chart visualization.
+   * @return use demographics language data as [{language: number}]
+   */
+  getDemographicsGenderStats():  Promise<any> {
+    const params = `?db=${PROFILES_DATABASE}&`;
+    return this.http.get(`${this.url}${API_STATS_DEMOGRAPHICS_GENDER}${params}`).toPromise();
+  }
+
 }
