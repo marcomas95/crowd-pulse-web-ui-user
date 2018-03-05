@@ -19,8 +19,10 @@
       <h1 fxHide.lt-sm fxHide.sm>Fitbit Account</h1>
 
       <div class="fitbit-actions-div" fxLayout fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
-        <mat-slide-toggle fxFlex="90" fxFlex.gt-sm="20" [(ngModel)]="shareProfile" (change)="updateShareProfile()">Share Profile</mat-slide-toggle>
-        <span fxFlex.gt-sm="65"></span>
+        <div fxFlex fxFlex.gt-sm="80" fxLayout fxLayout.lt-md="column">
+          <mat-slide-toggle fxFlex [(ngModel)]="shareProfile" (change)="updateShareProfile()">Share Profile</mat-slide-toggle>
+        </div>
+        <span fxFlex.gt-sm="5"></span>
         <button fxFlex="90" fxFlex.gt-sm="25" mat-raised-button color="warn" (click)="deleteAccount()">Delete Account</button>
       </div>
 
@@ -47,7 +49,215 @@
           Update Profile
         </button>
       </mat-card>
-    </div>
+
+
+      <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutWrap>
+
+        <!-- activity-->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingActivity; else activityCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #activityCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="activities; else noActivity">
+              <mat-card-title>Your last Activity</mat-card-title>
+              <div class="activity-like-div" *ngFor="let activity of activities">
+                <p *ngIf="post.story">ActivityID: {{ activity.activityId }}</p>
+                <p *ngIf="post.text">Calories: {{ activity.calories }} </p>
+                <p *ngIf="post.text">Description: {{ activity.description }} </p>
+                <p *ngIf="post.text">Distance: {{ activity.distance }} </p>
+                <p *ngIf="post.text">Duration: {{ activity.duration }} </p>
+                <p *ngIf="post.text">Start time: {{ activity.startTime }} </p>
+                <p *ngIf="post.text">Steps: {{ activity.steps }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateActivity(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Activity
+              </button>
+            </div>
+            <ng-template #noActivity>
+              <mat-card-title>No Activity Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your activity.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateActivity(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Activity
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+        <!-- body & weight-->
+        <mat-card fxFlex="50" fxFlex.lt-md="60" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingBody_Weight; else bodyCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #bodyCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="weight; else noWeight">
+              <mat-card-title>Your last Weight</mat-card-title>
+              <div class="activity-like-div" *ngFor="let weights of weight">
+                <p *ngIf="post.text">BMI: {{ weights.bmi }} </p>
+                <p *ngIf="post.text">Date: {{ weights.date }} </p>
+                <p *ngIf="post.text">Time: {{ weights.time }} </p>
+                <p *ngIf="post.text">Weight: {{ weights.weight }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateBody_Weight(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Weight
+              </button>
+            </div>
+            <ng-template #noWeight>
+              <mat-card-title>No Weight Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your weight.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateBody_Weight(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Weight
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+
+        <!-- food-->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingFood; else foodCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #foodCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="foods; else noFood">
+              <mat-card-title>Your last favorite Foods</mat-card-title>
+              <div class="activity-like-div" *ngFor="let foods of foods">
+                <p *ngIf="post.text">BMI: {{ foods.name }} </p>
+                <p *ngIf="post.text">Date: {{ foods.calories }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFood(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Foods
+              </button>
+            </div>
+            <ng-template #noFood>
+              <mat-card-title>No Foods Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your Foods.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateFood(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Foods
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+        <!-- friends-->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingFriends; else friendCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #friendCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="friends; else noFriends">
+              <mat-card-title>Your Friends</mat-card-title>
+              <div class="activity-like-div" *ngFor="let friends of friends">
+                <p *ngIf="post.text">BMI: {{ friends.fullName }} </p>
+                <p *ngIf="post.text">Date: {{ friends.gender }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFriends(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Friends
+              </button>
+            </div>
+            <ng-template #noFriends>
+              <mat-card-title>No Friends Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your Friends.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateFriends(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Friends
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+
+
+        <!-- heart rate-->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingHeartRate; else heartCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #heartCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="heart; else noHeart">
+              <mat-card-title>Your Friends</mat-card-title>
+              <div class="activity-like-div" *ngFor="let heart of activities-heart">
+                <p *ngIf="post.text">BMI: {{ heart.dateTime }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateHeartRate(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Heart Rate
+              </button>
+            </div>
+            <ng-template #noHeart>
+              <mat-card-title>No Heart Acquired</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your Heart Rate.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateHeartRate(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Heart Rate
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+
+        <!-- sleep-->
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingSleep; else sleepCard">
+          <mat-spinner></mat-spinner>
+        </mat-card>
+        <ng-template #sleepCard>
+          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="sleep; else noSleep">
+              <mat-card-title>Your Sleep</mat-card-title>
+              <div class="activity-like-div" *ngFor="let sleep of sleep">
+                <p *ngIf="post.text">BMI: {{ sleep.dateOfSleep }} </p>
+                <mat-divider></mat-divider>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateSleep(true)">
+                <mat-icon aria-label="get_data">cached</mat-icon>
+                Update Sleep
+              </button>
+            </div>
+            <ng-template #noSleep>
+              <mat-card-title>No Sleep</mat-card-title>
+              <mat-card-content>
+                In this section will be shown your Sleep.
+              </mat-card-content>
+              <button mat-raised-button color="primary" (click)="updateSleep(true)">
+                <mat-icon aria-label="get_data">get_app</mat-icon>
+                Get Sleep
+              </button>
+            </ng-template>
+          </mat-card>
+        </ng-template>
+
+
+
+        </div>
+      </div>
   </ng-template>
 
 </ng-template>
