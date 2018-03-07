@@ -90,7 +90,19 @@ export class ProfileDataComponent implements OnInit {
       const dataId = params['show'];
 
       if (dataId) {
-        this.selected = dataId;
+        if (dataId !== APP_ROUTES.profile.demographics
+          && dataId !== APP_ROUTES.profile.interest
+          && dataId !== APP_ROUTES.profile.affects
+          && dataId !== APP_ROUTES.profile.cognitiveAspects
+          && dataId !== APP_ROUTES.profile.behavior
+          && dataId !== APP_ROUTES.profile.socialRelations
+          && dataId !== APP_ROUTES.profile.physicalState) {
+
+          this.router.navigateByUrl(this.rootPage);
+
+        } else {
+          this.selected = dataId;
+        }
       }
     });
 
