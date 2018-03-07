@@ -195,21 +195,51 @@
 
             <ng-template #noConnections>
 
-              <!-- no charts -->
-              <mat-card *ngIf="!selected.visualization && !customChart
-                            && !chartsLoading && !gpsCoordinate
-                            && (!socialMessages || !socialMessages.length); else noData"
-                        class="stats-card">
-                <p>Please select on the of the available visualization from the left/above menu.</p>
+              <mat-card *ngIf="selected.visualization && selected.visualization.id == 'activities-list'
+                          && activities && activities.length; else noActivities" class="stats-card">
+
+                <h2>{{selected.visualization.name}}</h2>
+                <p>{{selected.visualization.description}}</p>
+
+                <div class="list-div" fxLayout *ngFor="let activity of activities">
+
+                  <div *ngIf="activity.timestamp" fxFlex="30">
+                    <p>{{ activity.timestamp | date }}</p>
+                  </div>
+
+                  <div *ngIf="activity.source" fxFlex="30">
+                    <p>{{ activity.source }}</p>
+                  </div>
+
+                  <div fxFlex>
+                    <p>Running ({{ activity.running }}%), Walking ({{ activity.walking }}%), Still ({{ activity.still }}%),
+                      In Vehicle ({{ activity.inVehicle }}%), On Bicycle ({{ activity.onBicycle }}%),
+                      On Foot ({{ activity.onFoot }}%), Tilting ({{ activity.tilting }}%),
+                      Unknown ({{ activity.unknown }}%)</p>
+                  </div>
+                  <mat-divider></mat-divider>
+                </div>
+
               </mat-card>
 
-              <!-- chart/map selected but no data available -->
-              <ng-template #noData>
-                <mat-card class="stats-card">
-                  <p>No data available.</p>
-                </mat-card>
-              </ng-template>
+              <ng-template #noActivities>
 
+                <!-- no charts -->
+                <mat-card *ngIf="!selected.visualization && !customChart
+                            && !chartsLoading && !gpsCoordinate
+                            && (!socialMessages || !socialMessages.length); else noData"
+                          class="stats-card">
+                  <p>Please select on the of the available visualizations from the left/above menu.</p>
+                </mat-card>
+
+                <!-- chart/map selected but no data available -->
+                <ng-template #noData>
+                  <mat-card class="stats-card">
+                    <p>No data available.</p>
+                  </mat-card>
+                </ng-template>
+
+              </ng-template>
             </ng-template>
           </ng-template>
         </ng-template>

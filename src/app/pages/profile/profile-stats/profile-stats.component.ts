@@ -74,13 +74,13 @@ export class ProfileStatsComponent {
     description: 'This view shows your network usage (bytes received, bytes transmitted, etc.)',
     types: [
       {
-        name: 'timeline',
-        id: 'spline',
+        name: 'barchart',
+        id: 'bar',
         filters: [this.filters.filterDate],
       },
       {
-        name: 'barchart',
-        id: 'bar',
+        name: 'timeline',
+        id: 'spline',
         filters: [this.filters.filterDate],
       },
     ]
@@ -90,14 +90,14 @@ export class ProfileStatsComponent {
     description: 'This view shows the apps you frequently use (foreground time)',
     types: [
       {
-        name: 'timeline',
-        id: 'spline',
-        filters: [this.filters.filterDate],
-      },
-      {
         name: 'barchart',
         id: 'bar',
         filters: [this.filters.filterDate, this.filters.filterCategory],
+      },
+      {
+        name: 'timeline',
+        id: 'spline',
+        filters: [this.filters.filterDate],
       },
     ]
   }, {
@@ -123,7 +123,7 @@ export class ProfileStatsComponent {
       },
     ]
   }, {
-    name: 'Post',
+    name: 'Posts',
     id: 'messages-list',
     description: 'This view shows the posts your have shared on social networks',
     types: [
@@ -134,7 +134,7 @@ export class ProfileStatsComponent {
       },
     ]
   }, {
-    name: 'Like',
+    name: 'Likes',
     id: 'likes-list',
     description: 'This view shows the pages you like',
     types: [
@@ -145,14 +145,25 @@ export class ProfileStatsComponent {
       },
     ]
   }, {
-    name: 'Connection',
+    name: 'Connections',
     id: 'connections-list',
-    description: 'This view shows the connections we have extracted from your device or your social networks',
+    description: 'This view shows the connections we have extracted from your device or from your social networks',
     types: [
       {
         name: 'list',
         id: 'list',
         filters: [this.filters.filterConnection, this.filters.filterLimit],
+      },
+    ]
+  }, {
+    name: 'Activities',
+    id: 'activities-list',
+    description: 'This view shows the activities detected by your device',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [this.filters.filterDate],
       },
     ]
   },
@@ -198,6 +209,11 @@ export class ProfileStatsComponent {
    * User connections (Facebook friends, Twitter followings/followers, phone contacts, etc).
    */
   connections: any;
+
+  /**
+   * Android user activities detected by sensors.
+   */
+  activities: any;
 
   constructor(
     private statsService: StatsService,
@@ -271,6 +287,9 @@ export class ProfileStatsComponent {
         break;
       case 'connections-list':
         this.buildConnectionsList();
+        break;
+      case 'activities-list':
+        this.buildActivitiesList();
         break;
       default:
         this.customChart = null;
@@ -869,6 +888,23 @@ export class ProfileStatsComponent {
       (res) => {
         if (res.length) {
           this.connections = res;
+        }
+      }
+    );
+  }
+
+  /**
+   * Build the activities list (android activity).
+   */
+  private buildActivitiesList() {
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+    };
+    this.statsService.getActivityData(filters).then(
+      (res) => {
+        if (res && res.length) {
+          this.activities = res;
         }
       }
     );

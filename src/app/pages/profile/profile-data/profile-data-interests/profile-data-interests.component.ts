@@ -46,19 +46,19 @@ export class ProfileDataInterestComponent implements OnInit {
     name: 'All',
   }, {
     id: 'message_token',
-    name: 'Social Hashtag',
+    name: 'Hashtags',
   }, {
     id: 'message_tag',
-    name: 'Tag',
+    name: 'Concepts',
   }, {
     id: 'message_tag_category',
-    name: 'Tag Category',
+    name: 'Topics',
   }, {
     id: 'like',
-    name: 'Like',
+    name: 'Likes',
   }, {
     id: 'app_category',
-    name: 'App Category',
+    name: 'App Categories',
   },
 
     // TODO add here new source type

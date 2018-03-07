@@ -28,7 +28,9 @@
         <mat-table #table [dataSource]="dataSource">
           <ng-container matColumnDef="name">
             <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name | uppercase }} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.name | uppercase }}
+              <span *ngIf="element.id">(@{{element.id}})</span>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="interactions">

@@ -18,6 +18,7 @@ const API_STATS_PERSONAL_DATA_NETSTATS_TIMELINE = 'api/stats/personal_data/netst
 const API_STATS_PERSONAL_DATA_APPINFO_TIMELINE = 'api/stats/personal_data/appinfo/timeline';
 const API_STATS_PERSONAL_DATA_APPINFO_BAR = 'api/stats/personal_data/appinfo/bar';
 const API_STATS_PERSONAL_DATA_DISPLAY_BAR = 'api/stats/personal_data/display/bar';
+const API_STATS_PERSONAL_DATA_ACTIVITY = 'api/stats/personal_data/activity';
 const API_STATS_DEMOGRAPHICS_LOCATION = 'api/stats/demographics/location';
 const API_STATS_DEMOGRAPHICS_GENDER = 'api/stats/demographics/gender';
 const API_STATS_DEMOGRAPHICS_LANGUAGE = 'api/stats/demographics/language';
@@ -56,10 +57,10 @@ export class StatsService {
         params = `?db=${GlOBAL_DATABASE}&`;
       }
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.source)) {
         params += 'source=' + filter.source + '&';
@@ -100,10 +101,10 @@ export class StatsService {
         params += `type=${GlOBAL_DATABASE}&`;
       }
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
@@ -124,10 +125,10 @@ export class StatsService {
         params += `type=${GlOBAL_DATABASE}&`;
       }
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
@@ -147,10 +148,10 @@ export class StatsService {
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.latitude)) {
         params += 'lat=' + filter.latitude + '&';
@@ -176,10 +177,10 @@ export class StatsService {
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
@@ -196,10 +197,10 @@ export class StatsService {
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
@@ -217,10 +218,10 @@ export class StatsService {
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
@@ -237,10 +238,10 @@ export class StatsService {
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.groupByCategory)) {
         params += 'groupByCategory=' + filter.groupByCategory + '&';
@@ -255,19 +256,33 @@ export class StatsService {
    * @param filter: the filters
    * @return use display data as [{name: string, value: number}]
    */
-  getDisplayBarStats(filter?: {dateFrom?: Date, dateTo?: Date}):  Promise<any> {
+  getDisplayBarStats(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
       if (!isNullOrUndefined(filter.dateFrom)) {
-        params += 'from=' + filter.dateFrom + '&';
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
       if (!isNullOrUndefined(filter.dateTo)) {
-        params += 'to=' + filter.dateTo + '&';
+        params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
 
     return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_DISPLAY_BAR}${params}`).toPromise();
+  }
+
+  getActivityData(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_ACTIVITY}${params}`).toPromise();
   }
 
   /**

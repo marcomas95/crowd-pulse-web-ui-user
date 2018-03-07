@@ -21,7 +21,7 @@ export class ProfileDataSocialRelationsComponent {
   /**
    * Friends data.
    */
-  data: {name: string, interactions: number}[] = [];
+  data: {name: string, id: string, interactions: number}[] = [];
 
   /**
    * Available contact types.
@@ -94,7 +94,7 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.friends && res.friends.length > 0) {
           res.friends.forEach((friend) => {
-            this.data.push({name: friend.contactName, interactions: 1});
+            this.data.push({name: friend.contactName, id: null, interactions: 1});
           });
           this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
@@ -112,11 +112,11 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.friends && res.friends.length > 0) {
           res.friends.forEach((friend) => {
-            const contact = this.data.find(x => x.name == friend.contactName);
+            const contact = this.data.find(x => x.id == friend.contactId);
             if (contact) {
               contact.interactions++;
             } else {
-              this.data.push({name: friend.contactName, interactions: 1});
+              this.data.push({name: friend.contactName, id: friend.contactId, interactions: 1});
             }
           });
           this.data.sort((a, b) => b.interactions - a.interactions);
@@ -135,7 +135,7 @@ export class ProfileDataSocialRelationsComponent {
       (res) => {
         if (res.length) {
           res.forEach((contact) => {
-            this.data.push({name: contact.name, interactions: contact.value});
+            this.data.push({name: contact.name, id: null, interactions: contact.value});
           });
           this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
