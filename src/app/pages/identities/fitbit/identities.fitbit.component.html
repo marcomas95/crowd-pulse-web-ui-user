@@ -198,7 +198,7 @@
         </mat-card>
         <ng-template #heartCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="heart; else noHeart">
+            <div *ngIf="activities_heart; else noHeart">
               <mat-card-title>Your Friends</mat-card-title>
               <div class="activity-like-div" *ngFor="let heart of activities-heart">
                 <p *ngIf="post.text">BMI: {{ heart.dateTime }} </p>

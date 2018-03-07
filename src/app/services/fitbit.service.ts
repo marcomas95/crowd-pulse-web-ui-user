@@ -6,6 +6,7 @@ import {isNullOrUndefined} from 'util';
 
 const API_LOGIN_DIALOG = 'api/fitbit/login_dialog';
 const API_REQUEST_TOKEN = 'api/fitbit/request_token';
+
 const API_USER_PROFILE = 'api/fitbit/profile';
 const API_USER_ACTIVITY = 'api/fitbit/activity';
 const API_USER_BODY_WEIGHT = 'api/fitbit/body_weight';
@@ -14,6 +15,7 @@ const API_USER_FOOD = 'api/fitbit/food';
 const API_USER_FRIENDS = 'api/fitbit/friends';
 const API_USER_HEARTRATE = 'api/fitbit/heartrate';
 const API_USER_SLEEP = 'api/fitbit/sleep';
+
 const API_DELETE_ACCOUNT = 'api/fitbit/delete';
 const API_CONFIG = 'api/fitbit/config';
 
