@@ -16,14 +16,7 @@ import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { DeveloperComponent } from './pages/developer/developer.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings/profile-settings.component';
-import { ProfileDataDemographicsComponent } from './pages/profile/profile-data/profile-data-demographics/profile-data-demographics.component';
 import { PeopleComponent } from './pages/people/people.component';
-import { ProfileDataAffectsComponent } from './pages/profile/profile-data/profile-data-affects/profile-data-affects.component';
-import { ProfileDataInterestComponent } from './pages/profile/profile-data/profile-data-interests/profile-data-interests.component';
-import { ProfileDataCognitiveAspectsComponent } from './pages/profile/profile-data/profile-data-cognitive-aspects/profile-data-cognitive-aspects.component';
-import { ProfileDataPhysicalStateComponent } from './pages/profile/profile-data/profile-data-physical-state/profile-data-physical-state.component';
-import { ProfileDataBehaviorComponent } from './pages/profile/profile-data/profile-data-behavior/profile-data-behavior.component';
-import { ProfileDataSocialRelationsComponent } from './pages/profile/profile-data/profile-data-social-relations/profile-data-social-relations.component';
 
 const routes: Routes = [
   {

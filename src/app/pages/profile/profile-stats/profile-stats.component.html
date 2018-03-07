@@ -207,8 +207,9 @@
                     <p>{{ activity.timestamp | date }}</p>
                   </div>
 
-                  <div *ngIf="activity.source" fxFlex="30">
-                    <p>{{ activity.source }}</p>
+                  <div fxFlex="30">
+                    <!-- TODO parametrize here if there are more sources -->
+                    <p>ANDROID</p>
                   </div>
 
                   <div fxFlex>

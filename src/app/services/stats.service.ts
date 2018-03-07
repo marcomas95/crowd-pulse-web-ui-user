@@ -49,7 +49,7 @@ export class StatsService {
    * @param filter: the filters
    * @return: stats object as [{value: string, weight: number}]
    */
-  getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string, global?: boolean}): Promise<any> {
+  getInterestsStats(filter?: {dateFrom?: Date, dateTo?: Date, source?: string, global?: boolean, limit?: number}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
@@ -64,6 +64,9 @@ export class StatsService {
       }
       if (!isNullOrUndefined(filter.source)) {
         params += 'source=' + filter.source + '&';
+      }
+      if (!isNullOrUndefined(filter.limit)) {
+        params += 'limitResults=' + filter.limit + '&';
       }
     }
 
