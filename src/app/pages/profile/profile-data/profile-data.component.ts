@@ -46,7 +46,10 @@ export class ProfileDataComponent implements OnInit {
     gender?: string,
     location?: string,
     language?: string,
-    email?: string,
+    email?: {
+      number: number,
+      value: string,
+    },
     industry?: string,
     dateOfBirth?: string,
     height?: string,
@@ -135,11 +138,16 @@ export class ProfileDataComponent implements OnInit {
       if (demographics.email) {
         let emails = '';
         const emailSortedArray = demographics.email.sort((a, b) => b.timestamp - a.timestamp);
+        this.bioFields.email = {
+          number: 0,
+          value: '',
+        };
         for (const email of emailSortedArray) {
 
           // only the last emails with the same timestamp
           if (email.timestamp === emailSortedArray[0].timestamp) {
             emails += email.value + ', ';
+            this.bioFields.email.number++;
           }
         }
 
@@ -147,7 +155,7 @@ export class ProfileDataComponent implements OnInit {
         if (emails.substr(emails.length - 2) === ', ') {
           emails = emails.substr(0, emails.length - 2);
         }
-        this.bioFields.email = emails;
+        this.bioFields.email.value = emails;
       }
 
       // catch gender
@@ -163,7 +171,24 @@ export class ProfileDataComponent implements OnInit {
         for (const language of languageSortedArray) {
 
           // only the last languages with the same timestamp and different value
-          if (language.timestamp === languageSortedArray[0].timestamp ) {
+          if (language.timestamp === languageSortedArray[0].timestamp) {
+            switch (language.value) {
+              case 'it':
+                language.value = 'italian';
+                break;
+              case 'en':
+                language.value = 'english';
+                break;
+              case 'es':
+                language.value = 'spanish';
+                break;
+              case 'fr':
+                language.value = 'french';
+                break;
+              case 'de':
+                language.value = 'german';
+              break;
+            }
             languages += language.value + ', ';
           }
         }
@@ -186,7 +211,7 @@ export class ProfileDataComponent implements OnInit {
       }
 
       // catch interests
-      this.statsService.getInterestsStats({limit: 3}).then(
+      this.statsService.getInterestsStats({source: 'message_tag', limit: 3}).then(
         (res) => {
           if (res && res.length) {
             this.bioFields.interests = res[0].value + ', ' + res[1].value + ' and ' + res[2].value;
@@ -276,9 +301,9 @@ export class ProfileDataComponent implements OnInit {
           last[maxKey] = undefined;
 
           if (i == 0) {
-            this.bioFields.personality += maxKey + ' and ';
+            this.bioFields.personality += 'your ' + maxKey + ' and ';
           } else {
-            this.bioFields.personality += maxKey;
+            this.bioFields.personality += 'your ' + maxKey;
           }
 
           i++;
