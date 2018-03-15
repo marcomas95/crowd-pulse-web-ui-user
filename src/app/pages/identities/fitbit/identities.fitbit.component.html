@@ -53,14 +53,14 @@
 
       <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutWrap>
 
-        <!-- activity-->
+        <!-- activity
         <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingActivity; else activityCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #activityCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="activities; else noActivity">
+            <div *ngIf="activities.length > 0; else noActivity">
               <mat-card-title>Your last Activity</mat-card-title>
               <div class="activity-like-div" *ngFor="let activity of activities">
                 <p *ngIf="post.story">ActivityID: {{ activity.activityId }}</p>
@@ -88,16 +88,16 @@
               </button>
             </ng-template>
           </mat-card>
-        </ng-template>
+        </ng-template> -->
 
-        <!-- body & weight-->
+        <!-- body & weight
         <mat-card fxFlex="50" fxFlex.lt-md="60" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingBody_Weight; else bodyCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #bodyCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="weight; else noWeight">
+            <div *ngIf="weight.length > 0; else noWeight">
               <mat-card-title>Your last Weight</mat-card-title>
               <div class="activity-like-div" *ngFor="let weights of weight">
                 <p *ngIf="post.text">BMI: {{ weights.bmi }} </p>
@@ -122,17 +122,17 @@
               </button>
             </ng-template>
           </mat-card>
-        </ng-template>
+        </ng-template> -->
 
 
-        <!-- food-->
+        <!-- food
         <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingFood; else foodCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #foodCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="foods; else noFood">
+            <div *ngIf="foods.length > 0; else noFood">
               <mat-card-title>Your last favorite Foods</mat-card-title>
               <div class="activity-like-div" *ngFor="let foods of foods">
                 <p *ngIf="post.text">BMI: {{ foods.name }} </p>
@@ -155,23 +155,26 @@
               </button>
             </ng-template>
           </mat-card>
-        </ng-template>
+        </ng-template> -->
 
         <!-- friends-->
-        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
-                  *ngIf="loadingFriends; else friendCard">
+        <!-- friends -->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+                  *ngIf="loadingFriends; else friendsCard">
           <mat-spinner></mat-spinner>
         </mat-card>
-        <ng-template #friendCard>
-          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="friends; else noFriends">
+        <ng-template #friendsCard>
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="friends.length > 0; else noFriends">
               <mat-card-title>Your Friends</mat-card-title>
-              <div class="activity-like-div" *ngFor="let friends of friends">
-                <p *ngIf="post.text">BMI: {{ friends.fullName }} </p>
-                <p *ngIf="post.text">Date: {{ friends.gender }} </p>
+              <div class="post-like-div" *ngFor="let friend of friends">
+                <p>{{ friend.username }}</p>
                 <mat-divider></mat-divider>
               </div>
-              <button mat-raised-button color="primary" (click)="updateFriends(true)">
+              <div *ngIf="friends.length == 10">
+                <p>Other friends not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
                 <mat-icon aria-label="get_data">cached</mat-icon>
                 Update Friends
               </button>
@@ -179,9 +182,9 @@
             <ng-template #noFriends>
               <mat-card-title>No Friends Acquired</mat-card-title>
               <mat-card-content>
-                In this section will be shown your Friends.
+                In this section will be shown your Fitbit friends.
               </mat-card-content>
-              <button mat-raised-button color="primary" (click)="updateFriends(true)">
+              <button mat-raised-button color="primary" (click)="updateFriends(null, true)">
                 <mat-icon aria-label="get_data">get_app</mat-icon>
                 Get Friends
               </button>
@@ -191,15 +194,15 @@
 
 
 
-        <!-- heart rate-->
+        <!-- heart rate
         <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingHeartRate; else heartCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #heartCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="activities_heart; else noHeart">
-              <mat-card-title>Your Friends</mat-card-title>
+            <div *ngIf="activities_heart.length > 0; else noHeart">
+              <mat-card-title>Your Heart Rate</mat-card-title>
               <div class="activity-like-div" *ngFor="let heart of activities-heart">
                 <p *ngIf="post.text">BMI: {{ heart.dateTime }} </p>
                 <mat-divider></mat-divider>
@@ -220,17 +223,17 @@
               </button>
             </ng-template>
           </mat-card>
-        </ng-template>
+        </ng-template> -->
 
 
-        <!-- sleep-->
+        <!-- sleep
         <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingSleep; else sleepCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #sleepCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="sleep; else noSleep">
+            <div *ngIf="sleep.length > 0; else noSleep">
               <mat-card-title>Your Sleep</mat-card-title>
               <div class="activity-like-div" *ngFor="let sleep of sleep">
                 <p *ngIf="post.text">BMI: {{ sleep.dateOfSleep }} </p>
@@ -252,7 +255,7 @@
               </button>
             </ng-template>
           </mat-card>
-        </ng-template>
+        </ng-template> -->
 
 
 

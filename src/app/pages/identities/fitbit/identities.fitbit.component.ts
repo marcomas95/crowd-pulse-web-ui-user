@@ -170,13 +170,16 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.loading = false;
         this.user = user;
         this.setupFitbitProfileTable();
+        this.updateFriends(10);
 
 
         // set share values
         this.shareProfile = this.user.identities.configs.fitbitConfig.shareProfile;
-      /*  this.shareMessages = this.user.identities.configs.fitbitConfig.shareMessages;
         this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
-        this.shareLikes = this.user.identities.configs.fitbitConfig.shareLikes;*/
+
+        /*  this.shareMessages = this.user.identities.configs.fitbitConfig.shareMessages;
+          this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
+          this.shareLikes = this.user.identities.configs.fitbitConfig.shareLikes;*/
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -198,8 +201,6 @@ export class IdentitiesFitbitComponent implements OnInit {
 
               // update Fitbit profile
               this.updateProfile();
-              this.updateActivity();
-              /*todo*/
             });
           } else {
             this.loading = false;
@@ -369,27 +370,30 @@ export class IdentitiesFitbitComponent implements OnInit {
    * Update user Friends.
    * @param showToast: if you want to show the toast messages
    */
-  updateFriends(showToast?: boolean)  {
-    this.fitbitService.userFriends().subscribe((res) => {
-      this.loading = false;
-
-      if (res && res.friends) {
-        if (showToast) {
-          this.toast.success('Friends Updated');
+  updateFriends(friendsToRead?: number, showToast?: boolean)  {
+    this.loadingFriends = true;
+    this.fitbitService.userFriends(friendsToRead).subscribe(
+      (res) => {
+        this.loadingFriends = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Friends Updated');
+          }
+          if (res.friends && res.friends.length > 0) {
+            this.friends = res.friends;
+          } else if (!friendsToRead) {
+            this.loadingFriends = true;
+            setTimeout(() => this.updateFriends(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        this.friends = res.friends;
-
-        // set share values
-        this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
-
-        setTimeout(() => this.updateFriends(), DELAY_TIMEOUT);
-
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingFriends = false;
+      });
   }
 
 
@@ -590,16 +594,18 @@ export class IdentitiesFitbitComponent implements OnInit {
 
     // array used to populate the data source object
     const fitbitProfile: {dataName: string, dataValue: any}[] = [];
-    fitbitProfile.push({dataName: 'Full Name', dataValue: fitbit['fullName']});
-    fitbitProfile.push({dataName: 'aboutMe', dataValue: fitbit['aboutMe']});
+    fitbitProfile.push({dataName: 'FullName', dataValue: fitbit['fullName']});
+    fitbitProfile.push({dataName: 'displayName', dataValue: fitbit['displayName']});
+    fitbitProfile.push({dataName: 'locale', dataValue: fitbit['locale']});
     fitbitProfile.push({dataName: 'Gender', dataValue: fitbit['gender']});
+    fitbitProfile.push({dataName: 'city', dataValue: fitbit['city']});
     fitbitProfile.push({dataName: 'country', dataValue: fitbit['country']});
-    fitbitProfile.push({dataName: 'weight', dataValue: fitbit['weight']});
     fitbitProfile.push({dataName: 'state', dataValue: fitbit['state']});
+    fitbitProfile.push({dataName: 'weight', dataValue: fitbit['weight']});
+    fitbitProfile.push({dataName: 'weightUnit', dataValue: fitbit['weightUnit']});
     fitbitProfile.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
     fitbitProfile.push({dataName: 'height', dataValue: fitbit['height']});
-    fitbitProfile.push({dataName: 'city', dataValue: fitbit['city']});
-    fitbitProfile.push({dataName: 'displayName', dataValue: fitbit['displayName']});
+    fitbitProfile.push({dataName: 'heightUnit', dataValue: fitbit['heightUnit']});
     this.dataSource = new MatTableDataSource(fitbitProfile);
   }
 }

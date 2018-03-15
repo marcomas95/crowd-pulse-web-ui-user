@@ -152,11 +152,18 @@ export class FitbitService {
    * Get user Friends.
    * @return{Observable<Object>}: Fitbit user Friends if request was sent, false otherwise
    */
-  userFriends(): Observable<any>  {
+  userFriends(friendsToRead?: number): Observable<any>  {
     // timeout
-    if (Date.now() - this.lastUpdateFriends >= FIVE_MINUTES_MILLIS) {
-      this.lastUpdateFriends = Date.now();
-      return this.http.get(`${this.url}${API_USER_FRIENDS}`);
+    if (friendsToRead || Date.now() - this.lastUpdateFriends >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!friendsToRead) {
+        this.lastUpdateFriends = Date.now();
+      }
+      const postParams = {
+        friendsNumber: friendsToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_FRIENDS}`, postParams);
     } else {
       return Observable.of(false);
     }
