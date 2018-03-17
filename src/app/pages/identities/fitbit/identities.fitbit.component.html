@@ -91,34 +91,31 @@
         </ng-template> -->
 
         <!-- body & weight
-        <mat-card fxFlex="50" fxFlex.lt-md="60" fxLayoutAlign="center center" class="fitbit-card"
+        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingBody_Weight; else bodyCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #bodyCard>
           <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="weight.length > 0; else noWeight">
-              <mat-card-title>Your last Weight</mat-card-title>
-              <div class="activity-like-div" *ngFor="let weights of weight">
-                <p *ngIf="post.text">BMI: {{ weights.bmi }} </p>
-                <p *ngIf="post.text">Date: {{ weights.date }} </p>
-                <p *ngIf="post.text">Time: {{ weights.time }} </p>
-                <p *ngIf="post.text">Weight: {{ weights.weight }} </p>
+            <div *ngIf="body.length > 0; else noBody">
+              <mat-card-title>Your last Fats & Weights</mat-card-title>
+              <div class="post-like-div" *ngFor="let body of body">
+                <p *ngIf="body.fat">Story: {{ body.fat }}</p>
                 <mat-divider></mat-divider>
               </div>
-              <button mat-raised-button color="primary" (click)="updateBody_Weight(true)">
+              <button mat-raised-button color="primary" (click)="updateBody_Weight(null, true)">
                 <mat-icon aria-label="get_data">cached</mat-icon>
-                Update Weight
+                Update Body & Weights
               </button>
             </div>
-            <ng-template #noWeight>
-              <mat-card-title>No Weight Acquired</mat-card-title>
+            <ng-template #noBody>
+              <mat-card-title>No Body & Weight Acquired</mat-card-title>
               <mat-card-content>
-                In this section will be shown your weight.
+                In this section will be shown your body data.
               </mat-card-content>
-              <button mat-raised-button color="primary" (click)="updateBody_Weight(true)">
+              <button mat-raised-button color="primary" (click)="updateBody_Weight(null, true)">
                 <mat-icon aria-label="get_data">get_app</mat-icon>
-                Get Weight
+                Get Body & Weight
               </button>
             </ng-template>
           </mat-card>
@@ -158,7 +155,6 @@
         </ng-template> -->
 
         <!-- friends-->
-        <!-- friends -->
         <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingFriends; else friendsCard">
           <mat-spinner></mat-spinner>
@@ -168,7 +164,7 @@
             <div *ngIf="friends.length > 0; else noFriends">
               <mat-card-title>Your Friends</mat-card-title>
               <div class="post-like-div" *ngFor="let friend of friends">
-                <p>{{ friend.username }}</p>
+                <p *ngIf="friend.username">USERNAME: {{ friend.username }}</p>
                 <mat-divider></mat-divider>
               </div>
               <div *ngIf="friends.length == 10">
@@ -226,36 +222,46 @@
         </ng-template> -->
 
 
-        <!-- sleep
-        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+        <!-- sleep-->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingSleep; else sleepCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #sleepCard>
-          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="fitbit-card">
             <div *ngIf="sleep.length > 0; else noSleep">
               <mat-card-title>Your Sleep</mat-card-title>
-              <div class="activity-like-div" *ngFor="let sleep of sleep">
-                <p *ngIf="post.text">BMI: {{ sleep.dateOfSleep }} </p>
+              <div class="post-like-div" *ngFor="let sleeps of sleep">
+                <p *ngIf="sleeps.startTime">START TIME: {{ sleeps.startTime }}</p>
+                <p *ngIf="sleeps.duration">DURATION: {{ sleeps.duration }}</p>
+                <p *ngIf="sleeps.efficiency">EFFICIENTY: {{ sleeps.efficiency }}</p>
+                <p *ngIf="sleeps.minutesAfterWakeup">MINUTES AFTER WAKEUP: {{ sleeps.minutesAfterWakeup }}</p>
+                <p *ngIf="sleeps.minutesAsleep">MINUTES A SLEEP: {{ sleeps.minutesAsleep }}</p>
+                <p *ngIf="sleeps.minutesAwake">MINUTES AWAKE: {{ sleeps.minutesAwake }}</p>
+                <p *ngIf="sleeps.minutesToFallAsleep">MINUTES TO FALL A SLEEP: {{ sleeps.minutesToFallAsleep }}</p>
+                <p *ngIf="sleeps.timeInBed">TIME IN BED: {{ sleeps.timeInBed }}</p>
                 <mat-divider></mat-divider>
               </div>
-              <button mat-raised-button color="primary" (click)="updateSleep(true)">
+              <div *ngIf="sleep.length == 10">
+                <p>Other sleeps not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateSleep(null, true)">
                 <mat-icon aria-label="get_data">cached</mat-icon>
                 Update Sleep
               </button>
             </div>
             <ng-template #noSleep>
-              <mat-card-title>No Sleep</mat-card-title>
+              <mat-card-title>No Sleep Acquired</mat-card-title>
               <mat-card-content>
-                In this section will be shown your Sleep.
+                In this section will be shown your sleep.
               </mat-card-content>
-              <button mat-raised-button color="primary" (click)="updateSleep(true)">
+              <button mat-raised-button color="primary" (click)="updateSleep(null, true)">
                 <mat-icon aria-label="get_data">get_app</mat-icon>
                 Get Sleep
               </button>
             </ng-template>
           </mat-card>
-        </ng-template> -->
+        </ng-template>
 
 
 

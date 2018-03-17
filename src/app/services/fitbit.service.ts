@@ -107,7 +107,7 @@ export class FitbitService {
    * Get user Body & Weight.
    * @return{Observable<Object>}: Fitbit user body & weight if request was sent, false otherwise
    */
-  userBody_Weight(): Observable<any>  {
+  userBody_Weight(messagesToRead?: number): Observable<any>  {
     // timeout
     if (Date.now() - this.lastUpdateBody_Weight >= FIVE_MINUTES_MILLIS) {
       this.lastUpdateBody_Weight = Date.now();
@@ -188,11 +188,18 @@ export class FitbitService {
    * Get user Sleep.
    * @return{Observable<Object>}: Fitbit user Sleep if request was sent, false otherwise
    */
-  userSleep(): Observable<any>  {
+  userSleep(sleepToRead?: number): Observable<any>  {
     // timeout
-    if (Date.now() - this.lastUpdateSleep >= FIVE_MINUTES_MILLIS) {
-      this.lastUpdateSleep = Date.now();
-      return this.http.get(`${this.url}${API_USER_SLEEP}`);
+    if (sleepToRead || Date.now() - this.lastUpdateSleep >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!sleepToRead) {
+        this.lastUpdateSleep = Date.now();
+      }
+      const postParams = {
+        sleepNumber: sleepToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_SLEEP}`, postParams);
     } else {
       return Observable.of(false);
     }
