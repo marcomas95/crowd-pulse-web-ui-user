@@ -21,19 +21,19 @@ export class PeopleDemographicsComponent implements OnInit {
   ngOnInit() {
 
     this.statsService.getDemographicsLocationStats().then((res) => {
-      if (res) {
+      if (res && res.length > 0) {
         this.buildChart(res, 'Location', '');
       }
     });
 
     this.statsService.getDemographicsGenderStats().then((res) => {
-      if (res) {
+      if (res && res.length > 0) {
         this.buildChart(res, 'Gender', '');
       }
     });
 
     this.statsService.getDemographicsLanguageStats().then((res) => {
-      if (res) {
+      if (res && res.length > 0) {
         this.buildChart(res, 'Language', '');
       }
     });
