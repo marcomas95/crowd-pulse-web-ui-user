@@ -31,12 +31,21 @@ export class ProfileDataCognitiveAspectsComponent implements OnInit {
     if (personalities && personalities.length) {
       const personalitiesData: {dataName: string, dataValue: any}[] = [];
       const currentPersonality = personalities.sort((a, b) => b.timestamp - a.timestamp)[0];
-      personalitiesData.push({dataName: 'openness', dataValue: currentPersonality.openness.toFixed(2)});
-      personalitiesData.push({dataName: 'conscientiousness', dataValue: currentPersonality.conscientiousness.toFixed(2)});
-      personalitiesData.push({dataName: 'extroversion', dataValue: currentPersonality.extroversion.toFixed(2)});
-      personalitiesData.push({dataName: 'agreeableness', dataValue: currentPersonality.agreeableness.toFixed(2)});
-      personalitiesData.push({dataName: 'neuroticism', dataValue: currentPersonality.neuroticism.toFixed(2)});
-      this.dataSource = new MatTableDataSource(personalitiesData);
+
+      // we have the data
+      if (currentPersonality.openness
+        && currentPersonality.conscientiousness
+        && currentPersonality.extroversion
+        && currentPersonality.agreeableness
+        && currentPersonality.neuroticism) {
+
+        personalitiesData.push({dataName: 'openness', dataValue: currentPersonality.openness.toFixed(2)});
+        personalitiesData.push({dataName: 'conscientiousness', dataValue: currentPersonality.conscientiousness.toFixed(2)});
+        personalitiesData.push({dataName: 'extroversion', dataValue: currentPersonality.extroversion.toFixed(2)});
+        personalitiesData.push({dataName: 'agreeableness', dataValue: currentPersonality.agreeableness.toFixed(2)});
+        personalitiesData.push({dataName: 'neuroticism', dataValue: currentPersonality.neuroticism.toFixed(2)});
+        this.dataSource = new MatTableDataSource(personalitiesData);
+      }
     }
 
     if (this.user.empathies && this.user.empathies.length) {
