@@ -279,7 +279,10 @@ export class ProfileDataComponent implements OnInit {
       // catch personality
       if (this.user.personalities && this.user.personalities.length) {
         this.bioFields.personality = '';
-        const last = this.user.personalities.sort((a, b) => b.timestamp - a.timestamp)[0];
+        let last = this.user.personalities.sort((a, b) => b.timestamp - a.timestamp)[0];
+
+        // clone the object
+        last = JSON.parse(JSON.stringify(last));
 
         // remove metadata
         last.source = undefined;

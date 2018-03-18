@@ -290,7 +290,7 @@ export class StatsService {
 
   /**
    * Get demographics location data for a pie chart visualization.
-   * @return use demographics location data as [{location: number}]
+   * @return use demographics location data as {location: number}
    */
   getDemographicsLocationStats():  Promise<any> {
     const params = `?db=${PROFILES_DATABASE}&`;
@@ -299,7 +299,7 @@ export class StatsService {
 
   /**
    * Get demographics gender data for a pie chart visualization.
-   * @return use demographics gender data as [{gender: number}]
+   * @return use demographics gender data as {gender: number}
    */
   getDemographicsLanguageStats():  Promise<any> {
     const params = `?db=${PROFILES_DATABASE}&`;
@@ -308,7 +308,7 @@ export class StatsService {
 
   /**
    * Get demographics language data for a pie chart visualization.
-   * @return use demographics language data as [{language: number}]
+   * @return use demographics language data as {language: number}
    */
   getDemographicsGenderStats():  Promise<any> {
     const params = `?db=${PROFILES_DATABASE}&`;

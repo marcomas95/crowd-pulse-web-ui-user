@@ -21,19 +21,19 @@ export class PeopleDemographicsComponent implements OnInit {
   ngOnInit() {
 
     this.statsService.getDemographicsLocationStats().then((res) => {
-      if (res && res.length > 0) {
+      if (res) {
         this.buildChart(res, 'Location', '');
       }
     });
 
     this.statsService.getDemographicsGenderStats().then((res) => {
-      if (res && res.length > 0) {
+      if (res) {
         this.buildChart(res, 'Gender', '');
       }
     });
 
     this.statsService.getDemographicsLanguageStats().then((res) => {
-      if (res && res.length > 0) {
+      if (res) {
         this.buildChart(res, 'Language', '');
       }
     });
@@ -49,19 +49,21 @@ export class PeopleDemographicsComponent implements OnInit {
         });
       }
     }
-    const chart = new Chart({
-      chart: {
-        type: 'pie'
-      },
-      title: null,
-      credits: {
-        enabled: false
-      },
-      series: [{
-        data: stats
-      }]
-    });
-    this.charts.push({chart: chart, name: name, description: description});
+    if (stats.length > 0) {
+      const chart = new Chart({
+        chart: {
+          type: 'pie'
+        },
+        title: null,
+        credits: {
+          enabled: false
+        },
+        series: [{
+          data: stats
+        }]
+      });
+      this.charts.push({chart: chart, name: name, description: description});
+    }
   }
 
 }
