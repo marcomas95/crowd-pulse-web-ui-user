@@ -31,10 +31,6 @@ export class IdentitiesFitbitComponent implements OnInit {
    */
   body: any[] = [];
 
-  /**
-   * Device array.
-   */
-  devices: any[] = [];
 
   /**
    * Food array.
@@ -47,12 +43,12 @@ export class IdentitiesFitbitComponent implements OnInit {
   friends: any[] = [];
 
   /**
-   * Friends array.
+   * Heart Rate array.
    */
-  activities_heart: any[] = [];
+  heart: any[] = [];
 
   /**
-   * Weight array.
+   * Sleep array.
    */
   sleep: any[] = [];
 
@@ -72,10 +68,6 @@ export class IdentitiesFitbitComponent implements OnInit {
    */
   loadingBody_Weight = false;
 
-  /**
-   * True if devices are loading.
-   */
-  loadingDevices = false;
 
   /**
    * True if food are loading.
@@ -112,10 +104,6 @@ export class IdentitiesFitbitComponent implements OnInit {
    */
   shareBodyWeight: boolean;
 
-  /**
-   * Share devices option.
-   */
-  shareDevices: boolean;
 
   /**
    * Share food option.
@@ -171,8 +159,10 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.user = user;
         this.setupFitbitProfileTable();
         this.updateFriends(10);
+        this.updateSleep(10);
+        this.updateFood(10);
         this.updateBody_Weight(10);
-        this.updateBody_Weight(10);
+        this.updateHeartRate(10);
 
 
 
@@ -181,7 +171,8 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
        // this.shareBodyWeight = this.user.identities.configs.fitbitConfig.shareBodyWeight;
         this.shareSleep = this.user.identities.configs.fitbitConfig.shareSleep;
-        /*todo*/
+        this.shareHeartRate = this.user.identities.configs.fitbitConfig.shareHeartRate;
+        this.shareFood = this.user.identities.configs.fitbitConfig.shareFood;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -295,60 +286,37 @@ export class IdentitiesFitbitComponent implements OnInit {
   }
 
 
-  /**
-   * Update user Devices.
-   * @param showToast: if you want to show the toast messages
-   */
-  updateDevices(showToast?: boolean)  {
-
-    this.fitbitService.userDevices().subscribe((res) => {
-      this.loading = false;
-
-      if (res && res.devices) {
-        if (showToast) {
-          this.toast.success('Devices Updated');
-        }
-        this.devices = res.devices;
-
-        // set share values
-        this.shareDevices = this.user.identities.configs.fitbitConfig.shareDevices;
-
-        setTimeout(() => this.updateDevices(), DELAY_TIMEOUT);
-
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
-  }
 
   /**
    * Update user Food.
    * @param showToast: if you want to show the toast messages
    */
-  updateFood(showToast?: boolean)  {
+  updateFood(foodToRead?: number, showToast?: boolean)  {
+    this.loadingFood = true;
+    this.fitbitService.userFood(foodToRead).subscribe(
+      (res) => {
+        this.loadingFood = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Food Updated');
+          }
+          if (res.foods && res.foods.length > 0) {
+            this.foods = res.foods;
+            this.toast.success('entrato');
 
-    this.fitbitService.userFood().subscribe((res) => {
-      this.loading = false;
-
-      if (res && res.foods) {
-        if (showToast) {
-          this.toast.success('Food Updated');
+          } else if (!foodToRead) {
+            this.loadingFood = true;
+            setTimeout(() => this.updateFood(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        this.foods = res.foods;
-
-        // set share values
-        this.shareFood = this.user.identities.configs.fitbitConfig.shareFood;
-
-        setTimeout(() => this.updateFood(), DELAY_TIMEOUT);
-
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingFood = false;
+      });
   }
 
 
@@ -363,10 +331,11 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.loadingFriends = false;
         if (res) {
           if (showToast) {
-            this.toast.success('Friends Updated');
+            this.toast.success('Friend Updated');
           }
           if (res.friends && res.friends.length > 0) {
             this.friends = res.friends;
+
           } else if (!friendsToRead) {
             this.loadingFriends = true;
             setTimeout(() => this.updateFriends(10), DELAY_TIMEOUT);
@@ -387,28 +356,36 @@ export class IdentitiesFitbitComponent implements OnInit {
    * Update user Heart Rate.
    * @param showToast: if you want to show the toast messages
    */
-  updateHeartRate(showToast?: boolean)  {
+  updateHeartRate(heartToRead?: number, showToast?: boolean)  {
 
-    this.fitbitService.userHeartRate().subscribe((res) => {
-      this.loading = false;
+    this.loadingHeartRate = true;
+    this.fitbitService.userHeartRate(heartToRead).subscribe(
+      (res) => {
+        this.loadingHeartRate = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Heart Rate Updated');
+          }
+          if (res.heart && res.heart.length > 0) {
+            this.heart = res.heart;
+            this.toast.success('entrato');
 
-      if (res && res.heartrate) {
-        if (showToast) {
-          this.toast.success('Heart Rate Updated');
+
+
+
+          } else if (!heartToRead) {
+            this.loadingHeartRate = true;
+            setTimeout(() => this.updateHeartRate(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        this.activities_heart = res.activities_heart;
-
-        // set share values
-        this.shareHeartRate = this.user.identities.configs.fitbitConfig.shareHeartRate;
-
-        setTimeout(() => this.updateHeartRate(), DELAY_TIMEOUT);
-
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingHeartRate = false;
+      });
   }
 
 
@@ -484,19 +461,6 @@ export class IdentitiesFitbitComponent implements OnInit {
     });
   }
 
-
-  /**
-   * Update share devices.
-   */
-  updateShareDevices() {
-    this.fitbitService.configuration({shareDevices: this.shareDevices}).subscribe((res) => {
-      if (res && res.auth) {
-        this.toast.success('Configuration updated');
-      } else {
-        this.toast.error('An error occurred');
-      }
-    });
-  }
 
   /**
    * Update share food.

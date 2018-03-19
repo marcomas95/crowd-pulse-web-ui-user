@@ -122,37 +122,40 @@
         </ng-template> -->
 
 
-        <!-- food
-        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+        <!-- food-->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingFood; else foodCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #foodCard>
-          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="fitbit-card">
             <div *ngIf="foods.length > 0; else noFood">
-              <mat-card-title>Your last favorite Foods</mat-card-title>
-              <div class="activity-like-div" *ngFor="let foods of foods">
-                <p *ngIf="post.text">BMI: {{ foods.name }} </p>
-                <p *ngIf="post.text">Date: {{ foods.calories }} </p>
+              <mat-card-title>Your Food</mat-card-title>
+              <div class="post-like-div" *ngFor="let food of foods">
+                <p *ngIf="food.timestamp">TIMESTAMP: {{ food.timestamp | date }}</p>
+                <p *ngIf="food.caloriesIn">CALORIES_IN: {{ food.caloriesIn }}</p>
                 <mat-divider></mat-divider>
               </div>
-              <button mat-raised-button color="primary" (click)="updateFood(true)">
+              <div *ngIf="foods.length == 10">
+                <p>Other foods not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateFood(null, true)">
                 <mat-icon aria-label="get_data">cached</mat-icon>
-                Update Foods
+                Update Food
               </button>
             </div>
             <ng-template #noFood>
-              <mat-card-title>No Foods Acquired</mat-card-title>
+              <mat-card-title>No Food Acquired</mat-card-title>
               <mat-card-content>
-                In this section will be shown your Foods.
+                In this section will be shown your foods.
               </mat-card-content>
-              <button mat-raised-button color="primary" (click)="updateFood(true)">
+              <button mat-raised-button color="primary" (click)="updateFood(null, true)">
                 <mat-icon aria-label="get_data">get_app</mat-icon>
-                Get Foods
+                Get Food
               </button>
             </ng-template>
           </mat-card>
-        </ng-template> -->
+        </ng-template>
 
         <!-- friends-->
         <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
@@ -190,41 +193,49 @@
 
 
 
-        <!-- heart rate
-        <mat-card fxFlex="50" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+        <!-- heart rate-->
+        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
                   *ngIf="loadingHeartRate; else heartCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #heartCard>
-          <mat-card fxFlex="50" fxFlex.lt-md="100" class="fitbit-card">
-            <div *ngIf="activities_heart.length > 0; else noHeart">
+          <mat-card fxFlex="48" fxFlex.lt-md="100" class="fitbit-card">
+            <div *ngIf="heart.length > 0; else noHeart">
               <mat-card-title>Your Heart Rate</mat-card-title>
-              <div class="activity-like-div" *ngFor="let heart of activities-heart">
-                <p *ngIf="post.text">BMI: {{ heart.dateTime }} </p>
+              <div class="post-like-div" *ngFor="let hearts of heart">
+                <p *ngIf="hearts.timestamp">TIMESTAMP: {{ hearts.timestamp | date}}</p>
+                <p *ngIf="hearts.restingHeartRate">RESTING HEART RATE: {{ hearts.restingHeartRate }}</p>
+                <p *ngIf="hearts.outOfRange_minutes">OUT FO RANGE MINUTES: {{ hearts.outOfRange_minutes }}</p>
+                <p *ngIf="hearts.fatBurn_minutes">FAT BURN MINUTES: {{ hearts.fatBurn_minutes }}</p>
+                <p *ngIf="hearts.cardio_minutes">CARDIO MINUTES: {{ hearts.cardio_minutes }}</p>
+                <p *ngIf="hearts.peak_minutes">PEAK MINUTES: {{ hearts.peak_minutes }}</p>
                 <mat-divider></mat-divider>
               </div>
-              <button mat-raised-button color="primary" (click)="updateHeartRate(true)">
+              <div *ngIf="heart.length == 10">
+                <p>Other hearts not shown.</p>
+              </div>
+              <button mat-raised-button color="primary" (click)="updateHeartRate(null, true)">
                 <mat-icon aria-label="get_data">cached</mat-icon>
                 Update Heart Rate
               </button>
             </div>
             <ng-template #noHeart>
-              <mat-card-title>No Heart Acquired</mat-card-title>
+              <mat-card-title>No Heart Rate Acquired</mat-card-title>
               <mat-card-content>
-                In this section will be shown your Heart Rate.
+                In this section will be shown your heart rate.
               </mat-card-content>
-              <button mat-raised-button color="primary" (click)="updateHeartRate(true)">
+              <button mat-raised-button color="primary" (click)="updateHeartRate(null, true)">
                 <mat-icon aria-label="get_data">get_app</mat-icon>
                 Get Heart Rate
               </button>
             </ng-template>
           </mat-card>
-        </ng-template> -->
+        </ng-template>
 
 
         <!-- sleep-->
-        <mat-card fxFlex="48" fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
-                  *ngIf="loadingSleep; else sleepCard">
+        <mat-card fxFlex="48"  fxFlex.lt-md="100" fxLayoutAlign="center center" class="fitbit-card"
+      *ngIf="loadingSleep; else sleepCard">
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #sleepCard>
@@ -232,14 +243,16 @@
             <div *ngIf="sleep.length > 0; else noSleep">
               <mat-card-title>Your Sleep</mat-card-title>
               <div class="post-like-div" *ngFor="let sleeps of sleep">
-                <p *ngIf="sleeps.startTime">START TIME: {{ sleeps.startTime }}</p>
-                <p *ngIf="sleeps.duration">DURATION: {{ sleeps.duration }}</p>
+                <br />
+                <p *ngIf="sleeps.timestamp">START TIME: {{ sleeps.timestamp | date }}</p>
+                <p *ngIf="sleeps.duration">DURATION: {{ sleeps.duration/60000 }}</p>
                 <p *ngIf="sleeps.efficiency">EFFICIENTY: {{ sleeps.efficiency }}</p>
                 <p *ngIf="sleeps.minutesAfterWakeup">MINUTES AFTER WAKEUP: {{ sleeps.minutesAfterWakeup }}</p>
-                <p *ngIf="sleeps.minutesAsleep">MINUTES A SLEEP: {{ sleeps.minutesAsleep }}</p>
+                <p *ngIf="sleeps.minutesAsleep">MINUTES ASLEEP: {{ sleeps.minutesAsleep }}</p>
                 <p *ngIf="sleeps.minutesAwake">MINUTES AWAKE: {{ sleeps.minutesAwake }}</p>
                 <p *ngIf="sleeps.minutesToFallAsleep">MINUTES TO FALL A SLEEP: {{ sleeps.minutesToFallAsleep }}</p>
                 <p *ngIf="sleeps.timeInBed">TIME IN BED: {{ sleeps.timeInBed }}</p>
+                <br />
                 <mat-divider></mat-divider>
               </div>
               <div *ngIf="sleep.length == 10">

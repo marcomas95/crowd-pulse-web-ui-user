@@ -10,7 +10,6 @@ const API_REQUEST_TOKEN = 'api/fitbit/request_token';
 const API_USER_PROFILE = 'api/fitbit/profile';
 const API_USER_ACTIVITY = 'api/fitbit/activity';
 const API_USER_BODY_WEIGHT = 'api/fitbit/body_weight';
-const API_USER_DEVICES = 'api/fitbit/devices';
 const API_USER_FOOD = 'api/fitbit/food';
 const API_USER_FRIENDS = 'api/fitbit/friends';
 const API_USER_HEARTRATE = 'api/fitbit/heartrate';
@@ -30,7 +29,6 @@ export class FitbitService {
   private lastUpdateProfile: number;
   private lastUpdateActivity: number;
   private lastUpdateBody_Weight: number;
-  private lastUpdateDevices: number;
   private lastUpdateFood: number;
   private lastUpdateFriends: number;
   private lastUpdateHeartRate: number;
@@ -118,35 +116,27 @@ export class FitbitService {
   }
 
 
-  /**
-   * Get user Devices.
-   * @return{Observable<Object>}: Fitbit devices if request was sent, false otherwise
-   */
-  userDevices(): Observable<any>  {
-    // timeout
-    if (Date.now() - this.lastUpdateDevices >= FIVE_MINUTES_MILLIS) {
-      this.lastUpdateDevices = Date.now();
-      return this.http.get(`${this.url}${API_USER_DEVICES}`);
-    } else {
-      return Observable.of(false);
-    }
-  }
-
 
   /**
    * Get user Food.
    * @return{Observable<Object>}: Fitbit user Food if request was sent, false otherwise
    */
-  userFood(): Observable<any>  {
+  userFood(foodToRead?: number): Observable<any>  {
     // timeout
-    if (Date.now() - this.lastUpdateFood >= FIVE_MINUTES_MILLIS) {
-      this.lastUpdateFood = Date.now();
-      return this.http.get(`${this.url}${API_USER_FOOD}`);
+    if (foodToRead || Date.now() - this.lastUpdateFood >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!foodToRead) {
+        this.lastUpdateFood = Date.now();
+      }
+      const postParams = {
+        foodNumber: foodToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_FOOD}`, postParams);
     } else {
       return Observable.of(false);
     }
   }
-
 
   /**
    * Get user Friends.
@@ -174,11 +164,18 @@ export class FitbitService {
    * Get user Heart Rate.
    * @return{Observable<Object>}: Fitbit user Heart Rate if request was sent, false otherwise
    */
-  userHeartRate(): Observable<any>  {
+  userHeartRate(heartToRead?: number): Observable<any>  {
     // timeout
-    if (Date.now() - this.lastUpdateHeartRate >= FIVE_MINUTES_MILLIS) {
-      this.lastUpdateHeartRate = Date.now();
-      return this.http.get(`${this.url}${API_USER_HEARTRATE}`);
+    if (heartToRead || Date.now() - this.lastUpdateHeartRate >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!heartToRead) {
+        this.lastUpdateHeartRate = Date.now();
+      }
+      const postParams = {
+        heartNumber: heartToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_HEARTRATE}`, postParams);
     } else {
       return Observable.of(false);
     }
@@ -213,7 +210,7 @@ export class FitbitService {
    * @return {Observable<Object>}
    */
   configuration(option: {shareProfile?: boolean, shareActivity?: boolean, shareBodyWeight?: boolean,
-    shareDevices?: boolean, shareFood?: boolean, shareFriends?: boolean, shareHeartRate?: boolean, shareSleep?: boolean}): Observable<any> {
+     shareFood?: boolean, shareFriends?: boolean, shareHeartRate?: boolean, shareSleep?: boolean}): Observable<any> {
     let params = '?';
 
     if (!isNullOrUndefined(option.shareProfile)) {
@@ -228,24 +225,20 @@ export class FitbitService {
       params += 'shareBodyWeight=' + option.shareBodyWeight + '&';
     }
 
-    if (!isNullOrUndefined(option.shareDevices)) {
-      params += 'shareLikes=' + option.shareDevices + '&';
-    }
-
     if (!isNullOrUndefined(option.shareFood)) {
-      params += 'shareLikes=' + option.shareFood + '&';
+      params += 'shareFood=' + option.shareFood + '&';
     }
 
     if (!isNullOrUndefined(option.shareFriends)) {
-      params += 'shareLikes=' + option.shareFriends + '&';
+      params += 'shareFriends=' + option.shareFriends + '&';
     }
 
     if (!isNullOrUndefined(option.shareHeartRate)) {
-      params += 'shareLikes=' + option.shareHeartRate + '&';
+      params += 'shareHeartRate=' + option.shareHeartRate + '&';
     }
 
     if (!isNullOrUndefined(option.shareSleep)) {
-      params += 'shareLikes=' + option.shareSleep + '&';
+      params += 'shareSleep=' + option.shareSleep + '&';
     }
 
     return this.http.get(`${this.url}${API_CONFIG}${params}`);
