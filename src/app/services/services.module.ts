@@ -11,6 +11,7 @@ import { LinkedinService } from './linkedin.service';
 import { AndroidSocketService } from './android-socket.service';
 import { ProfileService } from './profile.service';
 import { ErrorService } from './error.service';
+import {InstagramService} from './instagram.service';
 
 @NgModule({
   declarations: [],
@@ -28,6 +29,7 @@ import { ErrorService } from './error.service';
     TwitterService,
     FacebookService,
     LinkedinService,
+    InstagramService,
     AndroidSocketService,
     AuthGuardService,
     StatsService,

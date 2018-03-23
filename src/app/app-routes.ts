@@ -12,6 +12,7 @@ export const APP_ROUTES = {
     linkedin: 'linkedin',
     android: 'android',
     fitbit: 'fitbit',
+    instagram: 'instagram',
   },
   profile: {
     root: 'u',

@@ -17,6 +17,7 @@ import { ErrorComponent } from './pages/error/error.component';
 import { DeveloperComponent } from './pages/developer/developer.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings/profile-settings.component';
 import { PeopleComponent } from './pages/people/people.component';
+import {IdentitiesInstagramComponent} from './pages/identities/instagram/identities.instagram.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,9 @@ const routes: Routes = [
     }, {
       path: APP_ROUTES.identities.fitbit,
       component: IdentitiesFitbitComponent,
+    }, {
+      path: APP_ROUTES.identities.instagram,
+      component: IdentitiesInstagramComponent,
     },
     ]
   },

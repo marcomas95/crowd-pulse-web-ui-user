@@ -44,6 +44,7 @@ import { PeopleSocialRelationsComponent } from './people/people-social-relations
 import { PeopleInterestComponent } from './people/people-interests/people-interests.component';
 import { PeopleCognitiveAspectsComponent } from './people/people-cognitive-aspects/people-cognitive-aspects.component';
 import { AgmCoreModule } from '@agm/core';
+import {IdentitiesInstagramComponent} from './identities/instagram/identities.instagram.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { AgmCoreModule } from '@agm/core';
     IdentitiesLinkedinComponent,
     IdentitiesAndroidComponent,
     IdentitiesFitbitComponent,
+    IdentitiesInstagramComponent,
     ProfileComponent,
     ProfileDataComponent,
     ProfileDataDemographicsComponent,
