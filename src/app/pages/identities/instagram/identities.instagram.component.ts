@@ -1,11 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
-import {MatTableDataSource} from '@angular/material';
+import {MatDialog, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {InstagramService} from '../../../services/instagram.service';
 import {isNullOrUndefined} from 'util';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../../environments/environment';
+import {ConfirmDialogComponent} from "../../../components/confirm-dialog/confirm-dialog.component";
+
+const DELAY_TIMEOUT = 3500; // milliseconds
 
 @Component({
   styleUrls: ['./identities.instagram.component.scss'],
@@ -48,7 +51,7 @@ export class IdentitiesInstagramComponent implements OnInit {
    */
   appName: string;
 
-  // data source containing user Facebook profile data
+  // data source containing user Instagram profile data
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['dataName', 'dataValue'];
 
@@ -60,6 +63,7 @@ export class IdentitiesInstagramComponent implements OnInit {
     private route: ActivatedRoute,
     private instagramService: InstagramService,
     private toast: ToastrService,
+    private dialog: MatDialog,
   ) {
     this.appName = environment.appName;
   }
@@ -72,12 +76,9 @@ export class IdentitiesInstagramComponent implements OnInit {
       if (user && user.identities && user.identities.instagram) {
         this.loading = false;
         this.user = user;
-        /*
-        this.setupFacebookProfileTable();
+
+        this.setupInstagramProfileTable();
         this.updatePosts(10);
-        this.updateLikes(10);
-        this.updateFriends(10);
-        */
 
         // set share values
         this.shareProfile = this.user.identities.configs.instragramConfig.shareProfile;
@@ -99,10 +100,8 @@ export class IdentitiesInstagramComponent implements OnInit {
 
             // request access token
             this.instagramService.accessToken(this.authorizationCode).subscribe((res) => {
-
-              // update Facebook profile
-              // this.updateProfile();
-
+              // update Instagram profile
+               this.updateProfile();
             });
           } else {
             this.loading = false;
@@ -127,5 +126,124 @@ export class IdentitiesInstagramComponent implements OnInit {
           this.toast.error('Server error occurred. Try again later.');
         }
       });
+  }
+
+  /**
+   * Update user Instagram profile information.
+   * @param showToast: if you want to show the toast messages
+   */
+  updateProfile(showToast?: boolean) {
+    this.instagramService.profile().subscribe((res) => {
+      this.loading = false;
+      if (res && res.user) {
+        if (showToast) {
+          this.toast.success('Profile Updated');
+        }
+        this.user = res.user;
+
+        // set share values
+        this.shareProfile = this.user.identities.configs.instagramConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.instagramConfig.shareMessages;
+
+        this.setupInstagramProfileTable();
+      } else {
+        if (showToast) {
+          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+        }
+      }
+    });
+  }
+
+  private setupInstagramProfileTable() {
+    // user Instagram data
+    const instagram = this.user.identities.instagram;
+
+    // array used to populate the data source object
+    const instagramProfile: {dataName: string, dataValue: any}[] = [];
+    instagramProfile.push({dataName: 'Full Name', dataValue: instagram['name']});
+    instagramProfile.push({dataName: 'Picture', dataValue: instagram['picture']});
+    // instagramProfile.push({dataName: 'Gender', dataValue: instagram['gender']});
+    // instagramProfile.push({dataName: 'Languages', dataValue: instagram['languages']});
+    this.dataSource = new MatTableDataSource(instagramProfile);
+  }
+
+  /**
+   * Update user Posts.
+   * @param messagesToRead: the messages number to retrieve
+   * @param showToast: if you want to show the toast messages
+   */
+  updatePosts(messagesToRead?: number, showToast?: boolean) {
+    this.loadingPosts = true;
+    this.instagramService.userPosts(messagesToRead).subscribe(
+      (res) => {
+        this.loadingPosts = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Posts Updated');
+          }
+          if (res.messages && res.messages.length > 0) {
+            this.posts = res.messages;
+          } else if (!messagesToRead) {
+            this.loadingPosts = true;
+            setTimeout(() => this.updatePosts(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingPosts = false;
+      });
+  }
+
+  /**
+   * Update share profile.
+   */
+  updateShareProfile() {
+    this.instagramService.configuration({shareProfile: this.shareProfile}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Update share messages.
+   */
+  updateShareMessages() {
+    this.instagramService.configuration({shareMessages: this.shareMessages}).subscribe((res) => {
+      if (res && res.auth) {
+        this.toast.success('Configuration updated');
+      } else {
+        this.toast.error('An error occurred');
+      }
+    });
+  }
+
+  /**
+   * Delete Instagram information account, including posts and likes.
+   */
+  deleteAccount() {
+    const dialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        infoText: 'Are you sure? All data related to your Instagram account will be deleted from ' + environment.appName
+      }
+    });
+
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.instagramService.deleteAccount().subscribe((res) => {
+          if (res.auth) {
+            this.user.identities.instagram = null;
+          } else {
+            this.toast.error('Something went wrong.');
+          }
+        });
+      }
+    });
   }
 }
