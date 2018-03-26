@@ -99,7 +99,7 @@ export class InstagramService {
    * @param option: share options
    * @return {Observable<Object>}
    */
-  configuration(option: {shareProfile?: boolean, shareMessages?: boolean, shareFriends?: boolean, shareLikes?: boolean}): Observable<any> {
+  configuration(option: {shareProfile?: boolean, shareMessages?: boolean}): Observable<any> {
     let params = '?';
 
     if (!isNullOrUndefined(option.shareProfile)) {

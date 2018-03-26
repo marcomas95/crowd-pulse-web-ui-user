@@ -6,7 +6,7 @@ import {InstagramService} from '../../../services/instagram.service';
 import {isNullOrUndefined} from 'util';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../../environments/environment';
-import {ConfirmDialogComponent} from "../../../components/confirm-dialog/confirm-dialog.component";
+import {ConfirmDialogComponent} from '../../../components/confirm-dialog/confirm-dialog.component';
 
 const DELAY_TIMEOUT = 3500; // milliseconds
 
@@ -81,8 +81,8 @@ export class IdentitiesInstagramComponent implements OnInit {
         this.updatePosts(10);
 
         // set share values
-        this.shareProfile = this.user.identities.configs.instragramConfig.shareProfile;
-        this.shareMessages = this.user.identities.configs.instragramConfig.shareMessages;
+        this.shareProfile = this.user.identities.configs.instagramConfig.shareProfile;
+        this.shareMessages = this.user.identities.configs.instagramConfig.shareMessages;
 
         // clean the URL
         window.history.replaceState(null, null, window.location.pathname);
@@ -160,10 +160,13 @@ export class IdentitiesInstagramComponent implements OnInit {
 
     // array used to populate the data source object
     const instagramProfile: {dataName: string, dataValue: any}[] = [];
-    instagramProfile.push({dataName: 'Full Name', dataValue: instagram['name']});
+    instagramProfile.push({dataName: 'Full Name', dataValue: instagram['full_name']});
+    instagramProfile.push({dataName: 'Username', dataValue: instagram['username']});
+    instagramProfile.push({dataName: 'Bio', dataValue: instagram['bio']});
+    instagramProfile.push({dataName: 'Website', dataValue: instagram['website']});
+    instagramProfile.push({dataName: 'Follows', dataValue: instagram['follows']});
+    instagramProfile.push({dataName: 'Followers', dataValue: instagram['followed_by']});
     instagramProfile.push({dataName: 'Picture', dataValue: instagram['picture']});
-    // instagramProfile.push({dataName: 'Gender', dataValue: instagram['gender']});
-    // instagramProfile.push({dataName: 'Languages', dataValue: instagram['languages']});
     this.dataSource = new MatTableDataSource(instagramProfile);
   }
 

@@ -59,12 +59,30 @@
           <mat-spinner></mat-spinner>
         </mat-card>
         <ng-template #postsCard>
-          <mat-card fxFlex="50" fxFlex.lt-md="100" class="instagram-card">
+          <mat-card fxFlex="100" fxFlex.lt-md="100" class="instagram-card">
             <div *ngIf="posts.length > 0; else noPosts">
               <mat-card-title>Your last Posts</mat-card-title>
               <div class="post-like-div" *ngFor="let post of posts">
-                <p *ngIf="post.story">Story: {{ post.story }}</p>
-                <p *ngIf="post.text">Text: {{ post.text }} </p>
+                <table style="width:100%">
+                  <tr>
+                    <td style="width:50%">
+                      <table>
+                        <td>
+                          <tr align="left"><p *ngIf="post.text">Caption:  {{ post.text }} </p></tr>
+                          <tr align="left"><p *ngIf="post.date">Date:  {{ post.date }} </p></tr>
+                          <tr align="left"><p *ngIf="post.likes">Likes:  {{ post.likes }} </p></tr>
+                        </td>
+                      </table>
+                    </td>
+                    <td style="width:50%">
+                      <table style="width:50%">
+                        <tr>
+                          <td><p *ngIf="post.image"><img src="{{ post.image }}" height="80%" width="80%"> </p></td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
                 <mat-divider></mat-divider>
               </div>
               <button mat-raised-button color="primary" (click)="updatePosts(null, true)">
