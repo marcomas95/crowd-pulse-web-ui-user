@@ -4,6 +4,7 @@ import {StatsService} from '../../../services/stats.service';
 import {AuthService} from '../../../services/auth.service';
 import {TwitterService} from '../../../services/twitter.service';
 import {FacebookService} from '../../../services/facebook.service';
+import {InstagramService} from '../../../services/instagram.service';
 
 @Component({
   styleUrls: ['./profile-stats.component.scss'],
@@ -38,7 +39,7 @@ export class ProfileStatsComponent {
     filterMessage: {
       name: 'Source',
       source: 'all',
-      sources: ['all', 'facebook', 'twitter'],
+      sources: ['all', 'facebook', 'twitter', 'instagram'],
     },
     filterConnection: {
       name: 'Source',
@@ -196,7 +197,7 @@ export class ProfileStatsComponent {
   gpsCoordinate: {latitude: number, longitude: number}[];
 
   /**
-   * Social Network messages (tweets, Facebook posts, etc).
+   * Social Network messages (tweets, Facebook posts, Instagram posts, etc).
    */
   socialMessages: any;
 
@@ -220,6 +221,7 @@ export class ProfileStatsComponent {
     private authService: AuthService,
     private facebookService: FacebookService,
     private twitterService: TwitterService,
+    private instagramService: InstagramService,
   ) {
     this.user = authService.getCachedUser();
     this.chartsLoading = false;
@@ -698,8 +700,23 @@ export class ProfileStatsComponent {
           }
         });
         break;
+      case 'instagram':
+        this.instagramService.userPosts(messagesNumber).subscribe((res) => {
+          if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                image: message.images[0],
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'instagram',
+              };
+            });
+            this.socialMessages = res.messages;
+          }
+        });
+        break;
       default:
-        this.facebookService.userPosts(messagesNumber / 2).subscribe((res) => {
+        this.facebookService.userPosts(messagesNumber / 3).subscribe((res) => {
           if (res.messages && res.messages.length) {
             res.messages = res.messages.map(message => {
               return {
@@ -714,7 +731,7 @@ export class ProfileStatsComponent {
             });
           }
         });
-        this.twitterService.timeline(messagesNumber / 2).subscribe((res) => {
+        this.twitterService.timeline(messagesNumber / 3).subscribe((res) => {
           if (res.messages && res.messages.length) {
             res.messages = res.messages.map(message => {
               return {
@@ -722,6 +739,21 @@ export class ProfileStatsComponent {
                 story: message.story,
                 date: new Date(message.date).toLocaleDateString(),
                 source: 'twitter',
+              };
+            });
+            res.messages.forEach((message) => {
+              this.socialMessages.push(message);
+            });
+          }
+        });
+        this.instagramService.userPosts(messagesNumber / 3).subscribe((res) => {
+          if (res.messages && res.messages.length) {
+            res.messages = res.messages.map(message => {
+              return {
+                text: message.text,
+                image: message.images[0],
+                date: new Date(message.date).toLocaleDateString(),
+                source: 'instagram',
               };
             });
             res.messages.forEach((message) => {
