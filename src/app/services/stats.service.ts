@@ -22,6 +22,7 @@ const API_STATS_PERSONAL_DATA_ACTIVITY = 'api/stats/personal_data/activity';
 const API_STATS_DEMOGRAPHICS_LOCATION = 'api/stats/demographics/location';
 const API_STATS_DEMOGRAPHICS_GENDER = 'api/stats/demographics/gender';
 const API_STATS_DEMOGRAPHICS_LANGUAGE = 'api/stats/demographics/language';
+const API_STATS_MAP = 'api/stats/map';
 
 @Injectable()
 export class StatsService {
@@ -71,6 +72,30 @@ export class StatsService {
     }
 
     return this.http.get(`${this.url}${API_STATS_INTERESTS_WORD_CLOUD}${params}`).toPromise();
+  }
+
+  /**
+   * Get behaviors data stats.
+   * @param filter: the filters
+   * @return: stats object as [{text: String, latitude: number, longitude: number}]
+   */
+  getMapStats(filter?: {dateFrom?: Date, dateTo?: Date, global?: boolean}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+      if (!isNullOrUndefined(filter.global) && filter.global) {
+        params = `?db=${GlOBAL_DATABASE}&`;
+      }
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_MAP}${params}`).toPromise();
   }
 
   /**
