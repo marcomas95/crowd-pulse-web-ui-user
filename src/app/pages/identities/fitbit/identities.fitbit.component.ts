@@ -24,12 +24,22 @@ export class IdentitiesFitbitComponent implements OnInit {
   /**
    * Activity array.
    */
-  activities: any[] = [];
+  activities = [];
 
   /**
    * Weight array.
    */
-  body: any[] = [];
+  weights: any[] = [];
+
+  /**
+   * Fat array.
+   */
+  fats: any[] = [];
+
+  /**
+   * BMI array.
+   */
+  bmis: any[] = [];
 
 
   /**
@@ -64,7 +74,17 @@ export class IdentitiesFitbitComponent implements OnInit {
   loadingActivity = false;
 
   /**
-   * True if body & weight are loading.
+   * True if fat is loading.
+   */
+  loadingBody_Fat = false;
+
+  /**
+   * True if BMI is loading.
+   */
+  loadingBody_Bmi = false;
+
+  /**
+   * True if weight is loading.
    */
   loadingBody_Weight = false;
 
@@ -103,6 +123,16 @@ export class IdentitiesFitbitComponent implements OnInit {
    * Share body & weight option.
    */
   shareBodyWeight: boolean;
+
+  /**
+   * Share body & fat option.
+   */
+  shareBodyFat: boolean;
+
+  /**
+   * Share body & BMI option.
+   */
+  shareBodyBmi: boolean;
 
 
   /**
@@ -161,15 +191,21 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.updateFriends(10);
         this.updateSleep(10);
         this.updateFood(10);
-        this.updateBody_Weight(10);
+        this.updateBody_Weight(1);
+        this.updateBody_Fat(1);
+        this.updateBody_Bmi(1);
         this.updateHeartRate(10);
+        this.updateActivity(10);
 
 
 
         // set share values
+        this.shareActivity = this.user.identities.configs.fitbitConfig.shareActivity;
         this.shareProfile = this.user.identities.configs.fitbitConfig.shareProfile;
         this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
-       // this.shareBodyWeight = this.user.identities.configs.fitbitConfig.shareBodyWeight;
+        this.shareBodyWeight = this.user.identities.configs.fitbitConfig.shareBodyWeight;
+        this.shareBodyFat = this.user.identities.configs.fitbitConfig.shareBodyFat;
+        this.shareBodyBmi = this.user.identities.configs.fitbitConfig.shareBodyBmi;
         this.shareSleep = this.user.identities.configs.fitbitConfig.shareSleep;
         this.shareHeartRate = this.user.identities.configs.fitbitConfig.shareHeartRate;
         this.shareFood = this.user.identities.configs.fitbitConfig.shareFood;
@@ -235,7 +271,16 @@ export class IdentitiesFitbitComponent implements OnInit {
         this.user = res.user;
 
         // set share values
+        this.shareActivity = this.user.identities.configs.fitbitConfig.shareActivity;
         this.shareProfile = this.user.identities.configs.fitbitConfig.shareProfile;
+        this.shareFriends = this.user.identities.configs.fitbitConfig.shareFriends;
+        this.shareBodyWeight = this.user.identities.configs.fitbitConfig.shareBodyWeight;
+        this.shareBodyFat = this.user.identities.configs.fitbitConfig.shareBodyFat;
+        this.shareBodyBmi = this.user.identities.configs.fitbitConfig.shareBodyBmi;
+        this.shareSleep = this.user.identities.configs.fitbitConfig.shareSleep;
+        this.shareHeartRate = this.user.identities.configs.fitbitConfig.shareHeartRate;
+        this.shareFood = this.user.identities.configs.fitbitConfig.shareFood;
+
 
         this.setupFitbitProfileTable();
       } else {
@@ -250,28 +295,39 @@ export class IdentitiesFitbitComponent implements OnInit {
    * Update user Activity.
    * @param showToast: if you want to show the toast messages
    */
-  updateActivity(showToast?: boolean)  {
-
-    this.fitbitService.userActivity().subscribe((res) => {
-      this.loading = false;
-
-      if (res && res.activities) {
-        if (showToast) {
-          this.toast.success('Activities Updated');
+  updateActivity(activityToRead?: number, showToast?: boolean)  {
+    this.loadingActivity = true;
+    this.fitbitService.userActivity(activityToRead).subscribe(
+      (res) => {
+        this.loadingActivity = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Activity Updated');
+          }
+          if (res.steps) {
+            this.activities.push({
+              steps: res.steps,
+              calories: res.calories,
+              elevation: res.elevation,
+              minutesLightlyActive: res.minutesLightlyActive,
+              veryActive: res.veryActive,
+              minutesSedentary: res.minutesSedentary,
+              fairly: res.fairly,
+              distance: res.distance,
+              floors: res.floors});
+          } else if (!activityToRead) {
+            this.loadingActivity = true;
+            setTimeout(() => this.updateActivity(10), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
         }
-        this.activities = res.activities;
-
-        // set share values
-        this.shareActivity = this.user.identities.configs.fitbitConfig.shareActivity;
-
-        setTimeout(() => this.updateActivity(), DELAY_TIMEOUT);
-
-      } else {
-        if (showToast) {
-          this.toast.warning('Timeout not elapsed. Retry in about five minutes');
-        }
-      }
-    });
+      },
+      (err) => {
+        this.loadingActivity = false;
+      });
   }
 
 
@@ -280,9 +336,95 @@ export class IdentitiesFitbitComponent implements OnInit {
    * @param showToast: if you want to show the toast messages
    */
   updateBody_Weight(bodyToRead?: number, showToast?: boolean)  {
+    this.loadingBody_Weight = true;
+    this.fitbitService.userBody_Weight(bodyToRead).subscribe(
+      (res) => {
+
+        this.loadingBody_Weight = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Weight Updated');
+          }
+          if (res.weight && res.weight.length > 0) {
+            this.weights = res.weight;
+          } else if (!bodyToRead) {
+            this.loadingBody_Weight = true;
+            setTimeout(() => this.updateBody_Weight(1), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingBody_Weight = false;
+      });
+  }
 
 
 
+  /**
+   * Update user Body & Fat.
+   * @param showToast: if you want to show the toast messages
+   */
+  updateBody_Fat(fatToRead?: number, showToast?: boolean)  {
+    this.loadingBody_Fat = true;
+    this.fitbitService.userBody_Fat(fatToRead).subscribe(
+      (res) => {
+
+        this.loadingBody_Fat = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('Fat Updated');
+          }
+          if (res.fat && res.fat.length > 0) {
+            this.fats = res.fat;
+          } else if (!fatToRead) {
+            this.loadingBody_Fat = true;
+            setTimeout(() => this.updateBody_Fat(1), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingBody_Fat = false;
+      });
+  }
+
+
+  /**
+   * Update user Body & BMI.
+   * @param showToast: if you want to show the toast messages
+   */
+  updateBody_Bmi(bmiToRead?: number, showToast?: boolean)  {
+    this.loadingBody_Bmi = true;
+    this.fitbitService.userBody_Bmi(bmiToRead).subscribe(
+      (res) => {
+
+        this.loadingBody_Bmi = false;
+        if (res) {
+          if (showToast) {
+            this.toast.success('BMI Updated');
+          }
+          if (res.bmi && res.bmi.length > 0) {
+            this.bmis = res.bmi;
+          } else if (!bmiToRead) {
+            this.loadingBody_Bmi = true;
+            setTimeout(() => this.updateBody_Bmi(1), DELAY_TIMEOUT);
+          }
+        } else {
+          if (showToast) {
+            this.toast.warning('Timeout not elapsed. Retry in about five minutes');
+          }
+        }
+      },
+      (err) => {
+        this.loadingBody_Bmi = false;
+      });
   }
 
 
@@ -302,7 +444,6 @@ export class IdentitiesFitbitComponent implements OnInit {
           }
           if (res.foods && res.foods.length > 0) {
             this.foods = res.foods;
-            this.toast.success('entrato');
 
           } else if (!foodToRead) {
             this.loadingFood = true;
@@ -368,11 +509,6 @@ export class IdentitiesFitbitComponent implements OnInit {
           }
           if (res.heart && res.heart.length > 0) {
             this.heart = res.heart;
-            this.toast.success('entrato');
-
-
-
-
           } else if (!heartToRead) {
             this.loadingHeartRate = true;
             setTimeout(() => this.updateHeartRate(10), DELAY_TIMEOUT);
@@ -547,18 +683,43 @@ export class IdentitiesFitbitComponent implements OnInit {
 
     // array used to populate the data source object
     const fitbitProfile: {dataName: string, dataValue: any}[] = [];
-    fitbitProfile.push({dataName: 'FullName', dataValue: fitbit['fullName']});
-    fitbitProfile.push({dataName: 'displayName', dataValue: fitbit['displayName']});
-    fitbitProfile.push({dataName: 'locale', dataValue: fitbit['locale']});
-    fitbitProfile.push({dataName: 'Gender', dataValue: fitbit['gender']});
-    fitbitProfile.push({dataName: 'city', dataValue: fitbit['city']});
-    fitbitProfile.push({dataName: 'country', dataValue: fitbit['country']});
-    fitbitProfile.push({dataName: 'state', dataValue: fitbit['state']});
-    fitbitProfile.push({dataName: 'weight', dataValue: fitbit['weight']});
-    fitbitProfile.push({dataName: 'weightUnit', dataValue: fitbit['weightUnit']});
-    fitbitProfile.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
-    fitbitProfile.push({dataName: 'height', dataValue: fitbit['height']});
-    fitbitProfile.push({dataName: 'heightUnit', dataValue: fitbit['heightUnit']});
+
+    if (fitbit['fullName'] && fitbit['fullName'] !== '') {
+      fitbitProfile.push({dataName: 'FullName', dataValue: fitbit['fullName']});
+    }
+    if (fitbit['displayName'] && fitbit['displayName'] !== '') {
+      fitbitProfile.push({dataName: 'displayName', dataValue: fitbit['displayName']});
+    }
+    if (fitbit['locale'] && fitbit['locale'] !== '') {
+      fitbitProfile.push({dataName: 'locale', dataValue: fitbit['locale']});
+    }
+    if (fitbit['gender'] && fitbit['gender'] !== '') {
+      fitbitProfile.push({dataName: 'Gender', dataValue: fitbit['gender']});
+    }
+    if (fitbit['city'] && fitbit['city'] !== '') {
+      fitbitProfile.push({dataName: 'city', dataValue: fitbit['city']});
+    }
+    if (fitbit['country'] && fitbit['country'] !== '') {
+      fitbitProfile.push({dataName: 'country', dataValue: fitbit['country']});
+    }
+    if (fitbit['state'] && fitbit['state'] !== '') {
+      fitbitProfile.push({dataName: 'state', dataValue: fitbit['state']});
+    }
+    if (fitbit['weight'] && fitbit['weight'] !== '') {
+      fitbitProfile.push({dataName: 'weight', dataValue: fitbit['weight']});
+    }
+    if (fitbit['weightUnit'] && fitbit['weightUnit'] !== '') {
+      fitbitProfile.push({dataName: 'weightUnit', dataValue: fitbit['weightUnit']});
+    }
+    if (fitbit['dateOfBirth'] && fitbit['dateOfBirth'] !== '') {
+      fitbitProfile.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
+    }
+    if (fitbit['height'] && fitbit['height'] !== '') {
+      fitbitProfile.push({dataName: 'height', dataValue: fitbit['height']});
+    }
+    if (fitbit['heightUnit'] && fitbit['heightUnit'] !== '') {
+      fitbitProfile.push({dataName: 'heightUnit', dataValue: fitbit['heightUnit']});
+    }
     this.dataSource = new MatTableDataSource(fitbitProfile);
   }
 }
