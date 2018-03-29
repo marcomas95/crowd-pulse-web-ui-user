@@ -32,18 +32,19 @@
 
     <div *ngIf="selectedType; else noBehaviorSelected">
 
-      <mat-card *ngIf="!data || data.length == 0">
+      <mat-card *ngIf="!postsCoordinates || postsCoordinates.length == 0">
         <h2>{{selectedType.name}}</h2>
         <p>No results match the filters.</p>
       </mat-card>
 
-      <mat-card *ngIf="data && data.length > 0 && selectedType.id == 'location'">
+      <mat-card *ngIf="postsCoordinates && postsCoordinates.length > 0 && selectedType.id == 'location'">
         <h1>{{ selectedType.name }}</h1>
 
         <!-- this creates a google map on the page with the given lat/lng from -->
         <!-- the component as the initial center of the map: -->
-        <agm-map [latitude]="data[0].latitude" [longitude]="data[0].longitude">
-          <agm-marker *ngFor="let marker of data" [iconUrl]="iconUrl" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+        <agm-map [latitude]="postsCoordinates[0].latitude" [longitude]="postsCoordinates[0].longitude">
+          <agm-marker *ngFor="let marker of postsCoordinates" [iconUrl]="iconUrl" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+
         </agm-map>
       </mat-card>
 

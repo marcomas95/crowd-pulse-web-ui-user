@@ -45,8 +45,10 @@ export class ProfileDataBehaviorComponent implements OnInit {
    * Application name.
    */
   appName = environment.appName;
-
-  data: any;
+  /**
+   *
+   */
+  postsCoordinates: any;
 
   constructor(
     private statsService: StatsService,
@@ -58,16 +60,17 @@ export class ProfileDataBehaviorComponent implements OnInit {
   ngOnInit(): void {
     // get word cloud interests data
     this.statsService.getMapStats(this.filter).then((stats) => {
-      this.data = stats.map((data) => {
+      this.postsCoordinates = stats.map((data) => {
         return {
+          text: data.text,
           latitude: data.latitude,
           longitude: data.longitude,
         };
       });
       // this.data = stats;
-      for (let i = this.data.length - 1; i >= 0; i--) {
-        if (this.data[i].latitude == null) {
-          this.data.splice(i, 1);
+      for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
+        if (this.postsCoordinates[i].latitude == null) {
+          this.postsCoordinates.splice(i, 1);
         }
       }
     });
@@ -78,16 +81,17 @@ export class ProfileDataBehaviorComponent implements OnInit {
    */
   updateChart() {
     this.statsService.getMapStats(this.filter).then((stats) => {
-      this.data = stats.map((data) => {
+      this.postsCoordinates = stats.map((data) => {
         return {
+          text: data.text,
           latitude: data.latitude,
           longitude: data.longitude,
         };
       });
       // this.data = stats;
-      for (let i = this.data.length - 1; i >= 0; i--) {
-        if (this.data[i].latitude == null) {
-          this.data.splice(i, 1);
+      for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
+        if (this.postsCoordinates[i].latitude == null) {
+          this.postsCoordinates.splice(i, 1);
         }
       }
       // console.log(this.data);
