@@ -18,14 +18,19 @@ export class ProfileDataBehaviorComponent implements OnInit {
   /**
    * Available behavior source.
    */
-  types = [{
-    id: null,
-    name: 'All',
-  }, {
+  types = [ {
     id: 'location',
     name: 'Places',
+  }, {
+    id: null,
+    name: 'None',
   },
   ];
+
+  /**
+   * Selected affect type.
+   */
+  selectedType: {id: string, name: string};
 
   /**
    * Filter available.

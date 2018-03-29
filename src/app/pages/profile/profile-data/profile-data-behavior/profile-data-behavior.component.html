@@ -30,7 +30,7 @@
       </div>
     </mat-card>
 
-    <div *ngIf="selectedType; else noAffectSelected">
+    <div *ngIf="selectedType; else noBehaviorSelected">
 
       <mat-card *ngIf="!data || data.length == 0">
         <h2>{{selectedType.name}}</h2>
@@ -50,7 +50,7 @@
 
     </div>
 
-    <ng-template #noAffectSelected>
+    <ng-template #noBehaviorSelected>
       <mat-card>
         <p>No behavior type selected.</p>
       </mat-card>
