@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StatsService} from '../../../../services/stats.service';
-import {CloudData, CloudOptions, ZoomOnHoverOptions} from 'angular-tag-cloud-module';
 import {environment} from '../../../../../environments/environment';
+import {InfoDialogComponent} from '../../../../components/info-dialog/info-dialog.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-profile-behavior',
@@ -28,7 +29,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
   ];
 
   /**
-   * Selected affect type.
+   * Selected type.
    */
   selectedType: {id: string, name: string};
 
@@ -45,29 +46,34 @@ export class ProfileDataBehaviorComponent implements OnInit {
    * Application name.
    */
   appName = environment.appName;
+
   /**
-   *
+   * Contains all the posts coordinates
    */
   postsCoordinates: any;
 
+
   constructor(
     private statsService: StatsService,
+    private dialog: MatDialog,
   ) {}
 
   /**
    * @override
    */
   ngOnInit(): void {
-    // get word cloud interests data
+
     this.statsService.getMapStats(this.filter).then((stats) => {
       this.postsCoordinates = stats.map((data) => {
         return {
           text: data.text,
           latitude: data.latitude,
           longitude: data.longitude,
+          date: data.date,
+          fromUser: data.fromUser
         };
       });
-      // this.data = stats;
+
       for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
         if (this.postsCoordinates[i].latitude == null) {
           this.postsCoordinates.splice(i, 1);
@@ -86,16 +92,34 @@ export class ProfileDataBehaviorComponent implements OnInit {
           text: data.text,
           latitude: data.latitude,
           longitude: data.longitude,
+          date: data.date,
+          fromUser: data.fromUser
         };
       });
-      // this.data = stats;
+
       for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
         if (this.postsCoordinates[i].latitude == null) {
           this.postsCoordinates.splice(i, 1);
         }
       }
-      // console.log(this.data);
     });
   }
 
+  clickedMarker(marker: any) {
+    // console.log(marker);
+    let message;
+    const toConvert = new Date(marker.date);
+    message = 'Text: ' + marker.text + '  \nDate: ' + toConvert.toLocaleDateString() ;
+    this.openInfoDialog(message);
+  }
+
+  /**
+   * Open a dialog with information about data source.
+   * @param info: the info message
+   */
+  openInfoDialog(info: string) {
+    this.dialog.open(InfoDialogComponent, {
+      data: {infoText: info},
+    });
+  }
 }

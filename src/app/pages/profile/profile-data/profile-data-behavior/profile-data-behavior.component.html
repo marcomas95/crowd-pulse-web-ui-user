@@ -43,7 +43,15 @@
         <!-- this creates a google map on the page with the given lat/lng from -->
         <!-- the component as the initial center of the map: -->
         <agm-map [latitude]="postsCoordinates[0].latitude" [longitude]="postsCoordinates[0].longitude">
-          <agm-marker *ngFor="let marker of postsCoordinates" [iconUrl]="iconUrl" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+          <agm-marker *ngFor="let marker of postsCoordinates"
+                      [iconUrl]="iconUrl"
+                      [latitude]="marker.latitude"
+                      [longitude]="marker.longitude"
+                      [title]="marker.text"
+                      [markerClickable]
+                      (markerClick)="clickedMarker(marker)">
+
+          </agm-marker>
 
         </agm-map>
       </mat-card>

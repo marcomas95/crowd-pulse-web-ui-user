@@ -121,6 +121,22 @@ export class ProfileDataDemographicsComponent implements OnInit {
       }
     }
 
+    // catch bio
+    if (demographics.bio && demographics.bio.length > 0) {
+      demographicsData.push({
+        dataName: 'Biography',
+        dataValue: demographics.bio.sort((a, b) => b.timestamp - a.timestamp)[0].value
+      });
+    }
+
+    // catch website
+    if (demographics.website && demographics.website.length > 0) {
+      demographicsData.push({
+        dataName: 'Website',
+        dataValue: demographics.website.sort((a, b) => b.timestamp - a.timestamp)[0].value
+      });
+    }
+
     // TODO add here other demographics fields
 
     this.dataSource = new MatTableDataSource(demographicsData);
