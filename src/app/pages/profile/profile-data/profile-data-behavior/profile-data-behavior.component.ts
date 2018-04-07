@@ -109,7 +109,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
     // console.log(marker);
     let message;
     const toConvert = new Date(marker.date);
-    message = 'Text: ' + marker.text + '  \nDate: ' + toConvert.toLocaleDateString() ;
+    message = 'Text: ' + marker.text + '\nDate: ' + toConvert.toLocaleDateString() ;
     this.openInfoDialog(message);
   }
 

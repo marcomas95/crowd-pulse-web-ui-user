@@ -61,7 +61,7 @@ export class PeopleBehaviorComponent implements OnInit {
   clickedMarker(marker: any) {
     let message;
     const toConvert = new Date(marker.date);
-    message = 'ID: ' + marker.fromUser + marker.text + '  \nDate: ' + toConvert.toLocaleDateString() ;
+    message = 'User ID: ' + marker.fromUser + '   \nText: ' + marker.text + '  \nDate: ' + toConvert.toLocaleDateString() ;
     this.openInfoDialog(message);
     // console.log(marker);
   }

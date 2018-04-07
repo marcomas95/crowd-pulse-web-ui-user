@@ -8,6 +8,7 @@ const API_LOGIN_DIALOG = 'api/instagram/login_dialog';
 const API_REQUEST_TOKEN = 'api/instagram/request_token';
 const API_USER_PROFILE = 'api/instagram/profile';
 const API_USER_POSTS = 'api/instagram/posts';
+const API_USER_FRIENDS = 'api/instagram/friends';
 const API_DELETE_ACCOUNT = 'api/instagram/delete';
 const API_CONFIG = 'api/instagram/config';
 
@@ -93,6 +94,19 @@ export class InstagramService {
     }
   }
 
+  /**
+   * Get user friends (people tagged in posts).
+   * @param friendsToRead the number of friends to retrieve from database. If not specified, update the user friends
+   * @return {Observable<Object>}: Instagram user friends if request was sent, false otherwise
+   */
+  friends(friendsToRead?: number): Observable<any> {
+
+      const postParams = {
+        friendsNumber: friendsToRead,
+      };
+      return this.http.post(`${this.url}${API_USER_FRIENDS}`, postParams);
+
+  }
 
   /**
    * Send Instagram configuration to update.
