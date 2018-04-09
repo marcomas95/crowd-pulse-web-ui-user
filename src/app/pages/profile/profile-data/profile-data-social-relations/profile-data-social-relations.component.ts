@@ -41,7 +41,7 @@ export class ProfileDataSocialRelationsComponent {
     name: 'Phone Contact',
   }, {
     id: 'instagram',
-    name: 'Users in photo (IG)',
+    name: 'Instagram',
   },
 
     // TODO add here new source type
@@ -168,7 +168,7 @@ export class ProfileDataSocialRelationsComponent {
             if (contact) {
               contact.interactions++;
             } else {
-              this.data.push({name: friend.contactName, id: friend.contactId, interactions: 1});
+              this.data.push({name: friend.contactId, id: friend.contactName, interactions: 1});
             }
           });
           this.data.sort((a, b) => b.interactions - a.interactions);

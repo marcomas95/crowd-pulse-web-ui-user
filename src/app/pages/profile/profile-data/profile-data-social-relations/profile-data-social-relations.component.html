@@ -29,7 +29,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.name | uppercase }}
-              <span *ngIf="element.id">@{{element.id}}</span>
+              <span *ngIf="element.id">(@{{element.id}})</span>
             </mat-cell>
           </ng-container>
 
