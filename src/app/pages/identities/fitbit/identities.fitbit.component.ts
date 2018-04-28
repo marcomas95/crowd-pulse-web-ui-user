@@ -461,6 +461,7 @@ export class IdentitiesFitbitComponent implements OnInit {
   }
 
 
+
   /**
    * Update user Friends.
    * @param showToast: if you want to show the toast messages
