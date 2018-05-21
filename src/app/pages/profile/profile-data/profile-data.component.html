@@ -71,10 +71,68 @@
       <h2>Your Bio</h2>
 
       <div *ngIf="user && user.demographics; else noContent">
-        <p>Hi {{ bioFields.name }}<span *ngIf="bioFields.location "> of {{ bioFields.location }}</span>.</p>
-        <p>You are {{ bioFields.gender }}.</p>
-        <p>You can speak {{ bioFields.language }}.</p>
-        <p *ngIf="bioFields.email">Yours emails: {{ bioFields.email }}.</p>
+        <p>
+          Hi<span *ngIf="bioFields.name"> {{ bioFields.name }}</span>,
+          this is a brief bio we automatically built for you.
+        </p>
+
+        <p>
+          <span *ngIf="bioFields.gender && bioFields.language && bioFields.industry; else singleSentence">
+            <span *ngIf="bioFields.gender">You are {{ bioFields.gender }}, </span>
+            <span *ngIf="bioFields.language">you speak {{ bioFields.language }}</span>
+            <span *ngIf="bioFields.industry">and you work in {{ bioFields.industry }}</span>.
+          </span>
+
+          <ng-template #singleSentence>
+            <span *ngIf="bioFields.gender">You are {{ bioFields.gender }}.</span>
+            <span *ngIf="bioFields.language">You speak {{ bioFields.language }}.</span>
+            <span *ngIf="bioFields.industry">You work in {{ bioFields.industry }}.</span>
+          </ng-template>
+
+          <span *ngIf="bioFields.location">
+            <span *ngIf="bioFields.gender || bioFields.language || bioFields.industry; else noMoreover">
+              Moreover, it seems that your last location is {{ bioFields.location }}.
+            </span>
+            <ng-template #noMoreover>
+              It seems that your last location is {{ bioFields.location }}.
+            </ng-template>
+          </span>
+
+          <span *ngIf="bioFields.email">
+            <span *ngIf="bioFields.email.number == 1">Your email is {{ bioFields.email.value }}.</span>
+            <span *ngIf="bioFields.email.number > 1">Your emails are {{ bioFields.email.value }}.</span>
+          </span>
+        </p>
+
+        <p>
+          <span *ngIf="bioFields.interests">
+            You recent interests regard {{ bioFields.interests }}.
+          </span>
+
+          <span *ngIf="bioFields.emotion">
+            From the last posts you wrote, you looked {{ bioFields.emotion }}.
+          </span>
+
+          <span *ngIf="bioFields.sentiment">
+            Your recent mood was {{ bioFields.sentiment }}.
+          </span>
+        </p>
+
+        <p>
+          <span *ngIf="bioFields.personality">
+            The main personality traits emerging from your profile are {{ bioFields.personality }}.
+          </span>
+          <span *ngIf="bioFields.empathy">
+            Your level of empathy is {{ bioFields.empathy }}.
+          </span>
+        </p>
+
+        <p>
+          <span *ngIf="bioFields.socialRelations">
+            You currently have {{ bioFields.socialRelations }}.
+          </span>
+        </p>
+
       </div>
 
       <ng-template #noContent>

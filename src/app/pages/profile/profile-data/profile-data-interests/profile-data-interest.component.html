@@ -1,12 +1,12 @@
 <div ngClass.gt-sm="main-content-page">
 
-  <div *ngIf="!data">
+  <mat-card class="card-spacer" *ngIf="!data">
     <h2>Interests</h2>
     <p>Your interests will be shown here.</p>
-  </div>
+  </mat-card>
 
   <div *ngIf="data">
-    <mat-card class="interest-filters">
+    <mat-card class="card-spacer">
       <h3>Filters</h3>
 
       <div fxLayout.lt-md="column">
@@ -42,14 +42,16 @@
       <angular-tag-cloud
         [data]="data"
         [width]="options.width"
-        [overflow]="options.overflow">
+        [overflow]="options.overflow"
+        [zoomOnHover]="zoomOnHoverOptions">
       </angular-tag-cloud>
     </mat-card>
 
     <ng-template #noInterest>
       <mat-card>
         <h2>Interests</h2>
-        <p>No interests found.</p>
+        <p>{{ appName }} is processing the data about your interests.
+          Your visualization will be available soon… change the filters or come back tomorrow 😊</p>
       </mat-card>
     </ng-template>
 

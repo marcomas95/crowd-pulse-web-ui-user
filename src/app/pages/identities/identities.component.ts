@@ -52,7 +52,7 @@ export class IdentitiesComponent implements OnInit {
       this.user = user;
       this.userImage = user.pictureUrl ? user.pictureUrl : 'assets/images/user-image.png';
       this.noIdentitiesLinked = !user.identities.twitter && !user.identities.linkedin && !user.identities.facebook
-        && (user.identities.devices.length == 0);
+        && !user.identities.instagram && (user.identities.devices.length == 0);
     });
     this.routedPage = this.router;
   }

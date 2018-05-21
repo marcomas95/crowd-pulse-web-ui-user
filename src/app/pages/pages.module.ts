@@ -36,6 +36,15 @@ import { ProfileDataPhysicalStateComponent } from './profile/profile-data/profil
 import { ProfileDataInterestComponent } from './profile/profile-data/profile-data-interests/profile-data-interests.component';
 import { ProfileDataCognitiveAspectsComponent } from './profile/profile-data/profile-data-cognitive-aspects/profile-data-cognitive-aspects.component';
 import { TagCloudModule } from 'angular-tag-cloud-module';
+import { PeopleAffectsComponent } from './people/people-affects/people-affects.component';
+import { PeopleDemographicsComponent } from './people/people-demographics/people-demographics.component';
+import { PeoplePhysicalStateComponent } from './people/people-physical-state/people-physical-state.component';
+import { PeopleBehaviorComponent } from './people/people-behavior/people-behavior.component';
+import { PeopleSocialRelationsComponent } from './people/people-social-relations/people-social-relations.component';
+import { PeopleInterestComponent } from './people/people-interests/people-interests.component';
+import { PeopleCognitiveAspectsComponent } from './people/people-cognitive-aspects/people-cognitive-aspects.component';
+import { AgmCoreModule } from '@agm/core';
+import {IdentitiesInstagramComponent} from './identities/instagram/identities.instagram.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +57,7 @@ import { TagCloudModule } from 'angular-tag-cloud-module';
     IdentitiesLinkedinComponent,
     IdentitiesAndroidComponent,
     IdentitiesFitbitComponent,
+    IdentitiesInstagramComponent,
     ProfileComponent,
     ProfileDataComponent,
     ProfileDataDemographicsComponent,
@@ -61,6 +71,13 @@ import { TagCloudModule } from 'angular-tag-cloud-module';
     ProfileSettingsComponent,
     DeveloperComponent,
     PeopleComponent,
+    PeopleAffectsComponent,
+    PeopleDemographicsComponent,
+    PeoplePhysicalStateComponent,
+    PeopleBehaviorComponent,
+    PeopleSocialRelationsComponent,
+    PeopleInterestComponent,
+    PeopleCognitiveAspectsComponent,
   ],
   imports: [
     ComponentModule,
@@ -90,6 +107,9 @@ import { TagCloudModule } from 'angular-tag-cloud-module';
     CdkTableModule,
     ChartModule,
     TagCloudModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDKoONUEVZK34qKI9ye5QLnplUIT7sFV6I',
+    }),
   ],
   providers: [],
 })

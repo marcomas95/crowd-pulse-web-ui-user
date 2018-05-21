@@ -1,6 +1,8 @@
-<div class="main-content-page" *ngIf="dataSource && dataSource.data.length == 0; else demographicsTable">
-  <h2>Demographics</h2>
-  <p>Demographic data will be shown here.</p>
+<div ngClass.gt-sm="main-content-page" *ngIf="dataSource && dataSource.data.length == 0; else demographicsTable">
+  <mat-card class="card-spacer">
+    <h2>Demographics</h2>
+    <p>Demographic data will be shown here.</p>
+  </mat-card>
 </div>
 
 <ng-template #demographicsTable>

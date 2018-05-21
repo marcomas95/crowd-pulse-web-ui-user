@@ -12,6 +12,7 @@ import { AndroidSocketService } from './android-socket.service';
 import { ProfileService } from './profile.service';
 import { ErrorService } from './error.service';
 import {FitbitService} from './fitbit.service';
+import {InstagramService} from './instagram.service';
 
 @NgModule({
   declarations: [],
@@ -29,11 +30,11 @@ import {FitbitService} from './fitbit.service';
     TwitterService,
     FacebookService,
     LinkedinService,
+    InstagramService,
     AndroidSocketService,
     AuthGuardService,
     StatsService,
     LocalStorageService,
-    ProfileService,
     ErrorService,
     FitbitService,
   ],

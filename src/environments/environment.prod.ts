@@ -7,4 +7,5 @@ export const environment = {
   facebookCallbackUrl: 'http://192.168.1.5:4200/identities/facebook',
   linkedinCallbackUrl: 'http://192.168.1.5:4200/identities/linkedin',
   fitbitCallbackUrl: 'http://192.168.1.5:4200/identities/fitbit',
+  instagramCallbackUrl: 'http://192.168.1.5:4200/identities/instagram',
 };

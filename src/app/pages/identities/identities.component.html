@@ -31,6 +31,12 @@
             <span class="spacer"></span> LinkedIn
           </span>
         </a>
+        <a mat-list-item [routerLink]="appRoutes.identities.instagram" routerLinkActive #rla="routerLinkActive">
+          <i class="fa fa-instagram fa-fw fa-1x" aria-hidden="true"></i>
+          <span fxHide.lt-sm>
+            <span class="spacer"></span> Instagram
+          </span>
+        </a>
       </nav>
 
       <nav>
@@ -83,6 +89,16 @@
             </div>
           </mat-card>
 
+          <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.instagram">
+            <mat-card-title>Instagram</mat-card-title>
+            <div fxLayout fxLayoutAlign="start center">
+              <img class="identities-user-image" src="{{user.identities.instagram.picture}}">
+              <div>
+                <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.instagram">Settings</button>
+              </div>
+            </div>
+          </mat-card>
+
           <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.linkedIn">
             <mat-card-title>LinkedIn</mat-card-title>
             <div fxLayout fxLayoutAlign="start center">
@@ -108,7 +124,7 @@
         </div>
 
         <ng-template #noIdentities>
-          <div ngClass.lt-sm="main-content-page">
+          <div class="main-content-page">
             <h2>No Identities Linked</h2>
           </div>
         </ng-template>

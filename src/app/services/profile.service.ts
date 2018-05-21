@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {AuthService} from './auth.service';
@@ -6,7 +6,7 @@ import {AuthService} from './auth.service';
 const API_USER_PROFILE = 'api/profile';
 
 @Injectable()
-export class ProfileService {
+export class ProfileService implements OnDestroy {
 
   /**
    * Back-end API url.
@@ -32,7 +32,7 @@ export class ProfileService {
   }
 
   /**
-   * Get profile information of not current logged user.
+   * Get profile information of generic user (logged or not).
    * @param username: the user name
    */
   getProfile(username: string): Promise<any> {
@@ -72,6 +72,14 @@ export class ProfileService {
    */
   isLoggedUser() {
     return this.loggedUser;
+  }
+
+  /**
+   * @override
+   */
+  ngOnDestroy() {
+    this.profile = null;
+    this.loggedUser = null;
   }
 
 

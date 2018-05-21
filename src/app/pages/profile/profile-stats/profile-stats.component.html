@@ -64,38 +64,189 @@
             <input matInput [(ngModel)]="filter.radius" type="number" (ngModelChange)="updateChart()" placeholder="Radius">
           </mat-form-field>
         </div>
+
+        <!-- filter by source (for messages) -->
+        <div *ngIf="filter == filters.filterMessage">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+              <mat-option *ngFor="let source of filter.sources" [value]="source">
+                {{ source | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- filter by source (for connection) -->
+        <div *ngIf="filter == filters.filterConnection">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+              <mat-option *ngFor="let source of filter.sources" [value]="source">
+                {{ source | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- limit results -->
+        <div *ngIf="filter == filters.filterLimit">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <input matInput [(ngModel)]="filter.limit" type="number" (ngModelChange)="updateChart()" placeholder="Number">
+          </mat-form-field>
+        </div>
+
       </mat-card>
     </div>
   </div>
 
   <!-- charts -->
   <div fxFlex.lt-md="65" fxFlex.lt-sm="100" fxFlex="80">
-    <mat-card *ngIf="!selected.visualization && defaultCharts.length == 0 && chartsLoading"
+
+    <!-- loading -->
+    <mat-card *ngIf="!selected.visualization && chartsLoading"
               fxLayoutAlign="center" class="stats-card">
       <mat-spinner></mat-spinner>
     </mat-card>
 
     <!-- custom chart -->
-    <mat-card *ngIf="selected.visualization && customChart" class="stats-card">
-      <h2>{{selected.visualization.name}}</h2>
-      <div [chart]="customChart"></div>
+    <mat-card *ngIf="selected.visualization && customChart; else noChart" class="stats-card">
+        <h2>{{selected.visualization.name}}</h2>
+        <p>{{selected.visualization.description}}</p>
+        <div [chart]="customChart"></div>
     </mat-card>
 
-    <!-- default charts -->
-    <div *ngIf="!selected.visualization && defaultCharts.length > 0; else noCharts"
-         fxLayout.xs="column" fxLayout.sm="column" fxLayout="row" fxLayoutWrap>
-      <mat-card *ngFor="let chartInfo of defaultCharts" fxFlex="45" class="stats-card">
-        <h2>{{ chartInfo.name }}</h2>
-        <div [chart]="chartInfo.chart"></div>
-      </mat-card>
-    </div>
+    <ng-template #noChart>
 
-    <!-- no charts -->
-    <ng-template #noCharts>
-      <mat-card *ngIf="!customChart && !chartsLoading" class="stats-card">
-        <p>No visualization selected!</p>
+      <!-- map -->
+      <mat-card *ngIf="selected.visualization && selected.visualization.id == 'personaldata-gps' && gpsCoordinate; else noMap"
+                class="stats-card">
+        <h2>{{selected.visualization.name}}</h2>
+        <p>{{selected.visualization.description}}</p>
+        <agm-map [latitude]="gpsCoordinate[0].latitude" [longitude]="gpsCoordinate[0].longitude">
+
+          <agm-marker [latitude]="gpsCoordinate[0].latitude"
+                      [longitude]="gpsCoordinate[0].longitude"
+                      [label]="'S'"></agm-marker>
+
+          <agm-marker [latitude]="gpsCoordinate[gpsCoordinate.length - 1].latitude"
+                      [longitude]="gpsCoordinate[gpsCoordinate.length - 1].longitude"
+                      [label]="'E'"></agm-marker>
+
+          <agm-polyline [strokeColor]="'#FF0000'" [strokeWeight]="2" [geodesic]="true">
+            <agm-polyline-point *ngFor="let coor of gpsCoordinate" [latitude]="coor.latitude"
+                                [longitude]="coor.longitude">
+            </agm-polyline-point>
+          </agm-polyline>
+        </agm-map>
       </mat-card>
+
+      <ng-template #noMap>
+
+        <!-- messages -->
+        <mat-card *ngIf="selected.visualization && selected.visualization.id == 'messages-list'
+                          && socialMessages && socialMessages.length; else noMessages" class="stats-card">
+          <h2>{{selected.visualization.name}}</h2>
+          <p>{{selected.visualization.description}}</p>
+          <div class="list-div" fxLayout *ngFor="let message of socialMessages">
+
+            <div *ngIf="message.date" fxFlex="30">
+              <p>{{ message.date }}</p>
+            </div>
+
+            <div *ngIf="message.source" fxFlex="30">
+              <p>{{ message.source }}</p>
+            </div>
+
+            <div fxFlex>
+              <p *ngIf="message.story">Story: {{ message.story }}</p>
+              <p *ngIf="message.text">Text: {{ message.text }} </p>
+            </div>
+
+            <mat-divider></mat-divider>
+          </div>
+        </mat-card>
+
+        <ng-template #noMessages>
+
+          <mat-card *ngIf="selected.visualization && selected.visualization.id == 'likes-list'
+                          && likes && likes.length; else noLikes" class="stats-card">
+            <h2>{{selected.visualization.name}}</h2>
+            <p>{{selected.visualization.description}}</p>
+            <div class="list-div" *ngFor="let like of likes">
+              <p>{{like.name}}</p>
+              <mat-divider></mat-divider>
+            </div>
+          </mat-card>
+
+          <ng-template #noLikes>
+
+            <mat-card *ngIf="selected.visualization && selected.visualization.id == 'connections-list'
+                          && connections && connections.length; else noConnections" class="stats-card">
+              <h2>{{selected.visualization.name}}</h2>
+              <p>{{selected.visualization.description}}</p>
+              <div class="list-div" *ngFor="let connection of connections">
+                <p *ngIf="connection.contactName">{{ connection.contactName }}</p>
+                <p *ngIf="connection.name">{{ connection.name }}</p>
+                <mat-divider></mat-divider>
+              </div>
+            </mat-card>
+
+            <ng-template #noConnections>
+
+              <mat-card *ngIf="selected.visualization && selected.visualization.id == 'activities-list'
+                          && activities && activities.length; else noActivities" class="stats-card">
+
+                <h2>{{selected.visualization.name}}</h2>
+                <p>{{selected.visualization.description}}</p>
+
+                <div class="list-div" fxLayout *ngFor="let activity of activities">
+
+                  <div *ngIf="activity.timestamp" fxFlex="30">
+                    <p>{{ activity.timestamp | date }}</p>
+                  </div>
+
+                  <div fxFlex="30">
+                    <!-- TODO parametrize here if there are more sources -->
+                    <p>ANDROID</p>
+                  </div>
+
+                  <div fxFlex>
+                    <p>Running ({{ activity.running }}%), Walking ({{ activity.walking }}%), Still ({{ activity.still }}%),
+                      In Vehicle ({{ activity.inVehicle }}%), On Bicycle ({{ activity.onBicycle }}%),
+                      On Foot ({{ activity.onFoot }}%), Tilting ({{ activity.tilting }}%),
+                      Unknown ({{ activity.unknown }}%)</p>
+                  </div>
+                  <mat-divider></mat-divider>
+                </div>
+
+              </mat-card>
+
+              <ng-template #noActivities>
+
+                <!-- no charts -->
+                <mat-card *ngIf="!selected.visualization && !customChart
+                            && !chartsLoading && !gpsCoordinate
+                            && (!socialMessages || !socialMessages.length); else noData"
+                          class="stats-card">
+                  <p>Please select on the of the available visualizations from the left/above menu.</p>
+                </mat-card>
+
+                <!-- chart/map selected but no data available -->
+                <ng-template #noData>
+                  <mat-card class="stats-card">
+                    <p>No data available.</p>
+                  </mat-card>
+                </ng-template>
+
+              </ng-template>
+            </ng-template>
+          </ng-template>
+        </ng-template>
+      </ng-template>
     </ng-template>
+
   </div>
 
 </div>

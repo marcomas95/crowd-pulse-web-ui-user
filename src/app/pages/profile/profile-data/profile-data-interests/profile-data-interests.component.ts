@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StatsService} from '../../../../services/stats.service';
-import {CloudData, CloudOptions} from 'angular-tag-cloud-module';
+import {CloudData, CloudOptions, ZoomOnHoverOptions} from 'angular-tag-cloud-module';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-interests',
-  styleUrls: ['./profile-data-interest.component.scss'],
+  styleUrls: ['./../profile-data.component.scss'],
   templateUrl: './profile-data-interest.component.html'
 })
 export class ProfileDataInterestComponent implements OnInit {
@@ -25,7 +26,16 @@ export class ProfileDataInterestComponent implements OnInit {
   options: CloudOptions = {
     width : 1,
     height : 400,
-    overflow: true,
+    overflow: false,
+  };
+
+  /**
+   * Zoom WordCloud option.
+   */
+  zoomOnHoverOptions: ZoomOnHoverOptions = {
+    scale: 1.3,
+    transitionTime: 0.5,
+    delay: 0
   };
 
   /**
@@ -36,16 +46,19 @@ export class ProfileDataInterestComponent implements OnInit {
     name: 'All',
   }, {
     id: 'message_token',
-    name: 'Token',
+    name: 'Hashtags',
+  }, {
+    id: 'message_tag',
+    name: 'Concepts',
   }, {
     id: 'message_tag_category',
-    name: 'Tag Category',
+    name: 'Topics',
   }, {
     id: 'like',
-    name: 'Like',
+    name: 'Likes',
   }, {
     id: 'app_category',
-    name: 'App Category',
+    name: 'App Categories',
   },
 
     // TODO add here new source type
@@ -55,11 +68,15 @@ export class ProfileDataInterestComponent implements OnInit {
    * Filter available.
    */
   filter = {
-    dateFrom: null,
-    dateTo: null,
-    source: this.sources[0].id,
+    dateFrom: new Date(),
+    dateTo: new Date(),
+    source: this.sources[4].id,
   };
 
+  /**
+   * Application name.
+   */
+  appName = environment.appName;
 
   constructor(
     private statsService: StatsService,
@@ -71,7 +88,7 @@ export class ProfileDataInterestComponent implements OnInit {
   ngOnInit() {
 
     // get word cloud interests data
-    this.statsService.getInterestsStats().then((stats) => {
+    this.statsService.getInterestsStats(this.filter).then((stats) => {
       this.data = stats.map((data) => {
         return {
           weight: data.weight,

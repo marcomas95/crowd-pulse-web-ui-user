@@ -5,7 +5,8 @@ import {ProfileService} from '../../services/profile.service';
 
 @Component({
   styleUrls: ['./profile.component.scss'],
-  templateUrl: './profile.component.html'
+  templateUrl: './profile.component.html',
+  providers: [ProfileService],
 })
 export class ProfileComponent implements OnInit {
 
@@ -14,12 +15,12 @@ export class ProfileComponent implements OnInit {
    */
   profileTabItems = [
     {
-      name: 'General',
+      name: 'Profile',
       icon: 'fa fa-list fa-1x',
       path: APP_ROUTES.profile.data
     },
     {
-      name: 'Statistics',
+      name: 'Data',
       icon: 'fa fa-bar-chart fa-1x',
       path: APP_ROUTES.profile.stats
     },

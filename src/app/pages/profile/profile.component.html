@@ -3,8 +3,7 @@
   <div fxLayout="row" fxLayoutAlign="start center" class="profile-userinfo-div">
     <img class="user-image" src="{{userImage}}">
     <div fxLayout="column">
-      <h1>Profile</h1>
-      <h5 *ngIf="user">Username: {{user.username}}</h5>
+      <h1 *ngIf="user">{{user.username | uppercase}}</h1>
     </div>
   </div>
 

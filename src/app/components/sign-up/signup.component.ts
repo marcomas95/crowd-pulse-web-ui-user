@@ -10,6 +10,11 @@ import {APP_ROUTES} from '../../app-routes';
  */
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+/**
+ * Characters accepted
+ */
+const USERNAME_REGEX = /^([A-Za-z0-9]+)([\w]*)([A-Za-z0-9]+)$/;
+
 @Component({
   selector: 'app-signup',
   styleUrls: ['./signup.component.scss'],
@@ -47,6 +52,8 @@ export class SignupComponent {
   signUp() {
     if (!this.checkRequiredFields()) {
       this.toast.warning('Insert the required fields.');
+    } else if (!USERNAME_REGEX.test(this.username)) {
+      this.toast.warning('Invalid username.');
     } else if (!this.checkParityPassword()) {
       this.toast.warning('Password not match.');
     } else if (!EMAIL_REGEX.test(this.email)) {
