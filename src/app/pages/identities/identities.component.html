@@ -99,6 +99,16 @@
             </div>
           </mat-card>
 
+          <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.fitbit">
+            <mat-card-title>Fitbit</mat-card-title>
+            <div fxLayout fxLayoutAlign="start center">
+              <img class="identities-user-image" src="{{user.identities.fitbit.avatar}}">
+              <div>
+                <button mat-raised-button color="primary" [routerLink]="appRoutes.identities.fitbit">Settings</button>
+              </div>
+            </div>
+          </mat-card>
+
           <mat-card fxFlex="30" fxFlex.lt-md="100" class="identities-card" *ngIf="user.identities.linkedIn">
             <mat-card-title>LinkedIn</mat-card-title>
             <div fxLayout fxLayoutAlign="start center">

@@ -16,6 +16,8 @@ const API_USER_FOOD = 'api/fitbit/food';
 const API_USER_FRIENDS = 'api/fitbit/friends';
 const API_USER_HEARTRATE = 'api/fitbit/heartrate';
 const API_USER_SLEEP = 'api/fitbit/sleep';
+const API_USER_SLEEP_VIEW_DATE = 'api/fitbit/sleep_date';
+const API_USER_HEART_VIEW_DATE = 'api/fitbit/heart_date';
 
 const API_DELETE_ACCOUNT = 'api/fitbit/delete';
 const API_CONFIG = 'api/fitbit/config';
@@ -243,6 +245,34 @@ export class FitbitService {
     }
   }
 
+
+
+  /**
+   * Get user Heart Rate.
+   * @return{Observable<Object>}: Fitbit user Heart if request was sent, false otherwise
+   */
+  userHeartDate(heartToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (heartToRead || Date.now() - this.lastUpdateHeartRate >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!heartToRead) {
+        this.lastUpdateHeartRate = Date.now();
+      }
+      const postParams = {
+        heartNumber: heartToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_HEART_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
+
+
   /**
    * Get user Sleep.
    * @return{Observable<Object>}: Fitbit user Sleep if request was sent, false otherwise
@@ -263,6 +293,33 @@ export class FitbitService {
       return Observable.of(false);
     }
   }
+
+
+
+  /**
+   * Get user Sleep.
+   * @return{Observable<Object>}: Fitbit user Sleep if request was sent, false otherwise
+   */
+  userSleepDate(sleepToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (sleepToRead || Date.now() - this.lastUpdateSleep >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update friends
+      if (!sleepToRead) {
+        this.lastUpdateSleep = Date.now();
+      }
+      const postParams = {
+        sleepNumber: sleepToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_SLEEP_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
 
 
 

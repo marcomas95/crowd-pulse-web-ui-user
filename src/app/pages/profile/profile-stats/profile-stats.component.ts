@@ -5,6 +5,7 @@ import {AuthService} from '../../../services/auth.service';
 import {TwitterService} from '../../../services/twitter.service';
 import {FacebookService} from '../../../services/facebook.service';
 import {InstagramService} from '../../../services/instagram.service';
+import {FitbitService} from '../../../services/fitbit.service';
 
 @Component({
   styleUrls: ['./profile-stats.component.scss'],
@@ -44,7 +45,12 @@ export class ProfileStatsComponent {
     filterConnection: {
       name: 'Source',
       source: 'all',
-      sources: ['all', 'facebook', 'twitter', 'phone contact'],
+      sources: ['all', 'facebook', 'twitter', 'phone contact', 'fitbit'],
+    },
+    filterActivity: {
+      name: 'Source',
+      source: 'all',
+      sources: ['all', 'android', 'fitbit'],
     },
     filterLimit: {
       name: 'Limit',
@@ -164,6 +170,50 @@ export class ProfileStatsComponent {
       {
         name: 'list',
         id: 'list',
+        filters: [this.filters.filterActivity, this.filters.filterDate],
+      },
+    ]
+  }, {
+    name: 'Sleep',
+    id: 'sleep-list',
+    description: 'This view shows the sleeps detected by your device',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [this.filters.filterDate],
+      },
+    ]
+  }, {
+    name: 'Heart Rate',
+    id: 'heart-rate-list',
+    description: 'This view shows the heart rate detected by your device',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [this.filters.filterDate],
+      },
+    ]
+  }, {
+    name: 'Physical Data',
+    id: 'body-list',
+    description: 'This view shows the activities detected by your device',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
+        filters: [ this.filters.filterDate],
+      },
+    ]
+  }, {
+    name: 'Food',
+    id: 'food-list',
+    description: 'This view shows the activities detected by your device',
+    types: [
+      {
+        name: 'list',
+        id: 'list',
         filters: [this.filters.filterDate],
       },
     ]
@@ -216,11 +266,35 @@ export class ProfileStatsComponent {
    */
   activities: any;
 
+
+  /**
+   * Fitbit user activities (timestamp - value_activities) detected by sensors.
+   */
+  activitiesFitbit = [];
+
+  /**
+   * Fitbit user timestamp without repetitions.
+   */
+  uniqueArray = [];
+
+
+  /**
+   * Fitbit user sleeps detected by sensors.
+   */
+  sleeps: any;
+
+  /**
+   * Fitbit user heart-rate detected by sensors.
+   */
+  hearts: any;
+
+
   constructor(
     private statsService: StatsService,
     private authService: AuthService,
     private facebookService: FacebookService,
     private twitterService: TwitterService,
+    private fitbitService: FitbitService,
     private instagramService: InstagramService,
   ) {
     this.user = authService.getCachedUser();
@@ -292,6 +366,12 @@ export class ProfileStatsComponent {
         break;
       case 'activities-list':
         this.buildActivitiesList();
+        break;
+      case 'sleep-list':
+        this.buildSleepList();
+        break;
+      case 'heart-rate-list':
+        this.buildHeartList();
         break;
       default:
         this.customChart = null;
@@ -875,9 +955,13 @@ export class ProfileStatsComponent {
       case 'android':
         this.getAndroidContacts(this.filters.filterLimit.limit || 1000);
         break;
+      case 'fitbit':
+        this.getFitbitFriends(this.filters.filterLimit.limit || 1000);
+        break;
       default:
         this.getFacebookFriends(this.filters.filterLimit.limit || 1000);
         this.getTwitterFriends(this.filters.filterLimit.limit || 1000);
+        this.getFitbitFriends(this.filters.filterLimit.limit || 1000);
         this.getAndroidContacts(this.filters.filterLimit.limit || 1000);
         break;
     }
@@ -911,6 +995,21 @@ export class ProfileStatsComponent {
     );
   }
 
+
+  /**
+   * Get Fitbit friends.
+   * @param number: the friends number
+   */
+  private getFitbitFriends(number: number) {
+    this.fitbitService.userFriends(number).subscribe(
+      (res) => {
+        if (res.friends && res.friends.length > 0) {
+          this.connections = res.friends;
+        }
+      }
+    );
+  }
+
   /**
    * Get Android contacts.
    * @param number: the contacts number
@@ -925,6 +1024,7 @@ export class ProfileStatsComponent {
     );
   }
 
+
   /**
    * Build the activities list (android activity).
    */
@@ -933,13 +1033,118 @@ export class ProfileStatsComponent {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
     };
-    this.statsService.getActivityData(filters).then(
+
+    /*let firstIteration = 0;*/
+    switch (this.filters.filterActivity.source) {
+      case 'android':
+        this.statsService.getActivityData(filters).then(
+          (res) => {
+            if (res && res.length) {
+              this.activities = res;
+            }
+          }
+        );
+        break;
+      case 'fitbit':
+        this.statsService.getActivityDataFitbit(filters).then(
+          (res) => {
+            if (res && res.length) {
+
+              res.sort(function(a, b){
+                return a.timestamp - b.timestamp;
+              });
+              const finalArray = res.map(function (obj) {
+                return obj.timestamp;
+              });
+              this.uniqueArray = finalArray.filter(function(item, pos) {
+                return finalArray.indexOf(item) == pos;
+              });
+              this.activitiesFitbit = res;
+            }
+          }
+        );
+        break;
+      default:
+        this.statsService.getActivityData(filters).then(
+          (res) => {
+            if (res && res.length) {
+              this.activities = res;
+            }
+          }
+        );
+        this.statsService.getActivityDataFitbit(filters).then(
+          (res) => {
+            if (res && res.length) {
+              res.sort(function(a, b){
+                return a.timestamp - b.timestamp;
+              });
+              const finalArray = res.map(function (obj) {
+                return obj.timestamp;
+              });
+              this.uniqueArray = finalArray.filter(function(item, pos) {
+                return finalArray.indexOf(item) == pos;
+              });
+              this.activitiesFitbit = res;
+            }
+          }
+        );
+        break;
+    }
+  }
+
+
+
+  /**
+   * Build the user sleep list.
+   */
+  private buildSleepList() {
+    this.sleeps = [];
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+      limitResult: this.filters.filterLimit.limit,
+    };
+    this.fitbitService.userSleepDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
       (res) => {
-        if (res && res.length) {
-          this.activities = res;
+        this.chartsLoading = false;
+        if (res.sleeps && res.sleeps.length) {
+          this.sleeps = res.sleeps;
         }
+      },
+      (err) => {
+        this.chartsLoading = false;
       }
     );
   }
 
-}
+
+
+
+  /**
+   * Build the user heart-rate list.
+   */
+  private buildHeartList() {
+    this.hearts = [];
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+      limitResult: this.filters.filterLimit.limit,
+    };
+    this.fitbitService.userHeartDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+      (res) => {
+        this.chartsLoading = false;
+        if (res.hearts && res.hearts.length) {
+          this.hearts = res.hearts;
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      }
+    );
+  }
+
+
+}/** Fine **/
+
+
+

@@ -19,6 +19,7 @@ const API_STATS_PERSONAL_DATA_APPINFO_TIMELINE = 'api/stats/personal_data/appinf
 const API_STATS_PERSONAL_DATA_APPINFO_BAR = 'api/stats/personal_data/appinfo/bar';
 const API_STATS_PERSONAL_DATA_DISPLAY_BAR = 'api/stats/personal_data/display/bar';
 const API_STATS_PERSONAL_DATA_ACTIVITY = 'api/stats/personal_data/activity';
+const API_STATS_PERSONAL_DATA_ACTIVITY_FITBIT = 'api/stats/personal_data/activity_fitbit';
 const API_STATS_DEMOGRAPHICS_LOCATION = 'api/stats/demographics/location';
 const API_STATS_DEMOGRAPHICS_GENDER = 'api/stats/demographics/gender';
 const API_STATS_DEMOGRAPHICS_LANGUAGE = 'api/stats/demographics/language';
@@ -303,15 +304,36 @@ export class StatsService {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
+
       if (!isNullOrUndefined(filter.dateFrom)) {
         params += 'from=' + filter.dateFrom.toISOString() + '&';
       }
+
       if (!isNullOrUndefined(filter.dateTo)) {
         params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
     return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_ACTIVITY}${params}`).toPromise();
   }
+
+
+
+  getActivityDataFitbit(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_ACTIVITY_FITBIT}${params}`).toPromise();
+  }
+
 
   /**
    * Get demographics location data for a pie chart visualization.

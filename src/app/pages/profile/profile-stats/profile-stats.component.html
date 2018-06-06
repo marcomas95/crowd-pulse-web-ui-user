@@ -89,6 +89,18 @@
           </mat-form-field>
         </div>
 
+        <!-- filter by source (for activity) -->
+        <div *ngIf="filter == filters.filterActivity">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+              <mat-option *ngFor="let source of filter.sources" [value]="source">
+                {{ source | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <!-- limit results -->
         <div *ngIf="filter == filters.filterLimit">
           <h3>{{filter.name}}</h3>
@@ -223,7 +235,94 @@
 
               </mat-card>
 
+
+
+              <mat-card *ngIf="selected.visualization && selected.visualization.id == 'activities-list'
+                          && activitiesFitbit && activitiesFitbit.length" class="stats-card">
+
+                <h2>{{selected.visualization.name}}</h2>
+                <p>{{selected.visualization.description}}</p>
+
+
+
+                <div class="list-div" fxLayout *ngFor="let timestamp of uniqueArray">
+
+                  <div *ngIf="timestamp" fxFlex="30">
+                    <p>{{ timestamp | date }}</p>
+                  </div>
+
+                  <div fxFlex="30">
+                    <p> FITBIT </p>
+                  </div>
+
+                  <div fxFlex *ngFor="let activity of activitiesFitbit">
+                    <pre *ngIf="activity.steps && timestamp == activity.timestamp"> Steps ({{ activity.steps | number:0}}%), </pre>
+                    <pre *ngIf="activity.distance && timestamp == activity.timestamp">Distance ({{ activity.distance | number:0 }}%), </pre>
+                    <pre *ngIf="activity.calories && timestamp == activity.timestamp">Calories ({{ activity.calories | number:0 }}%), </pre>
+                    <pre *ngIf="activity.elevation && timestamp == activity.timestamp">Elevation ({{ activity.elevation | number:0}}%), </pre>
+                    <pre *ngIf="activity.veryActive && timestamp == activity.timestamp">Minutes Very Active ({{ activity.veryActive | number:0}}%), </pre>
+                    <pre *ngIf="activity.minutesSedentary && timestamp == activity.timestamp">Minutes Sedentary ({{ activity.minutesSedentary | number:0}}%), </pre>
+                    <pre *ngIf="activity.fairly && timestamp == activity.timestamp">Fairly ({{ activity.fairly | number:0}}%), </pre>
+                    <pre *ngIf="activity.floors && timestamp == activity.timestamp">Floors ({{ activity.floors | number:0}}%), </pre>
+                    <pre *ngIf="activity.minutesLightlyActive && timestamp == activity.timestamp">Minutes Lightly Active ({{ activity.minutesLightlyActive | number:0}}%), </pre>
+                  </div>
+                  <mat-divider></mat-divider>
+                </div>
+
+              </mat-card>
+
               <ng-template #noActivities>
+
+
+                <mat-card *ngIf="selected.visualization && selected.visualization.id == 'sleep-list'
+                          && sleeps && sleeps.length; else noSleep" class="stats-card">
+                  <h2>{{selected.visualization.name}}</h2>
+                  <p>{{selected.visualization.description}}</p>
+                  <div class="list-div" *ngFor="let sleep of sleeps">
+                    <div fxFlex="30">
+                      <p>{{sleep.timestamp | date}}</p>
+                    </div>
+
+                    <div fxFlex="30">
+                      <p> FITBIT </p>
+                    </div>
+
+                    <div fxFlex>
+                      <p> Duration ({{ sleep.duration | number:0}}%), Efficiency ({{ sleep.efficiency | number:0}}%),
+                        Minutes After Wakup ({{ sleep.minutesAfterWakup | number:0}}%), Minutes A sleep ({{ sleep.minutesAsleep | number:0}}%),
+                        Minutes A wake ({{ sleep.minutesAwake | number:0}}%),
+                        Minutes To Fall A Sleep ({{ sleep.minutesToFallASleep | number:0}}%),
+                        Time In Bed ({{ sleep.timeInBed | number:0}}%)
+                      </p>
+                    </div>
+                    <mat-divider></mat-divider>
+                  </div>
+                </mat-card>
+
+
+                <mat-card *ngIf="selected.visualization && selected.visualization.id == 'heart-rate-list'
+                          && hearts && hearts.length; else noHeart" class="stats-card">
+                  <h2>{{selected.visualization.name}}</h2>
+                  <p>{{selected.visualization.description}}</p>
+                  <div class="list-div" *ngFor="let heart of hearts">
+                    <div fxFlex="30">
+                      <p>{{heart.timestamp | date}}</p>
+                    </div>
+
+                    <div fxFlex="30">
+                      <p> FITBIT </p>
+                    </div>
+
+                    <div fxFlex>
+                      <p> restingHeartRate ({{ heart.restingHeartRate | number:0}}%), outOfRange_minutes ({{ heart.outOfRange_minutes | number:0}}%),
+                        fatBurn_minutes ({{ heart.fatBurn_minutes | number:0}}%), cardio_minutes ({{ heart.cardio_minutes | number:0}}%),
+                        peak_minutes ({{ heart.peak_minutes | number:0}}%)
+                      </p>
+                    </div>
+                    <mat-divider></mat-divider>
+                  </div>
+                </mat-card>
+
 
                 <!-- no charts -->
                 <mat-card *ngIf="!selected.visualization && !customChart

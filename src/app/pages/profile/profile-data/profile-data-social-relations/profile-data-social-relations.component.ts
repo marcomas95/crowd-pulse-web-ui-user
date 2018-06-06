@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {FacebookService} from '../../../../services/facebook.service';
 import {TwitterService} from '../../../../services/twitter.service';
 import {InstagramService} from '../../../../services/instagram.service';
+import {FitbitService} from '../../../../services/fitbit.service';
 import {StatsService} from '../../../../services/stats.service';
 import {MatTableDataSource} from '@angular/material';
 
@@ -42,6 +43,9 @@ export class ProfileDataSocialRelationsComponent {
   }, {
     id: 'instagram',
     name: 'Instagram',
+  }, {
+    id: 'fitbit',
+    name: 'Fitbit',
   },
 
     // TODO add here new source type
@@ -61,6 +65,7 @@ export class ProfileDataSocialRelationsComponent {
     private facebookService: FacebookService,
     private twitterService: TwitterService,
     private instagramService: InstagramService,
+    private fitbitService: FitbitService,
     private statsService: StatsService,
   ) {}
 
@@ -81,6 +86,10 @@ export class ProfileDataSocialRelationsComponent {
         this.data = [];
         this.getInstagramFriends(FRIENDS_NUMBER);
         break;
+      case 'fitbit':
+        this.data = [];
+        this.getFitbitFriends(FRIENDS_NUMBER);
+        break;
       case 'android':
         this.data = [];
         this.getAndroidContacts(FRIENDS_NUMBER);
@@ -90,6 +99,7 @@ export class ProfileDataSocialRelationsComponent {
         this.getFacebookFriends(FRIENDS_NUMBER);
         this.getTwitterFriends(FRIENDS_NUMBER);
         this.getInstagramFriends(FRIENDS_NUMBER);
+        this.getFitbitFriends(FRIENDS_NUMBER);
         this.getAndroidContacts(FRIENDS_NUMBER);
         break;
     }
@@ -170,6 +180,25 @@ export class ProfileDataSocialRelationsComponent {
             } else {
               this.data.push({name: friend.contactId, id: friend.contactName, interactions: 1});
             }
+          });
+          this.data.sort((a, b) => b.interactions - a.interactions);
+          this.dataSource = new MatTableDataSource(this.data);
+        }
+      }
+    );
+  }
+
+
+  /**
+   * Get Fitbit friends.
+   * @param number: the friends number
+   */
+  private getFitbitFriends(number: number) {
+    this.fitbitService.userFriends(number).subscribe(
+      (res) => {
+        if (res.friends && res.friends.length > 0) {
+          res.friends.forEach((friend) => {
+            this.data.push({name: friend.contactName, id: null, interactions: 1});
           });
           this.data.sort((a, b) => b.interactions - a.interactions);
           this.dataSource = new MatTableDataSource(this.data);
