@@ -18,6 +18,11 @@ const API_USER_HEARTRATE = 'api/fitbit/heartrate';
 const API_USER_SLEEP = 'api/fitbit/sleep';
 const API_USER_SLEEP_VIEW_DATE = 'api/fitbit/sleep_date';
 const API_USER_HEART_VIEW_DATE = 'api/fitbit/heart_date';
+const API_USER_FOOD_VIEW_DATE = 'api/fitbit/food_date';
+const API_USER_FAT_VIEW_DATE = 'api/fitbit/fat_date';
+const API_USER_WEIGHT_VIEW_DATE = 'api/fitbit/weight_date';
+const API_USER_BMI_VIEW_DATE = 'api/fitbit/bmi_date';
+
 
 const API_DELETE_ACCOUNT = 'api/fitbit/delete';
 const API_CONFIG = 'api/fitbit/config';
@@ -139,6 +144,55 @@ export class FitbitService {
 
 
   /**
+   * Get user Weights.
+   * @return{Observable<Object>}: Fitbit user weights if request was sent, false otherwise
+   */
+  userWeightDate(weightsToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (weightsToRead || Date.now() - this.lastUpdateBodyWeight >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update weight
+      if (!weightsToRead) {
+        this.lastUpdateBodyWeight = Date.now();
+      }
+      const postParams = {
+        weightsNumber: weightsToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_WEIGHT_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
+
+  /**
+   * Get user Fats.
+   * @return{Observable<Object>}: Fitbit user fats if request was sent, false otherwise
+   */
+  userFatDate(fatsToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (fatsToRead || Date.now() - this.lastUpdateBody_Fat >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update fat
+      if (!fatsToRead) {
+        this.lastUpdateBody_Fat = Date.now();
+      }
+      const postParams = {
+        fatsNumber: fatsToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_FAT_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
+  /**
    * Get user Body & Fat.
    * @return{Observable<Object>}: Fitbit user body & fat if request was sent, false otherwise
    */
@@ -158,6 +212,9 @@ export class FitbitService {
       return Observable.of(false);
     }
   }
+
+
+
 
 
   /**
@@ -183,6 +240,31 @@ export class FitbitService {
 
 
   /**
+   * Get user BMI.
+   * @return{Observable<Object>}: Fitbit user bmi if request was sent, false otherwise
+   */
+  userBmiDate(bmisToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (bmisToRead || Date.now() - this.lastUpdateBody_Bmi >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update bmi
+      if (!bmisToRead) {
+        this.lastUpdateBody_Bmi = Date.now();
+      }
+      const postParams = {
+        bmisNumber: bmisToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_BMI_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
+
+  /**
    * Get user Food.
    * @return{Observable<Object>}: Fitbit user Food if request was sent, false otherwise
    */
@@ -201,6 +283,34 @@ export class FitbitService {
       return Observable.of(false);
     }
   }
+
+
+
+  /**
+   * Get user Foods.
+   * @return{Observable<Object>}: Fitbit user foods if request was sent, false otherwise
+   */
+  userFoodDate(foodToRead?: number, dateFrom?: Date, dateTo?: Date): Observable<any>  {
+    // timeout
+    if (foodToRead || Date.now() - this.lastUpdateFood >= FIVE_MINUTES_MILLIS) {
+
+      // update the timeout only if user wants update food
+      if (!foodToRead) {
+        this.lastUpdateFood = Date.now();
+      }
+      const postParams = {
+        foodNumber: foodToRead,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      };
+      return this.http.post(`${this.url}${API_USER_FOOD_VIEW_DATE}`, postParams);
+    } else {
+      return Observable.of(false);
+    }
+  }
+
+
+
 
   /**
    * Get user Friends.
@@ -232,7 +342,7 @@ export class FitbitService {
     // timeout
     if (heartToRead || Date.now() - this.lastUpdateHeartRate >= FIVE_MINUTES_MILLIS) {
 
-      // update the timeout only if user wants update friends
+      // update the timeout only if user wants update heart
       if (!heartToRead) {
         this.lastUpdateHeartRate = Date.now();
       }
@@ -255,7 +365,7 @@ export class FitbitService {
     // timeout
     if (heartToRead || Date.now() - this.lastUpdateHeartRate >= FIVE_MINUTES_MILLIS) {
 
-      // update the timeout only if user wants update friends
+      // update the timeout only if user wants update heart
       if (!heartToRead) {
         this.lastUpdateHeartRate = Date.now();
       }
@@ -281,7 +391,7 @@ export class FitbitService {
     // timeout
     if (sleepToRead || Date.now() - this.lastUpdateSleep >= FIVE_MINUTES_MILLIS) {
 
-      // update the timeout only if user wants update friends
+      // update the timeout only if user wants update sleep
       if (!sleepToRead) {
         this.lastUpdateSleep = Date.now();
       }

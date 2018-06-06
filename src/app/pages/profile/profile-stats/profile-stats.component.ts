@@ -52,6 +52,11 @@ export class ProfileStatsComponent {
       source: 'all',
       sources: ['all', 'android', 'fitbit'],
     },
+    filterBody: {
+      name: 'Source',
+      source: 'all',
+      sources: ['FAT', 'WEIGHT', 'BMI'],
+    },
     filterLimit: {
       name: 'Limit',
       limit: null,
@@ -196,20 +201,20 @@ export class ProfileStatsComponent {
       },
     ]
   }, {
-    name: 'Physical Data',
+    name: 'Body',
     id: 'body-list',
-    description: 'This view shows the activities detected by your device',
+    description: 'This view shows the physical data detected by your device',
     types: [
       {
         name: 'list',
         id: 'list',
-        filters: [ this.filters.filterDate],
+        filters: [this.filters.filterBody, this.filters.filterDate],
       },
     ]
   }, {
     name: 'Food',
     id: 'food-list',
-    description: 'This view shows the activities detected by your device',
+    description: 'This view shows the food detected by your device',
     types: [
       {
         name: 'list',
@@ -287,6 +292,16 @@ export class ProfileStatsComponent {
    * Fitbit user heart-rate detected by sensors.
    */
   hearts: any;
+
+  /**
+   * Fitbit user foods detected by sensors.
+   */
+  foods: any;
+
+  /**
+   * Fitbit user body detected by sensors.
+   */
+  body: any;
 
 
   constructor(
@@ -372,6 +387,12 @@ export class ProfileStatsComponent {
         break;
       case 'heart-rate-list':
         this.buildHeartList();
+        break;
+      case 'food-list':
+        this.buildFoodList();
+        break;
+      case 'body-list':
+        this.buildBodyList();
         break;
       default:
         this.customChart = null;
@@ -1142,6 +1163,106 @@ export class ProfileStatsComponent {
       }
     );
   }
+
+
+
+
+  /**
+   * Build the user foods list.
+   */
+  private buildFoodList() {
+    this.foods = [];
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+      limitResult: this.filters.filterLimit.limit,
+    };
+    this.fitbitService.userFoodDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+      (res) => {
+        this.chartsLoading = false;
+        if (res.foods && res.foods.length) {
+          this.foods = res.foods;
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      }
+    );
+  }
+
+
+
+
+  /**
+   * Build the body list (android activity).
+   */
+  private buildBodyList() {
+    this.body = [];
+
+    const filters = {
+      dateFrom: this.filters.filterDate.dateFrom,
+      dateTo: this.filters.filterDate.dateTo,
+      limitResult: this.filters.filterLimit.limit,
+    };
+
+    /*let firstIteration = 0;*/
+    switch (this.filters.filterBody.source) {
+      case 'FAT':
+        this.fitbitService.userFatDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+          (res) => {
+            this.chartsLoading = false;
+            if (res.fats && res.fats.length) {
+              this.body = res.fats;
+            }
+          },
+          (err) => {
+            this.chartsLoading = false;
+          }
+        );
+        break;
+      case 'WEIGHT':
+        this.fitbitService.userWeightDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+          (res) => {
+            this.chartsLoading = false;
+            if (res.weights && res.weights.length) {
+              this.body = res.weights;
+            }
+          },
+          (err) => {
+            this.chartsLoading = false;
+          }
+        );
+        break;
+      case 'BMI':
+        this.fitbitService.userBmiDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+          (res) => {
+            this.chartsLoading = false;
+            if (res.bmis && res.bmis.length) {
+              this.body = res.bmis;
+            }
+          },
+          (err) => {
+            this.chartsLoading = false;
+          }
+        );
+        break;
+      default:
+        this.fitbitService.userFatDate(filters.limitResult || 1000, filters.dateFrom, filters.dateTo).subscribe(
+          (res) => {
+            this.chartsLoading = false;
+            if (res.fats && res.fats.length) {
+              this.body = res.fats;
+            }
+          },
+          (err) => {
+            this.chartsLoading = false;
+          }
+        );
+       break;
+    }
+  }
+
+
 
 
 }/** Fine **/

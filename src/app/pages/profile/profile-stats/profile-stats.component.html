@@ -101,6 +101,18 @@
           </mat-form-field>
         </div>
 
+        <!-- filter by source (for body) -->
+        <div *ngIf="filter == filters.filterBody">
+          <h3>{{filter.name}}</h3>
+          <mat-form-field class="filter-container">
+            <mat-select [(ngModel)]="filter.source" (ngModelChange)="updateChart()" placeholder="Source">
+              <mat-option *ngFor="let source of filter.sources" [value]="source">
+                {{ source | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <!-- limit results -->
         <div *ngIf="filter == filters.filterLimit">
           <h3>{{filter.name}}</h3>
@@ -314,13 +326,65 @@
                     </div>
 
                     <div fxFlex>
-                      <p> restingHeartRate ({{ heart.restingHeartRate | number:0}}%), outOfRange_minutes ({{ heart.outOfRange_minutes | number:0}}%),
-                        fatBurn_minutes ({{ heart.fatBurn_minutes | number:0}}%), cardio_minutes ({{ heart.cardio_minutes | number:0}}%),
-                        peak_minutes ({{ heart.peak_minutes | number:0}}%)
+                      <p> Resting Heart-Rate ({{ heart.restingHeartRate | number:0}}%), Out Of Range minutes ({{ heart.outOfRange_minutes | number:0}}%),
+                        Fat burn minutes ({{ heart.fatBurn_minutes | number:0}}%), Cardio minutes ({{ heart.cardio_minutes | number:0}}%),
+                        Peak minutes ({{ heart.peak_minutes | number:0}}%)
                       </p>
                     </div>
                     <mat-divider></mat-divider>
                   </div>
+                </mat-card>
+
+
+
+                <mat-card *ngIf="selected.visualization && selected.visualization.id == 'food-list'
+                          && foods && foods.length; else noFood" class="stats-card">
+                  <h2>{{selected.visualization.name}}</h2>
+                  <p>{{selected.visualization.description}}</p>
+                  <div class="list-div" *ngFor="let food of foods">
+                    <div fxFlex="30">
+                      <p>{{food.timestamp | date}}</p>
+                    </div>
+
+                    <div fxFlex="30">
+                      <p> FITBIT </p>
+                    </div>
+
+                    <div fxFlex>
+                      <p> Calories In ({{ food.caloriesIn | number:0}}%)
+                      </p>
+                    </div>
+                    <mat-divider></mat-divider>
+                  </div>
+                </mat-card>
+
+
+
+                <mat-card *ngIf="selected.visualization && selected.visualization.id == 'body-list'
+                          && body && body.length" class="stats-card">
+
+                  <h2>{{selected.visualization.name}}</h2>
+                  <p>{{selected.visualization.description}}</p>
+
+                  <div class="list-div" fxLayout *ngFor="let onebody of body">
+
+                    <div *ngIf="onebody.timestamp" fxFlex="30">
+                      <p>{{ onebody.timestamp | date }}</p>
+                    </div>
+
+                    <div fxFlex="30">
+                      <p> FITBIT </p>
+                    </div>
+
+                    <div fxFlex>
+                      <pre *ngIf="onebody.bodyBmi"> BMI ({{ onebody.bodyBmi | number:0}}%), </pre>
+                      <pre *ngIf="onebody.bodyFat">FAT ({{ onebody.bodyFat | number:0 }}%), </pre>
+                      <pre *ngIf="onebody.bodyWeight">WEIGHT ({{ onebody.bodyWeight | number:0 }}%), </pre>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                  </div>
+
                 </mat-card>
 
 
