@@ -185,6 +185,9 @@ export class IdentitiesFitbitComponent implements OnInit {
     this.authService.getUser().then((user) => {
       if (user && user.identities && user.identities.fitbit) {
 
+
+        this.fitbitService.refreshAccessToken(this.authorizationCode).subscribe((res) => {
+        });
         this.loading = false;
         this.user = user;
         this.setupFitbitProfileTable();
@@ -215,7 +218,7 @@ export class IdentitiesFitbitComponent implements OnInit {
 
       } else {
 
-
+        alert('dentro else');
         // reading parameters returned by Fitbit
         this.route.queryParams.subscribe(params => {
           this.authorizationCode = params['code'];

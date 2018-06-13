@@ -6,6 +6,8 @@ import {isNullOrUndefined} from 'util';
 
 const API_LOGIN_DIALOG = 'api/fitbit/login_dialog';
 const API_REQUEST_TOKEN = 'api/fitbit/request_token';
+const API_REFRESH_TOKEN = 'api/fitbit/refresh_token';
+
 
 const API_USER_PROFILE = 'api/fitbit/profile';
 const API_USER_ACTIVITY = 'api/fitbit/activity';
@@ -83,6 +85,20 @@ export class FitbitService {
       callbackUrl: environment.fitbitCallbackUrl,
     };
     return this.http.post(`${this.url}${API_REQUEST_TOKEN}`, postParams);
+  }
+
+
+  /**
+   * Refresh the access token.
+   * @param authorizationCode: authorization code returned by Fitbit
+   * @return{Observable<Object>}: Fitbit user accessToken
+   */
+  refreshAccessToken(authorizationCode: string): Observable<any> {
+    const postParams = {
+      code: authorizationCode,
+      callbackUrl: environment.fitbitCallbackUrl,
+    };
+    return this.http.post(`${this.url}${API_REFRESH_TOKEN}`, postParams);
   }
 
   /**
