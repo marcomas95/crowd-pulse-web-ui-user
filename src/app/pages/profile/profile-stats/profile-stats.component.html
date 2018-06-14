@@ -268,15 +268,15 @@
                   </div>
 
                   <div fxFlex *ngFor="let activity of activitiesFitbit">
-                    <pre *ngIf="activity.steps && timestamp == activity.timestamp"> Steps ({{ activity.steps | number:0}}%), </pre>
-                    <pre *ngIf="activity.distance && timestamp == activity.timestamp">Distance ({{ activity.distance | number:0 }}%), </pre>
-                    <pre *ngIf="activity.calories && timestamp == activity.timestamp">Calories ({{ activity.calories | number:0 }}%), </pre>
-                    <pre *ngIf="activity.elevation && timestamp == activity.timestamp">Elevation ({{ activity.elevation | number:0}}%), </pre>
-                    <pre *ngIf="activity.veryActive && timestamp == activity.timestamp">Minutes Very Active ({{ activity.veryActive | number:0}}%), </pre>
-                    <pre *ngIf="activity.minutesSedentary && timestamp == activity.timestamp">Minutes Sedentary ({{ activity.minutesSedentary | number:0}}%), </pre>
-                    <pre *ngIf="activity.fairly && timestamp == activity.timestamp">Fairly ({{ activity.fairly | number:0}}%), </pre>
-                    <pre *ngIf="activity.floors && timestamp == activity.timestamp">Floors ({{ activity.floors | number:0}}%), </pre>
-                    <pre *ngIf="activity.minutesLightlyActive && timestamp == activity.timestamp">Minutes Lightly Active ({{ activity.minutesLightlyActive | number:0}}%), </pre>
+                    <pre *ngIf="activity.steps && timestamp == activity.timestamp"> Steps ({{ activity.steps | number:0}}), </pre>
+                    <pre *ngIf="activity.distance && timestamp == activity.timestamp">Distance ({{ activity.distance | number:0 }}), </pre>
+                    <pre *ngIf="activity.calories && timestamp == activity.timestamp">Calories ({{ activity.calories | number:0 }}), </pre>
+                    <pre *ngIf="activity.elevation && timestamp == activity.timestamp">Elevation ({{ activity.elevation | number:0}}), </pre>
+                    <pre *ngIf="activity.veryActive && timestamp == activity.timestamp">Minutes Very Active ({{ activity.veryActive | number:0}}), </pre>
+                    <pre *ngIf="activity.minutesSedentary && timestamp == activity.timestamp">Minutes Sedentary ({{ activity.minutesSedentary | number:0}}), </pre>
+                    <pre *ngIf="activity.fairly && timestamp == activity.timestamp">Fairly ({{ activity.fairly | number:0}}), </pre>
+                    <pre *ngIf="activity.floors && timestamp == activity.timestamp">Floors ({{ activity.floors | number:0}}), </pre>
+                    <pre *ngIf="activity.minutesLightlyActive && timestamp == activity.timestamp">Minutes Lightly Active ({{ activity.minutesLightlyActive | number:0}}), </pre>
                   </div>
                   <mat-divider></mat-divider>
                 </div>
@@ -300,11 +300,11 @@
                     </div>
 
                     <div fxFlex>
-                      <p> Duration ({{ sleep.duration | number:0}}%), Efficiency ({{ sleep.efficiency | number:0}}%),
-                        Minutes After Wakup ({{ sleep.minutesAfterWakup | number:0}}%), Minutes A sleep ({{ sleep.minutesAsleep | number:0}}%),
-                        Minutes A wake ({{ sleep.minutesAwake | number:0}}%),
-                        Minutes To Fall A Sleep ({{ sleep.minutesToFallASleep | number:0}}%),
-                        Time In Bed ({{ sleep.timeInBed | number:0}}%)
+                      <p> Duration ({{ sleep.duration | number:0}}), Efficiency ({{ sleep.efficiency | number:0}}),
+                        Minutes After Wakup ({{ sleep.minutesAfterWakup | number:0}}), Minutes A sleep ({{ sleep.minutesAsleep | number:0}}),
+                        Minutes A wake ({{ sleep.minutesAwake | number:0}}),
+                        Minutes To Fall A Sleep ({{ sleep.minutesToFallASleep | number:0}}),
+                        Time In Bed ({{ sleep.timeInBed | number:0}})
                       </p>
                     </div>
                     <mat-divider></mat-divider>
@@ -326,9 +326,9 @@
                     </div>
 
                     <div fxFlex>
-                      <p> Resting Heart-Rate ({{ heart.restingHeartRate | number:0}}%), Out Of Range minutes ({{ heart.outOfRange_minutes | number:0}}%),
-                        Fat burn minutes ({{ heart.fatBurn_minutes | number:0}}%), Cardio minutes ({{ heart.cardio_minutes | number:0}}%),
-                        Peak minutes ({{ heart.peak_minutes | number:0}}%)
+                      <p> Resting Heart-Rate ({{ heart.restingHeartRate | number:0}}), Out Of Range minutes ({{ heart.outOfRange_minutes | number:0}}),
+                        Fat burn minutes ({{ heart.fatBurn_minutes | number:0}}), Cardio minutes ({{ heart.cardio_minutes | number:0}}),
+                        Peak minutes ({{ heart.peak_minutes | number:0}})
                       </p>
                     </div>
                     <mat-divider></mat-divider>
@@ -351,7 +351,7 @@
                     </div>
 
                     <div fxFlex>
-                      <p> Calories In ({{ food.caloriesIn | number:0}}%)
+                      <p> Calories In ({{ food.caloriesIn | number:0}})
                       </p>
                     </div>
                     <mat-divider></mat-divider>
@@ -377,9 +377,9 @@
                     </div>
 
                     <div fxFlex>
-                      <pre *ngIf="onebody.bodyBmi"> BMI ({{ onebody.bodyBmi | number:0}}%), </pre>
-                      <pre *ngIf="onebody.bodyFat">FAT ({{ onebody.bodyFat | number:0 }}%), </pre>
-                      <pre *ngIf="onebody.bodyWeight">WEIGHT ({{ onebody.bodyWeight | number:0 }}%), </pre>
+                      <pre *ngIf="onebody.bodyBmi"> BMI ({{ onebody.bodyBmi | number:0}}), </pre>
+                      <pre *ngIf="onebody.bodyFat">FAT ({{ onebody.bodyFat | number:0 }}), </pre>
+                      <pre *ngIf="onebody.bodyWeight">WEIGHT ({{ onebody.bodyWeight | number:0 }}), </pre>
 
                     </div>
                     <mat-divider></mat-divider>
