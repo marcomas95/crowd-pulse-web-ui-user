@@ -13,6 +13,7 @@ import {FitbitService} from '../../../services/fitbit.service';
 })
 export class ProfileStatsComponent {
 
+
   /**
    * User data.
    */
@@ -943,6 +944,8 @@ export class ProfileStatsComponent {
    */
   private buildLikesList() {
     this.likes = [];
+    this.filters.filterDate.dateFrom.setDate(1);
+
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
@@ -1050,6 +1053,9 @@ export class ProfileStatsComponent {
    * Build the activities list (android activity).
    */
   private buildActivitiesList() {
+
+    this.filters.filterDate.dateFrom.setDate(1);
+
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
@@ -1120,6 +1126,8 @@ export class ProfileStatsComponent {
    */
   private buildSleepList() {
     this.sleeps = [];
+    this.filters.filterDate.dateFrom.setDate(1);
+
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
@@ -1146,6 +1154,9 @@ export class ProfileStatsComponent {
    */
   private buildHeartList() {
     this.hearts = [];
+    this.filters.filterDate.dateFrom.setDate(1);
+
+
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
@@ -1172,6 +1183,9 @@ export class ProfileStatsComponent {
    */
   private buildFoodList() {
     this.foods = [];
+
+    this.filters.filterDate.dateFrom.setDate(1);
+
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,
       dateTo: this.filters.filterDate.dateTo,
@@ -1198,6 +1212,8 @@ export class ProfileStatsComponent {
    */
   private buildBodyList() {
     this.body = [];
+    this.filters.filterDate.dateFrom.setDate(1);
+
 
     const filters = {
       dateFrom: this.filters.filterDate.dateFrom,

@@ -218,7 +218,6 @@ export class IdentitiesFitbitComponent implements OnInit {
 
       } else {
 
-        alert('dentro else');
         // reading parameters returned by Fitbit
         this.route.queryParams.subscribe(params => {
           this.authorizationCode = params['code'];
