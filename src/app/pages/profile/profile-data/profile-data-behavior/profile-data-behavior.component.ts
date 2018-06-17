@@ -43,12 +43,30 @@ export class ProfileDataBehaviorComponent implements OnInit {
   ];
 
 
+  /**
+   * Available behavior source.
+   */
+  visualization = [ {
+    id: 'pie',
+    name: 'Pie Chart',
+  }, {
+    id: 'bar',
+    name: 'Bar Chart',
+  },
+  ];
+
+
 
 
   /**
    * Selected type.
    */
   selectedType: {id: string, name: string};
+
+  /**
+   * Selected chart.
+   */
+  selectedChart: {id: string, name: string};
 
   /**
    * Filter available.
@@ -136,7 +154,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
         });
         break;
       case 'activity':
-        this.buildActivityDataSourceChart(this.selectedType.id).then((chart) => {
+        this.buildActivityDataSourceChart(this.selectedChart.id).then((chart) => {
         this.customChart = chart;
         });
         break;
@@ -166,7 +184,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
         if (stats && stats.length > 0) {
           const chart = new Chart({
             chart: {
-              type: 'pie'
+              type: type || 'pie'
             },
             title: null,
             credits: {
