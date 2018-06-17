@@ -52,6 +52,9 @@ export class ProfileDataBehaviorComponent implements OnInit {
   }, {
     id: 'bar',
     name: 'Bar Chart',
+  }, {
+    id: 'line',
+    name: 'Line Chart',
   },
   ];
 
@@ -154,9 +157,17 @@ export class ProfileDataBehaviorComponent implements OnInit {
         });
         break;
       case 'activity':
-        this.buildActivityDataSourceChart(this.selectedChart.id).then((chart) => {
-        this.customChart = chart;
-        });
+        if (this.selectedChart.id == 'line') {
+          this.buildActivityDataSourceChartLine(this.selectedChart.id).then((chart) => {
+            this.customChart = chart;
+          });
+
+        } else {
+            this.buildActivityDataSourceChart(this.selectedChart.id).then((chart) => {
+            this.customChart = chart;
+          });
+        }
+
         break;
       default:
         this.customChart = null;
@@ -167,7 +178,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
 
 
   /**
-   * Build a pie chart with the activity data source type frequency.
+   * Build a pie or bar chart with the activity data source type frequency.
    * @param type: the chart type.
    */
   private buildActivityDataSourceChart(type?: string): Promise<Chart | any> {
@@ -202,6 +213,41 @@ export class ProfileDataBehaviorComponent implements OnInit {
         this.chartsLoading = false;
       });
   }
+
+
+
+  /**
+   * Build a line chart with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartLine(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbitLine(this.filter).then(
+      (stats) => {
+
+        this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'line'
+            },
+            title: null,
+            credits: {
+              enabled: false
+            },
+            series: [{
+              data: stats.map((stat) => ({name: 'Steps', y: stat.steps}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
+
 
 
   clickedMarker(marker: any) {
