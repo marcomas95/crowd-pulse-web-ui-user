@@ -29,7 +29,7 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- filter by type -->
+        <!-- filter by type chart -->
         <mat-form-field fxFlex class="filter-date">
           <mat-select [(ngModel)]="selectedChart" (ngModelChange)="updateChart()" placeholder="Type">
             <mat-option *ngFor="let type of visualization" [value]="type">
@@ -63,11 +63,9 @@
         </agm-map>
       </mat-card>
 
+      <!-- this creates a chart for activities -->
       <mat-card *ngIf="selectedType.id == 'activity'">
-
           <div [chart]="customChart"></div>
-
-
       </mat-card>
 
     </div>
