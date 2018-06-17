@@ -8,6 +8,7 @@ const GlOBAL_DATABASE = 'globalData';
 const PROFILES_DATABASE = 'profiles';
 
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
+const API_STATS_ACTIVITY_DATA_SOURCE = 'api/stats/activity_data/source';
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
@@ -45,6 +46,8 @@ export class StatsService {
     const params = `?db=${this.authService.getUserame()}`;
     return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_SOURCE}${params}`).toPromise();
   }
+
+
 
   /**
    * Get interests data stats.
@@ -314,6 +317,23 @@ export class StatsService {
       }
     }
     return this.http.get(`${this.url}${API_STATS_PERSONAL_DATA_ACTIVITY}${params}`).toPromise();
+  }
+
+
+  getActivityTypeDataFitbit(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_ACTIVITY_DATA_SOURCE}${params}`).toPromise();
   }
 
 

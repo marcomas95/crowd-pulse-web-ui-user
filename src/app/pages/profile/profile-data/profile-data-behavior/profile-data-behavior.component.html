@@ -24,6 +24,7 @@
           <mat-select [(ngModel)]="selectedType" (ngModelChange)="updateChart()" placeholder="Type">
             <mat-option *ngFor="let type of types" [value]="type">
               {{ type.name | uppercase }}
+
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -32,10 +33,6 @@
 
     <div *ngIf="selectedType; else noBehaviorSelected">
 
-      <mat-card *ngIf="!postsCoordinates || postsCoordinates.length == 0">
-        <h2>{{selectedType.name}}</h2>
-        <p>No results match the filters.</p>
-      </mat-card>
 
       <mat-card *ngIf="postsCoordinates && postsCoordinates.length > 0 && selectedType.id == 'location'">
         <h1>{{ selectedType.name }}</h1>
@@ -56,6 +53,12 @@
         </agm-map>
       </mat-card>
 
+      <mat-card *ngIf="selectedType.id == 'activity'">
+
+        <div [chart]="customChart"></div>
+
+
+      </mat-card>
 
     </div>
 

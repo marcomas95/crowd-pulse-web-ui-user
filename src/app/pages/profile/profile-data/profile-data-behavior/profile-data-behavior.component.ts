@@ -3,6 +3,7 @@ import {StatsService} from '../../../../services/stats.service';
 import {environment} from '../../../../../environments/environment';
 import {InfoDialogComponent} from '../../../../components/info-dialog/info-dialog.component';
 import {MatDialog} from '@angular/material';
+import {Chart} from 'angular-highcharts';
 
 @Component({
   selector: 'app-profile-behavior',
@@ -17,16 +18,32 @@ export class ProfileDataBehaviorComponent implements OnInit {
   @Input() user: any;
 
   /**
+   * Custom chart.
+   */
+  customChart: Chart;
+
+  /**
+   * For UI progress spinner, true if charts are loading.
+   */
+  chartsLoading: boolean;
+
+  /**
    * Available behavior source.
    */
   types = [ {
     id: 'location',
     name: 'Places',
   }, {
+    id: 'activity',
+    name: 'Activities',
+  }, {
     id: null,
     name: 'None',
   },
   ];
+
+
+
 
   /**
    * Selected type.
@@ -63,6 +80,8 @@ export class ProfileDataBehaviorComponent implements OnInit {
    */
   ngOnInit(): void {
 
+    this.filter.dateFrom.setDate(1);
+
     this.statsService.getMapStats(this.filter).then((stats) => {
       this.postsCoordinates = stats.map((data) => {
         return {
@@ -81,29 +100,91 @@ export class ProfileDataBehaviorComponent implements OnInit {
       }
     });
   }
+
+
+
+
+
 
   /**
-   * Update chart with filter value.
+   * Build chart with filter value.
    */
   updateChart() {
-    this.statsService.getMapStats(this.filter).then((stats) => {
-      this.postsCoordinates = stats.map((data) => {
-        return {
-          text: data.text,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          date: data.date,
-          fromUser: data.fromUser
-        };
-      });
 
-      for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
-        if (this.postsCoordinates[i].latitude == null) {
-          this.postsCoordinates.splice(i, 1);
-        }
-      }
-    });
+    this.customChart = undefined;
+    this.chartsLoading = true;
+    switch (this.selectedType.id) {
+
+      case 'location':
+
+        this.statsService.getMapStats(this.filter).then((stats) => {
+          this.postsCoordinates = stats.map((data) => {
+            return {
+              text: data.text,
+              latitude: data.latitude,
+              longitude: data.longitude,
+              date: data.date,
+              fromUser: data.fromUser
+            };
+          });
+
+          for (let i = this.postsCoordinates.length - 1; i >= 0; i--) {
+            if (this.postsCoordinates[i].latitude == null) {
+              this.postsCoordinates.splice(i, 1);
+            }
+          }
+        });
+        break;
+      case 'activity':
+        this.buildActivityDataSourceChart(this.selectedType.id).then((chart) => {
+        this.customChart = chart;
+        });
+        break;
+      default:
+        this.customChart = null;
+        break;
+    }
+
   }
+
+
+  /**
+   * Build a pie chart with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChart(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbit(this.filter).then(
+      (stats) => {
+
+        stats.forEach(function(element) {
+          if (element.name == null) {
+            element.name = 'sedentary';
+          }
+        });
+
+       this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'pie'
+            },
+            title: null,
+            credits: {
+              enabled: false
+            },
+            series: [{
+              data: stats.map((stat) => ({name: stat.name, y: stat.value}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
 
   clickedMarker(marker: any) {
     // console.log(marker);
@@ -112,6 +193,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
     message = 'Text: ' + marker.text + '\nDate: ' + toConvert.toLocaleDateString() ;
     this.openInfoDialog(message);
   }
+
 
   /**
    * Open a dialog with information about data source.
@@ -123,3 +205,8 @@ export class ProfileDataBehaviorComponent implements OnInit {
     });
   }
 }
+
+
+
+
+
