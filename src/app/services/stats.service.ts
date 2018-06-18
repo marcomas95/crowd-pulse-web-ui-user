@@ -10,6 +10,12 @@ const PROFILES_DATABASE = 'profiles';
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_ACTIVITY_DATA_SOURCE = 'api/stats/activity_data/source';
 const API_STATS_ACTIVITY_LINE_DATA_SOURCE = 'api/stats/activity_line_data/source';
+
+const API_STATS_SLEEP_LINE_DATA_SOURCE = 'api/stats/sleep_line_data/source';
+const API_STATS_HEART_LINE_DATA_SOURCE = 'api/stats/heart_line_data/source';
+const API_STATS_BODY_DATA_SOURCE = 'api/stats/body_data/source';
+const API_STATS_BODY_LINE_DATA_SOURCE = 'api/stats/body_line_data/source';
+
 const API_STATS_INTERESTS_WORD_CLOUD = 'api/stats/interests/wordcloud';
 const API_STATS_CONTACT_ANDROID = 'api/stats/personal_data/contact/bar';
 const API_STATS_SENTIMENT_TIMELINE = 'api/stats/sentiment/timeline';
@@ -353,6 +359,77 @@ export class StatsService {
     }
     return this.http.get(`${this.url}${API_STATS_ACTIVITY_LINE_DATA_SOURCE}${params}`).toPromise();
   }
+
+
+  getSleepTypeDataFitbitLine(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_SLEEP_LINE_DATA_SOURCE}${params}`).toPromise();
+  }
+
+
+  getHeartTypeDataFitbitLine(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_HEART_LINE_DATA_SOURCE}${params}`).toPromise();
+  }
+
+
+
+
+  getBodyTypeDataFitbit(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_BODY_DATA_SOURCE}${params}`).toPromise();
+  }
+
+
+  getBodyTypeDataFitbitLine(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_BODY_LINE_DATA_SOURCE}${params}`).toPromise();
+  }
+
 
 
 

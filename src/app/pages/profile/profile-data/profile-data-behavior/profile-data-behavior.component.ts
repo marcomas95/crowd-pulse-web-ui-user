@@ -197,7 +197,12 @@ export class ProfileDataBehaviorComponent implements OnInit {
             chart: {
               type: type || 'pie'
             },
-            title: null,
+            title: {
+              text: 'ACTIVITIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of activities'
+            },
             credits: {
               enabled: false
             },
@@ -230,7 +235,12 @@ export class ProfileDataBehaviorComponent implements OnInit {
             chart: {
               type: 'line'
             },
-            title: null,
+            title: {
+              text: 'ACTIVITIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of steps'
+            },
             credits: {
               enabled: false
             },

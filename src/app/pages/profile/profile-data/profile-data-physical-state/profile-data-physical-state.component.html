@@ -1,6 +1,74 @@
 <div ngClass.gt-sm="main-content-page">
-  <mat-card class="card-spacer">
-    <h2>Physical State</h2>
-    <p>Your physical state will be shown here.</p>
-  </mat-card>
+
+  <div>
+    <mat-card class="card-spacer">
+      <h3>Filter</h3>
+      <div fxLayout.lt-md="column">
+
+        <!-- filter by date -->
+        <mat-form-field fxFlex class="filter-date">
+          <input matInput [(ngModel)]="filter.dateFrom" [matDatepicker]="fromDate" placeholder="From Date"
+                 (ngModelChange)="updateChart()">
+          <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+          <mat-datepicker #fromDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex class="filter-date">
+          <input matInput [(ngModel)]="filter.dateTo" [matDatepicker]="toDate" placeholder="To Date"
+                 (ngModelChange)="updateChart()">
+          <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+          <mat-datepicker #toDate></mat-datepicker>
+        </mat-form-field>
+
+        <!-- filter by type -->
+        <mat-form-field fxFlex class="filter-date">
+          <mat-select [(ngModel)]="selectedType" (ngModelChange)="updateChart()" placeholder="Type">
+            <mat-option *ngFor="let type of types" [value]="type">
+              {{ type.name | uppercase }}
+
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- filter by type chart -->
+        <mat-form-field fxFlex class="filter-date">
+          <mat-select [(ngModel)]="selectedChart" (ngModelChange)="updateChart()" placeholder="Type">
+            <mat-option *ngFor="let type of visualization" [value]="type">
+              {{ type.name | uppercase }}
+
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card>
+
+    <div *ngIf="selectedType; else noPhysicalSelected">
+
+      <!-- this creates a chart for sleep -->
+      <mat-card *ngIf="selectedType.id == 'sleep'">
+        <h1>{{ selectedType.name }}</h1>
+        <div [chart]="customChart"></div>
+      </mat-card>
+
+      <!-- this creates a chart for heart -->
+      <mat-card *ngIf="selectedType.id == 'heart'">
+        <h1>{{ selectedType.name }}</h1>
+        <div [chart]="customChart"></div>
+      </mat-card>
+
+      <!-- this creates a chart for body -->
+      <mat-card *ngIf="selectedType.id == 'body'">
+        <h1>{{ selectedType.name }}</h1>
+        <div [chart]="customChart"></div>
+      </mat-card>
+
+    </div>
+
+    <ng-template #noPhysicalSelected>
+      <mat-card>
+        <p>No Physical state type selected.</p>
+      </mat-card>
+    </ng-template>
+
+  </div>
+
 </div>
