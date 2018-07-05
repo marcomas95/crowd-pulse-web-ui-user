@@ -21,6 +21,9 @@ export class ProfileDataBehaviorComponent implements OnInit {
    * Custom chart.
    */
   customChart: Chart;
+  customChart2: Chart;
+  customChart3: Chart;
+
 
   /**
    * For UI progress spinner, true if charts are loading.
@@ -36,9 +39,6 @@ export class ProfileDataBehaviorComponent implements OnInit {
   }, {
     id: 'activity',
     name: 'Activities',
-  }, {
-    id: null,
-    name: 'None',
   },
   ];
 
@@ -101,7 +101,10 @@ export class ProfileDataBehaviorComponent implements OnInit {
    */
   ngOnInit(): void {
 
+    /*Imposto la data di partenza a inizio mese*/
     this.filter.dateFrom.setDate(1);
+    /*Imposto la data di fine al giorno dopo di quello corrente*/
+    this.filter.dateTo.setDate(this.filter.dateTo.getDate() + 1);
 
     this.statsService.getMapStats(this.filter).then((stats) => {
       this.postsCoordinates = stats.map((data) => {
@@ -133,11 +136,12 @@ export class ProfileDataBehaviorComponent implements OnInit {
   updateChart() {
 
     this.customChart = undefined;
+    this.customChart2 = undefined;
+    this.customChart3 = undefined;
     this.chartsLoading = true;
     switch (this.selectedType.id) {
 
       case 'location':
-
         this.statsService.getMapStats(this.filter).then((stats) => {
           this.postsCoordinates = stats.map((data) => {
             return {
@@ -161,10 +165,25 @@ export class ProfileDataBehaviorComponent implements OnInit {
           this.buildActivityDataSourceChartLine(this.selectedChart.id).then((chart) => {
             this.customChart = chart;
           });
-
-        } else {
-            this.buildActivityDataSourceChart(this.selectedChart.id).then((chart) => {
+          this.buildActivityDataSourceChartLineSteps(this.selectedChart.id).then((chart) => {
+            this.customChart2 = chart;
+          });
+          this.buildActivityDataSourceChartLineCalories(this.selectedChart.id).then((chart) => {
+            this.customChart3 = chart;
+          });
+        } else if (this.selectedChart.id == 'pie') {
+            this.buildActivityDataSourceChartPie(this.selectedChart.id).then((chart) => {
             this.customChart = chart;
+          });
+        } else if (this.selectedChart.id == 'bar') {
+          this.buildActivityDataSourceChartBar(this.selectedChart.id).then((chart) => {
+            this.customChart = chart;
+          });
+          this.buildActivityDataSourceChartBarSteps(this.selectedChart.id).then((chart) => {
+            this.customChart2 = chart;
+          });
+          this.buildActivityDataSourceChartBarCalories(this.selectedChart.id).then((chart) => {
+            this.customChart3 = chart;
           });
         }
 
@@ -178,30 +197,41 @@ export class ProfileDataBehaviorComponent implements OnInit {
 
 
   /**
-   * Build a pie or bar chart with the activity data source type frequency.
+   * Build a pie with the activity data source type frequency.
    * @param type: the chart type.
    */
-  private buildActivityDataSourceChart(type?: string): Promise<Chart | any> {
+  private buildActivityDataSourceChartPie(type?: string): Promise<Chart | any> {
     return this.statsService.getActivityTypeDataFitbit(this.filter).then(
       (stats) => {
 
-        stats.forEach(function(element) {
-          if (element.name == null) {
-            element.name = 'sedentary';
-          }
+
+        stats = stats.filter(function( obj ) {
+            return obj.name !== 'steps';
+         });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'distance';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'calories';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== null;
         });
 
        this.chartsLoading = false;
         if (stats && stats.length > 0) {
           const chart = new Chart({
             chart: {
-              type: type || 'pie'
+              type: 'pie'
             },
             title: {
               text: 'ACTIVITIES'
             },
             subtitle: {
-              text: 'This graph shows the distribution of activities'
+              text: 'This graph shows the distribution of the minutes of the activities'
             },
             credits: {
               enabled: false
@@ -222,12 +252,420 @@ export class ProfileDataBehaviorComponent implements OnInit {
 
 
   /**
+   * Build a bar with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartBar(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbit(this.filter).then(
+      (stats) => {
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'distance';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'elevation';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'floors';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'floors';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'calories';
+        });
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'steps';
+        });
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== null;
+        });
+
+
+        this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'bar'
+            },
+            title: {
+              text: 'MINUTES OF ACTIVITIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of the minutes of the activities'
+            },
+            credits: {
+              enabled: false
+            },
+            xAxis: {
+              title: {
+                text: 'TYPE OF ACTIVITY'
+              },
+              categories: ['VeryActive', 'MinutesFairlyActive', 'MinutesLightlyActive', 'MinutesSedentary']
+            },
+            yAxis: {
+              title: {
+                text: 'QUANTITY'
+              },
+            },
+            series: [{
+              name: 'TYPE OF ACTIVITY',
+              data: stats.map((stat) => ({name: stat.name, y: stat.value}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
+
+  /**
+   * Build a bar with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartBarSteps(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbitLineSteps(this.filter).then(
+      (stats) => {
+
+        const arrayData = [];
+        let i;
+        for (i = 0; i < stats.length; i++) {
+
+          arrayData.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
+
+        }
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'fairly';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'distance';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'calories';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'veryActive';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'minutesLightlyActive';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'minutesSedentary';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'floors';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'elevation';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== null;
+        });
+
+
+        this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'bar'
+            },
+            title: {
+              text: 'STEPS'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of steps'
+            },
+            yAxis: {
+              title: {
+                text: 'NUMBER OF STEPS'
+              },
+            },
+            xAxis: {
+              title: {
+                text: 'DATE'
+              },
+              categories: arrayData
+            },
+            plotOptions: {
+              series: {
+                color: '#1a75ff'
+              }
+            },
+            credits: {
+              enabled: false
+            },
+            series: [{
+              name: 'Steps',
+              data: stats.map((stat) => ({name: 'Steps', y: stat.steps}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
+  /**
+   * Build a bar with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartBarCalories(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbitLineCalories(this.filter).then(
+      (stats) => {
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'fairly';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'distance';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'steps';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'veryActive';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'minutesLightlyActive';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'minutesSedentary';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'floors';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== 'elevation';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.name !== null;
+        });
+
+
+        const arrayData2 = [];
+        let i;
+        if (stats && stats.length > 0) {
+
+            for (i = 0; i < stats.length; i++) {
+
+              arrayData2.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
+            }
+        }
+
+        this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'bar'
+            },
+            title: {
+              text: 'CALORIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of calories'
+            },
+            yAxis: {
+              title: {
+                text: 'NUMBER OF CALORIES'
+              },
+            },
+            xAxis: {
+              title: {
+                text: 'DATE'
+              },
+              categories: arrayData2
+            },
+            credits: {
+              enabled: false
+            },
+            series: [{
+              name: 'Calories',
+              data: stats.map((stat) => ({name: 'Calories', y: stat.activityCalories}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
+
+
+
+  /**
    * Build a line chart with the activity data source type frequency.
    * @param type: the chart type.
    */
   private buildActivityDataSourceChartLine(type?: string): Promise<Chart | any> {
     return this.statsService.getActivityTypeDataFitbitLine(this.filter).then(
       (stats) => {
+
+        const arrayData2 = [];
+        let i;
+        if (stats && stats.length > 0) {
+
+          for (i = 0; i < stats.length; i++) {
+
+            arrayData2.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
+          }
+        }
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== 'distance';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== 'steps';
+        });
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== 'floors';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== 'elevation';
+        });
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== null;
+        });
+
+        const arrayMinutesVeryActive = [];
+        const arrayMinutesFairlyActive = [];
+        const arrayMinutesSedentary = [];
+        const arrayMinutesLightlyActive = [];
+
+        for (i = 0; i < stats.length; i++) {
+
+          if (stats[i].nameActivity == 'veryActive') {
+
+            arrayMinutesVeryActive.push({name: 'fairly', value: stats[i].minutesVeryActive});
+          }
+          if (stats[i].nameActivity == 'fairly') {
+
+            arrayMinutesFairlyActive.push({name: 'fairly', value: stats[i].minutesFairlyActive});
+          }
+          if (stats[i].nameActivity == 'minutesSedentary') {
+
+            arrayMinutesSedentary.push({name: 'fairly', value: stats[i].minutesSedentary});
+          }
+          if (stats[i].nameActivity == 'minutesLightlyActive') {
+
+            arrayMinutesLightlyActive.push({name: 'fairly', value: stats[i].minutesLightlyActive});
+          }
+
+        }
+
+        this.chartsLoading = false;
+        if (arrayMinutesSedentary && arrayMinutesSedentary.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'line'
+            },
+            title: {
+              text: 'ACTIVITIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of steps'
+            },
+            yAxis: {
+              title: {
+                text: 'MINUTES OF ACTIVITY'
+              },
+            },
+            xAxis: {
+              title: {
+                text: 'DATE'
+              },
+              categories: arrayData2
+            },
+            credits: {
+              enabled: false
+            },
+            series: [{
+              name: 'Very Active',
+              data: arrayMinutesVeryActive.map((stat) => ({name: 'Very Active', y: stat.value}))
+            },
+            {
+              name: 'Fairly',
+              data: arrayMinutesFairlyActive.map((stat) => ({name: 'Fairly', y: stat.value}))
+            },
+            {
+              name: 'Minutes Sedentary',
+              data: arrayMinutesSedentary.map((stat) => ({name: 'Minutes Sedentary', y: stat.value}))
+            },
+            {
+              name: 'Minutes Lightly Active',
+              data: arrayMinutesLightlyActive.map((stat) => ({name: 'Minutes Lightly Active', y: stat.value}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
+
+
+  /**
+   * Build a line chart with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartLineSteps(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbitLineSteps(this.filter).then(
+      (stats) => {
+
+        const arrayData = [];
+        let i;
+        if (stats && stats.length > 0) {
+
+          for (i = 0; i < stats.length; i++) {
+            if (stats[i].timestamp) {
+              arrayData.push(new Date(stats[i].timestamp).toDateString());
+            }
+          }
+
+        }
 
         this.chartsLoading = false;
         if (stats && stats.length > 0) {
@@ -241,10 +679,22 @@ export class ProfileDataBehaviorComponent implements OnInit {
             subtitle: {
               text: 'This graph shows the distribution of steps'
             },
+            yAxis: {
+              title: {
+                text: 'NUMBER OF STEPS'
+              },
+            },
+            xAxis: {
+              title: {
+                text: 'DATE'
+              },
+              categories: arrayData
+            },
             credits: {
               enabled: false
             },
             series: [{
+              name: 'Steps',
               data: stats.map((stat) => ({name: 'Steps', y: stat.steps}))
             }]
           });
@@ -257,6 +707,68 @@ export class ProfileDataBehaviorComponent implements OnInit {
       });
   }
 
+
+
+  /**
+   * Build a line chart with the activity data source type frequency.
+   * @param type: the chart type.
+   */
+  private buildActivityDataSourceChartLineCalories(type?: string): Promise<Chart | any> {
+    return this.statsService.getActivityTypeDataFitbitLineCalories(this.filter).then(
+      (stats) => {
+
+
+        const arrayData = [];
+        let i;
+        if (stats && stats.length > 0) {
+
+          for (i = 0; i < stats.length; i++) {
+            if (stats[i].timestamp) {
+              arrayData.push(new Date(stats[i].timestamp).toDateString());
+            }
+          }
+
+        }
+
+        this.chartsLoading = false;
+        if (stats && stats.length > 0) {
+          const chart = new Chart({
+            chart: {
+              type: 'line'
+            },
+            title: {
+              text: 'ACTIVITIES'
+            },
+            subtitle: {
+              text: 'This graph shows the distribution of steps'
+            },
+            yAxis: {
+              title: {
+                text: 'NUMBER OF CALORIES'
+              },
+            },
+            xAxis: {
+              title: {
+                text: 'DATE'
+              },
+              categories: arrayData
+            },
+            credits: {
+              enabled: false
+            },
+            series: [{
+              name: 'Calories',
+              data: stats.map((stat) => ({name: 'Calories', y: stat.activityCalories}))
+            }]
+          });
+
+          return Promise.resolve(chart);
+        }
+      },
+      (err) => {
+        this.chartsLoading = false;
+      });
+  }
 
 
 

@@ -36,6 +36,7 @@ export class ProfileDataDemographicsComponent implements OnInit {
    */
   private setupFacebookProfileTable() {
     const demographics = this.user.demographics;
+    const fitbit = this.user.identities.fitbit;
 
     // array used to populate the data source object
     const demographicsData: {dataName: string, dataValue: any}[] = [];
@@ -100,12 +101,33 @@ export class ProfileDataDemographicsComponent implements OnInit {
     }
 
     // catch industry
-    if (demographics.industry && demographics.industry.length > 0) {
+    if (demographics && demographics.industry.length > 0) {
       demographicsData.push({
         dataName: 'Industry',
         dataValue: demographics.industry.sort((a, b) => b.timestamp - a.timestamp)[0].value
       });
     }
+
+    // catch height
+    if (fitbit['height'] && fitbit['height'] !== '') {
+      demographicsData.push({dataName: 'height', dataValue: fitbit['height']});
+    }
+
+    // catch weight
+    if (fitbit['weight'] && fitbit['weight'] !== '') {
+      demographicsData.push({dataName: 'weight', dataValue: fitbit['weight']});
+    }
+
+    // catch birth
+    if (fitbit['dateOfBirth'] && fitbit['dateOfBirth'] !== '') {
+      demographicsData.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
+    }
+
+    // catch country
+    if (fitbit['country'] && fitbit['country'] !== '') {
+      demographicsData.push({dataName: 'country', dataValue: fitbit['country']});
+    }
+
 
     // catch devices
     if (demographics.device && demographics.device.length > 0) {

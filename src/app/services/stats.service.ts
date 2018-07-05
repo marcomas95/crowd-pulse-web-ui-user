@@ -10,8 +10,11 @@ const PROFILES_DATABASE = 'profiles';
 const API_STATS_PERSONAL_DATA_SOURCE = 'api/stats/personal_data/source';
 const API_STATS_ACTIVITY_DATA_SOURCE = 'api/stats/activity_data/source';
 const API_STATS_ACTIVITY_LINE_DATA_SOURCE = 'api/stats/activity_line_data/source';
+const API_STATS_ACTIVITY_LINE_DATA_SOURCE_STEPS = 'api/stats/activity_line_data_steps/source';
+const API_STATS_ACTIVITY_LINE_DATA_SOURCE_CALORIES = 'api/stats/activity_line_data_calories/source';
 
-const API_STATS_SLEEP_LINE_DATA_SOURCE = 'api/stats/sleep_line_data/source';
+const API_STATS_SLEEP_LINE_DATA_SOURCE_EFFICIENCY = 'api/stats/sleep_line_data_efficiency/source';
+const API_STATS_SLEEP_LINE_DATA_SOURCE_DURATION = 'api/stats/sleep_line_data/source';
 const API_STATS_HEART_LINE_DATA_SOURCE = 'api/stats/heart_line_data/source';
 const API_STATS_BODY_DATA_SOURCE = 'api/stats/body_data/source';
 const API_STATS_BODY_LINE_DATA_SOURCE = 'api/stats/body_line_data/source';
@@ -344,6 +347,7 @@ export class StatsService {
   }
 
 
+
   getActivityTypeDataFitbitLine(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
@@ -361,7 +365,7 @@ export class StatsService {
   }
 
 
-  getSleepTypeDataFitbitLine(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+  getActivityTypeDataFitbitLineSteps(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
     let params = `?db=${this.authService.getUserame()}&`;
 
     if (!isNullOrUndefined(filter)) {
@@ -374,7 +378,58 @@ export class StatsService {
         params += 'to=' + filter.dateTo.toISOString() + '&';
       }
     }
-    return this.http.get(`${this.url}${API_STATS_SLEEP_LINE_DATA_SOURCE}${params}`).toPromise();
+    return this.http.get(`${this.url}${API_STATS_ACTIVITY_LINE_DATA_SOURCE_STEPS}${params}`).toPromise();
+  }
+
+
+  getActivityTypeDataFitbitLineCalories(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_ACTIVITY_LINE_DATA_SOURCE_CALORIES}${params}`).toPromise();
+  }
+
+
+  getSleepTypeDataFitbitLineDuration(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_SLEEP_LINE_DATA_SOURCE_DURATION}${params}`).toPromise();
+  }
+
+
+  getSleepTypeDataFitbitLineEfficiency(filter?: {dateFrom?: Date, dateTo?: Date}): Promise<any> {
+    let params = `?db=${this.authService.getUserame()}&`;
+
+    if (!isNullOrUndefined(filter)) {
+
+      if (!isNullOrUndefined(filter.dateFrom)) {
+        params += 'from=' + filter.dateFrom.toISOString() + '&';
+      }
+
+      if (!isNullOrUndefined(filter.dateTo)) {
+        params += 'to=' + filter.dateTo.toISOString() + '&';
+      }
+    }
+    return this.http.get(`${this.url}${API_STATS_SLEEP_LINE_DATA_SOURCE_EFFICIENCY}${params}`).toPromise();
   }
 
 

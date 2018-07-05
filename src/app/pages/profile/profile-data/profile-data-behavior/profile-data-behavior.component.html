@@ -64,12 +64,16 @@
       </mat-card>
 
       <!-- this creates a chart for activities -->
-      <mat-card *ngIf="selectedType.id == 'activity'">
+      <mat-card *ngIf="selectedType.id == 'activity' ">
           <div [chart]="customChart"></div>
       </mat-card>
-
+      <mat-card *ngIf="selectedType.id == 'activity'">
+        <div [chart]="customChart2"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'activity' ">
+        <div [chart]="customChart3"></div>
+      </mat-card>
     </div>
-
     <ng-template #noBehaviorSelected>
       <mat-card>
         <p>No behavior type selected.</p>

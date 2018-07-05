@@ -36,9 +36,6 @@ export class ProfileDataAffectsComponent {
    * Available affect types.
    */
   types = [{
-    id: null,
-    name: 'None',
-  }, {
     id: 'mood',
     name: 'Mood',
   }, {

@@ -44,23 +44,38 @@
     <div *ngIf="selectedType; else noPhysicalSelected">
 
       <!-- this creates a chart for sleep -->
-      <mat-card *ngIf="selectedType.id == 'sleep'">
+      <mat-card *ngIf="selectedType.id == 'sleep' ">
         <h1>{{ selectedType.name }}</h1>
         <div [chart]="customChart"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'sleep' ">
+        <div [chart]="customChart2"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'sleep' ">
+        <div [chart]="customChart3"></div>
       </mat-card>
 
       <!-- this creates a chart for heart -->
       <mat-card *ngIf="selectedType.id == 'heart'">
-        <h1>{{ selectedType.name }}</h1>
         <div [chart]="customChart"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'heart'">
+        <div [chart]="customChart2"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'heart'">
+        <div [chart]="customChart3"></div>
       </mat-card>
 
       <!-- this creates a chart for body -->
       <mat-card *ngIf="selectedType.id == 'body'">
-        <h1>{{ selectedType.name }}</h1>
         <div [chart]="customChart"></div>
       </mat-card>
-
+      <mat-card *ngIf="selectedType.id == 'body'">
+        <div [chart]="customChart2"></div>
+      </mat-card>
+      <mat-card *ngIf="selectedType.id == 'body'">
+        <div [chart]="customChart3"></div>
+      </mat-card>
     </div>
 
     <ng-template #noPhysicalSelected>

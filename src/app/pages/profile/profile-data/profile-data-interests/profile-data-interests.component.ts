@@ -86,7 +86,10 @@ export class ProfileDataInterestComponent implements OnInit {
    * @override
    */
   ngOnInit() {
-
+    /*Imposto la data di partenza a inizio mese*/
+    this.filter.dateFrom.setDate(1);
+    /*Imposto la data di fine al giorno dopo di quello corrente*/
+    this.filter.dateTo.setDate(this.filter.dateTo.getDate() + 1);
     // get word cloud interests data
     this.statsService.getInterestsStats(this.filter).then((stats) => {
       this.data = stats.map((data) => {
