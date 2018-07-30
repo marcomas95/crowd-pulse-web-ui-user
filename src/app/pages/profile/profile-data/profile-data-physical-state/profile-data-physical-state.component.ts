@@ -270,7 +270,7 @@ export class ProfileDataPhysicalStateComponent {
 
 
   /**
-   * Build a pie chart with the sleep data source type frequency.
+   * Build a bar chart with the sleep data source type frequency.
    * @param type: the chart type.
    */
   private buildSleepDataSourceChartBar(type?: string): Promise<Chart | any> {
@@ -364,6 +364,8 @@ export class ProfileDataPhysicalStateComponent {
             }
           }
 
+          arrayData.reverse();
+
         }
 
 
@@ -415,7 +417,7 @@ export class ProfileDataPhysicalStateComponent {
 
 
   /**
-   * Build a line chart with the sleep data source type frequency.
+   * Build a bar chart with the sleep data source type frequency.
    * @param type: the chart type.
    */
   private buildSleepDataSourceChartBarDuration(type?: string): Promise<Chart | any> {
@@ -432,7 +434,7 @@ export class ProfileDataPhysicalStateComponent {
               arrayData.push(new Date(stats[j].timestamp).toDateString());
             }
           }
-
+          arrayData.reverse();
         }
 
         const duration = [];
@@ -510,6 +512,7 @@ export class ProfileDataPhysicalStateComponent {
               arrayData.push(new Date(stats[j].timestamp).toDateString());
             }
           }
+          arrayData.reverse();
         }
 
         this.chartsLoading = false;
@@ -588,7 +591,7 @@ export class ProfileDataPhysicalStateComponent {
               arrayData.push(new Date(stats[j].timestamp).toDateString());
             }
           }
-
+          arrayData.reverse();
         }
 
 
@@ -657,7 +660,7 @@ export class ProfileDataPhysicalStateComponent {
               arrayData.push(new Date(stats[j].timestamp).toDateString());
             }
           }
-
+          arrayData.reverse();
         }
 
         const duration = [];
