@@ -6,6 +6,7 @@ import {ProfileService} from '../../../services/profile.service';
 import {StatsService} from '../../../services/stats.service';
 import {FacebookService} from '../../../services/facebook.service';
 import {TwitterService} from '../../../services/twitter.service';
+import {FitbitService} from '../../../services/fitbit.service';
 
 @Component({
   styleUrls: ['./profile-data.component.scss'],
@@ -61,9 +62,41 @@ export class ProfileDataComponent implements OnInit {
     personality?: string,
     empathy?: string,
     socialRelations?: string,
+    activity?: string,
+    physicalActivity?: string,
+    sleep?: string,
+    heart?: string,
+    food?: string,
 
     // TODO add here more fields
   } = { };
+
+  /**
+   * Fitbit user sleeps detected by sensors.
+   */
+  sleeps: any;
+
+  /**
+   * Fitbit user heart rate detected by sensors.
+   */
+  hearts: any;
+
+  /**
+   * Fitbit user weight.
+   */
+  weights: any;
+
+  /**
+   * Fitbit user weight.
+   */
+  activities: any;
+
+  /**
+   * Fitbit user weight.
+   */
+  physicalActivities: any;
+
+
 
   constructor(
     private router: Router,
@@ -73,6 +106,7 @@ export class ProfileDataComponent implements OnInit {
     private statsService: StatsService,
     private facebookService: FacebookService,
     private twitterService: TwitterService,
+    private fitbitService: FitbitService,
   ) { }
 
   /**
@@ -342,6 +376,152 @@ export class ProfileDataComponent implements OnInit {
         }
       );
 
+
+      /**Bio phrases related to sleep*/
+      // catch sleep
+      let sumHourSleep = 0;
+      this.bioFields.sleep = '';
+      this.fitbitService.userSleepDate(1000, new Date((new Date()).setDate((new Date()).getDate() - 7)) , new Date()).subscribe(
+        (res) => {
+
+          if (res.sleeps && res.sleeps.length) {
+            this.sleeps = res.sleeps;
+            this.sleeps.forEach(function (arrayItem) {
+              sumHourSleep = ((arrayItem.duration / (1000 * 60 * 60)) % 24) + sumHourSleep;
+            });
+            /** verifico se in media si è riposato 7 ore al giorno(nell'arco di una settimana)*/
+            if (sumHourSleep > 49) {
+              this.bioFields.sleep =  'You slept well this week.';
+
+            } else {
+              this.bioFields.sleep =  'You did not sleep well this week.';
+              }
+          }
+        }
+      );
+
+      /**Bio phrases related to activity steps*/
+        // catch activity
+      this.bioFields.activity = '';
+
+      const filters = {
+        dateFrom: new Date((new Date()).setDate((new Date()).getDate() - 7)),
+        dateTo: new Date(),
+        limitResult: 1000,
+      };
+
+      this.statsService.getActivityDataFitbit(filters).then(
+        (res) => {
+          if (res && res.length) {
+
+              res.sort(function(a, b){
+                return a.timestamp - b.timestamp;
+              });
+
+            let sumSteps = 0;
+            this.activities = res;
+            this.activities.forEach(function (arrayItem) {
+              if (arrayItem.steps > 0) {
+
+                sumSteps = arrayItem.steps + sumSteps;
+              }
+            });
+            /** verifico se in media sono stati effettuati più di 8000 passi giornalieri  */
+            if (sumSteps > 40000) {
+              this.bioFields.activity =  'You walked a lot this week.';
+
+            } else {
+              this.bioFields.activity =  'You \'ve been rather sedentary this week.';
+            }
+          }
+        }
+      );
+
+
+      /**Bio phrases related to physical activity*/
+      // catch activity
+      this.bioFields.physicalActivity = '';
+
+      this.statsService.getActivityDataFitbit(filters).then(
+        (res) => {
+          if (res && res.length) {
+
+            res.sort(function(a, b){
+              return a.timestamp - b.timestamp;
+            });
+
+            let sumMinutesVeryActive = 0;
+            this.physicalActivities = res;
+            this.physicalActivities.forEach(function (arrayItem) {
+              if (arrayItem.minutesVeryActive > 0) {
+                sumMinutesVeryActive = arrayItem.minutesVeryActive + sumMinutesVeryActive;
+              }
+            });
+            /** verifico se in media sono stati effettuati più di 8000 passi giornalieri  */
+            if (sumMinutesVeryActive > 300) {
+              this.bioFields.physicalActivity =  'You practiced a lot of physical activity this week.';
+
+            } else {
+              this.bioFields.physicalActivity =  'You have not practiced much physical activity this week.';
+            }
+          }
+        }
+      );
+
+
+      /**Bio phrases related to heart*/
+        // catch heart
+      let sumRestingHeartRate = 0;
+      this.bioFields.heart = '';
+      this.fitbitService.userHeartDate(1000, new Date((new Date()).setDate((new Date()).getDate() - 7)), new Date()).subscribe(
+        (res) => {
+          if (res.hearts && res.hearts.length) {
+            this.hearts = res.hearts;
+            this.hearts.forEach(function (arrayItem) {
+              sumRestingHeartRate = arrayItem.restingHeartRate + sumRestingHeartRate;
+            });
+            /** verifico se il battito cardiaco è stato regolare (al di sotto dei 100 battiti al minuto) nell'arco di una settimana*/
+            if (sumRestingHeartRate > 600) {
+              this.bioFields.heart =  'The heartbeat was regular.';
+
+            } else {
+              this.bioFields.heart =  'The heartbeat has not been regular.';
+            }
+
+          }
+        }
+      );
+
+      /**Bio phrases related to weight*/
+        // catch heart
+      let firstWeight = 0, lastWeight = 0, flag = 0;
+      this.bioFields.weight = '';
+      this.fitbitService.userWeightDate(1000, new Date((new Date()).setDate((new Date()).getDate() - 7)) , new Date()).subscribe(
+        (res) => {
+          if (res.weights && res.weights.length) {
+            this.weights = res.weights;
+            this.weights.forEach(function (arrayItem) {
+              if (flag == 1) {
+                firstWeight = arrayItem.bodyWeight;
+              }
+              if (flag == 7) {
+                lastWeight = arrayItem.bodyWeight;
+              }
+              flag++;
+            });
+            /** verifico l'andamento del peso corporeo nell'arco di una settimana*/
+            if (firstWeight > lastWeight) {
+                this.bioFields.weight =  'You lost weight this week.';
+
+            } else if (firstWeight > lastWeight) {
+                this.bioFields.weight =  'You did not lose weight this week.';
+
+            } else if (firstWeight < lastWeight) {
+                this.bioFields.weight =  'You got fat in this week.';
+            }
+          }
+        }
+      );
       // TODO add here new fields to collect
 
     }
