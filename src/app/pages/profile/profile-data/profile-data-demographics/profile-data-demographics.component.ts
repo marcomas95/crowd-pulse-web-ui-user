@@ -38,6 +38,7 @@ export class ProfileDataDemographicsComponent implements OnInit {
     const demographics = this.user.demographics;
     const fitbit = this.user.identities.fitbit;
 
+
     // array used to populate the data source object
     const demographicsData: {dataName: string, dataValue: any}[] = [];
 
@@ -108,27 +109,25 @@ export class ProfileDataDemographicsComponent implements OnInit {
       });
     }
 
-    // catch height
-    if (fitbit['height'] && fitbit['height'] !== '') {
-      demographicsData.push({dataName: 'height', dataValue: fitbit['height']});
+    if (this.user && this.user.identities && this.user.identities.fitbit) {
+
+        // catch height
+        if (fitbit['height']  && fitbit['height'] !== '') {
+          demographicsData.push({dataName: 'height', dataValue: fitbit['height']});
+        }
+        // catch weight
+        if (fitbit['weight']  && fitbit['weight'] !== '') {
+          demographicsData.push({dataName: 'weight', dataValue: fitbit['weight']});
+        }
+        // catch birth
+        if (fitbit['dateOfBirth']  && fitbit['dateOfBirth'] !== '') {
+          demographicsData.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
+        }
+        // catch country
+        if (fitbit['country'] && fitbit['country'] !== '') {
+          demographicsData.push({dataName: 'country', dataValue: fitbit['country']});
+        }
     }
-
-    // catch weight
-    if (fitbit['weight'] && fitbit['weight'] !== '') {
-      demographicsData.push({dataName: 'weight', dataValue: fitbit['weight']});
-    }
-
-    // catch birth
-    if (fitbit['dateOfBirth'] && fitbit['dateOfBirth'] !== '') {
-      demographicsData.push({dataName: 'dateOfBirth', dataValue: fitbit['dateOfBirth']});
-    }
-
-    // catch country
-    if (fitbit['country'] && fitbit['country'] !== '') {
-      demographicsData.push({dataName: 'country', dataValue: fitbit['country']});
-    }
-
-
     // catch devices
     if (demographics.device && demographics.device.length > 0) {
       const devices = [];
@@ -147,7 +146,6 @@ export class ProfileDataDemographicsComponent implements OnInit {
     }
 
     // TODO add here other demographics fields
-
     this.dataSource = new MatTableDataSource(demographicsData);
   }
 
