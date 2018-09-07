@@ -391,10 +391,10 @@ export class ProfileDataComponent implements OnInit {
             });
             /** verifico se in media si è riposato 7 ore al giorno(nell'arco di una settimana)*/
             if (sumHourSleep > 49) {
-              this.bioFields.sleep =  'You slept well this week.';
+              this.bioFields.sleep =  'You slept enough this week.';
 
             } else {
-              this.bioFields.sleep =  'You did not sleep well this week.';
+              this.bioFields.sleep =  'You did not sleep enough this week.';
               }
           }
         }
@@ -459,10 +459,10 @@ export class ProfileDataComponent implements OnInit {
             });
             /** verifico se in media sono stati effettuati più di 8000 passi giornalieri  */
             if (sumMinutesVeryActive > 300) {
-              this.bioFields.physicalActivity =  'You practiced a lot of physical activity this week.';
+              this.bioFields.physicalActivity =  'You practiced enough physical activity this week.';
 
             } else {
-              this.bioFields.physicalActivity =  'You have not practiced much physical activity this week.';
+              this.bioFields.physicalActivity =  'You have not practiced enough physical activity this week.';
             }
           }
         }
@@ -485,7 +485,7 @@ export class ProfileDataComponent implements OnInit {
               this.bioFields.heart =  'The heartbeat was regular.';
 
             } else {
-              this.bioFields.heart =  'The heartbeat has not been regular.';
+              this.bioFields.heart =  'On average, you had an high number of heartbeats.';
             }
 
           }
