@@ -389,13 +389,15 @@ export class ProfileDataComponent implements OnInit {
             this.sleeps.forEach(function (arrayItem) {
               sumHourSleep = ((arrayItem.duration / (1000 * 60 * 60)) % 24) + sumHourSleep;
             });
-            /** verifico se in media si è riposato 7 ore al giorno(nell'arco di una settimana)*/
-            if (sumHourSleep > 49) {
+            /** verifico se in media si è riposato 6 ore al giorno(nell'arco di una settimana)*/
+            if (sumHourSleep > 42) {
               this.bioFields.sleep =  'You slept enough this week.';
 
+            } else if (sumHourSleep == 0) {
+              this.bioFields.sleep =  '';
             } else {
               this.bioFields.sleep =  'You did not sleep enough this week.';
-              }
+            }
           }
         }
       );
@@ -426,12 +428,15 @@ export class ProfileDataComponent implements OnInit {
                 sumSteps = arrayItem.steps + sumSteps;
               }
             });
-            /** verifico se in media sono stati effettuati più di 8000 passi giornalieri  */
-            if (sumSteps > 40000) {
+            /** verifico se in media sono stati effettuati più di 8000 passi giornalieri nell'ultima settimana  */
+            if (sumSteps > 56000) {
               this.bioFields.activity =  'You walked a lot this week.';
 
-            } else {
-              this.bioFields.activity =  'You \'ve been rather sedentary this week.';
+            } else if (sumSteps > 28000 && sumSteps < 42000) {
+              this.bioFields.activity =  'You walked enough this week.';
+
+            } else if (sumSteps < 28000) {
+              this.bioFields.activity =  'Rather sedentary this week.';
             }
           }
         }
@@ -457,8 +462,11 @@ export class ProfileDataComponent implements OnInit {
                 sumMinutesVeryActive = arrayItem.minutesVeryActive + sumMinutesVeryActive;
               }
             });
-            /** verifico se in media sono stati effettuati più di 8000 passi giornalieri  */
+            /**  verifico se è stata effettuata attività fisica giornaliera  */
             if (sumMinutesVeryActive > 300) {
+              this.bioFields.physicalActivity =  'You practiced much physical activity this week.';
+
+            } else if (sumMinutesVeryActive > 100 && sumMinutesVeryActive < 300) {
               this.bioFields.physicalActivity =  'You practiced enough physical activity this week.';
 
             } else {
@@ -513,7 +521,7 @@ export class ProfileDataComponent implements OnInit {
             if (firstWeight > lastWeight) {
                 this.bioFields.weight =  'You lost weight this week.';
 
-            } else if (firstWeight > lastWeight) {
+            } else if (firstWeight === lastWeight) {
                 this.bioFields.weight =  'You did not lose weight this week.';
 
             } else if (firstWeight < lastWeight) {
