@@ -429,14 +429,14 @@ export class ProfileDataComponent implements OnInit {
               }
             });
             /** verifico se in media sono stati effettuati più di 8000 passi giornalieri nell'ultima settimana  */
-            if (sumSteps > 56000) {
+            if (sumSteps > 42000) {
               this.bioFields.activity =  'You walked a lot this week.';
 
             } else if (sumSteps > 28000 && sumSteps < 42000) {
               this.bioFields.activity =  'You walked enough this week.';
 
             } else if (sumSteps < 28000) {
-              this.bioFields.activity =  'Rather sedentary this week.';
+              this.bioFields.activity =  'You have been rather sedentary this week.';
             }
           }
         }
@@ -521,11 +521,11 @@ export class ProfileDataComponent implements OnInit {
             if (firstWeight > lastWeight) {
                 this.bioFields.weight =  'You lost weight this week.';
 
-            } else if (firstWeight === lastWeight) {
-                this.bioFields.weight =  'You did not lose weight this week.';
-
             } else if (firstWeight < lastWeight) {
                 this.bioFields.weight =  'You got fat in this week.';
+
+            } else {
+                this.bioFields.weight =  'You did not lose weight this week.';
             }
           }
         }
