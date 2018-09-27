@@ -274,8 +274,8 @@
                     <pre *ngIf="activity.activityCalories && timestamp == activity.timestamp">Calories({{ activity.activityCalories | number:0 }}), </pre>
                     <pre *ngIf="activity.elevation && timestamp == activity.timestamp">Elevation({{ activity.elevation | number:0}}), </pre>
                     <pre *ngIf="activity.minutesVeryActive && timestamp == activity.timestamp">M.VeryActive({{ activity.minutesVeryActive | number:0}}), </pre>
-                    <pre *ngIf="activity.minutesSedentary && activity.minutesSedentary != 1440 && activity.minutesSedentary != 975 && timestamp == activity.timestamp; other">M.Sedentary({{ activity.minutesSedentary | number:0}}), </pre>
-                    <pre #other *ngIf="activity.minutesSedentary == 1440 && timestamp == activity.timestamp">M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </pre>
+                    <pre *ngIf="activity.minutesSedentary && activity.minutesSedentary < 600 && activity.minutesSedentary != 975 && timestamp == activity.timestamp; other">M.Sedentary({{ activity.minutesSedentary | number:0}}), </pre>
+                    <pre #other *ngIf="activity.minutesSedentary > 1200 && timestamp == activity.timestamp">M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </pre>
                     <pre *ngIf="activity.minutesSedentary == 975 && timestamp == activity.timestamp">M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </pre>
                     <pre *ngIf="activity.minutesFairlyActive && timestamp == activity.timestamp">M.Fairly({{ activity.minutesFairlyActive | number:0}}), </pre>
                     <pre *ngIf="activity.floors && timestamp == activity.timestamp">Floors({{ activity.floors | number:0}}), </pre>
