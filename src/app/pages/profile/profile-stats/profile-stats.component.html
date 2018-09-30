@@ -260,7 +260,7 @@
 
                 <div class="list-div" fxLayout *ngFor="let timestamp of uniqueArray">
 
-                  <div *ngIf="timestamp" fxFlex="10" layout="row" layout-align="start center" >
+                  <div *ngIf="timestamp" fxFlex="12" layout="row" layout-align="start center" >
                     <p>{{ timestamp | date }}</p>
                   </div>
 
@@ -269,17 +269,17 @@
                   </div>
 
                   <div  layout="row" layout-align="end center" *ngFor="let activity of activitiesFitbit">
-                    <pre *ngIf="activity.steps && timestamp == activity.timestamp"> Steps({{ activity.steps | number:0}}), </pre>
-                    <pre *ngIf="activity.distance && timestamp == activity.timestamp">Distance({{ activity.distance | number:0 }}),</pre>
-                    <pre *ngIf="activity.activityCalories && timestamp == activity.timestamp">Calories({{ activity.activityCalories | number:0 }}), </pre>
-                    <pre *ngIf="activity.elevation && timestamp == activity.timestamp">Elevation({{ activity.elevation | number:0}}), </pre>
-                    <pre *ngIf="activity.minutesVeryActive && timestamp == activity.timestamp">M.VeryActive({{ activity.minutesVeryActive | number:0}}), </pre>
-                    <pre *ngIf="activity.minutesSedentary && activity.minutesSedentary < 1200 && activity.minutesSedentary != 975 && timestamp == activity.timestamp; other">M.Sedentary({{ activity.minutesSedentary | number:0}}), </pre>
-                    <pre #other *ngIf="activity.minutesSedentary > 1200 && timestamp == activity.timestamp">M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </pre>
-                    <pre *ngIf="activity.minutesSedentary == 975 && timestamp == activity.timestamp">M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </pre>
-                    <pre *ngIf="activity.minutesFairlyActive && timestamp == activity.timestamp">M.Fairly({{ activity.minutesFairlyActive | number:0}}), </pre>
-                    <pre *ngIf="activity.floors && timestamp == activity.timestamp">Floors({{ activity.floors | number:0}}), </pre>
-                    <pre *ngIf="activity.minutesLightlyActive && timestamp == activity.timestamp">M.Lightly({{ activity.minutesLightlyActive | number:0}}), </pre>
+                    <p *ngIf="activity.steps && timestamp == activity.timestamp"> Steps({{ activity.steps | number:0}}),  </p>
+                    <p *ngIf="activity.distance && timestamp == activity.timestamp"> Distance({{ activity.distance | number:'1.2-2' }}km),  </p>
+                    <p *ngIf="activity.activityCalories && timestamp == activity.timestamp"> Calories({{ activity.activityCalories | number:0 }}),  </p>
+                    <p *ngIf="activity.elevation && timestamp == activity.timestamp"> Elevation({{ activity.elevation | number:0}}), </p>
+                    <p *ngIf="activity.minutesVeryActive && timestamp == activity.timestamp"> M.VeryActive({{(activity.minutesVeryActive/60) | number:0}}),  </p>
+                    <p *ngIf="activity.minutesSedentary && activity.minutesSedentary < 1200 && activity.minutesSedentary != 975 && timestamp == activity.timestamp; other">Sedentary({{(activity.minutesSedentary/60) | number:'2.0-0'}}h),  </p>
+                    <p #other *ngIf="activity.minutesSedentary > 1200 && timestamp == activity.timestamp"> Sedentary({{(activity.minutesSedentary/60) | number:'2.0-0'}}h), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </p>
+                    <p *ngIf="activity.minutesSedentary == 975 && timestamp == activity.timestamp"> M.Sedentary({{ activity.minutesSedentary | number:0}}), Steps(0), Distance(0), Calories(0), M.VeryActive(0),   </p>
+                    <p *ngIf="activity.minutesFairlyActive && timestamp == activity.timestamp"> M.Fairly({{ activity.minutesFairlyActive | number:0}}),  </p>
+                    <p *ngIf="activity.floors && timestamp == activity.timestamp"> Floors({{ activity.floors | number:0}}),  </p>
+                    <p *ngIf="activity.minutesLightlyActive && timestamp == activity.timestamp"> Lightly({{(activity.minutesLightlyActive/60) | number:0}}h), </p>
                   </div>
                   <mat-divider></mat-divider>
                 </div>
