@@ -125,15 +125,15 @@ export class ProfileDataAffectsComponent {
     this.data = [];
     stats.forEach((stat) => {
       let color = '#535353';
-      if (stat.name === 'joy') {
+      if (stat.name.replace(/\s/g, '') === 'joy') {
         color = '#e6e44b';
-      } else if (stat.name === 'anger') {
+      } else if (stat.name.replace(/\s/g, '') === 'anger') {
         color = '#b10000';
-      } else if (stat.name === 'fear') {
+      } else if (stat.name.replace(/\s/g, '') === 'fear') {
         color = '#151741';
-      } else if (stat.name === 'disgust') {
+      } else if (stat.name.replace(/\s/g, '') === 'disgust') {
         color = '#865809';
-      } else if (stat.name === 'surprise') {
+      } else if (stat.name.replace(/\s/g, '') === 'surprise') {
         color = '#00e68b';
       }
 

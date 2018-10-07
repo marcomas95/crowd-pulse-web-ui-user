@@ -291,15 +291,16 @@ export class ProfileDataComponent implements OnInit {
             });
 
             if (lastData.name) {
-              if (lastData.name === 'disgust') {
+
+              if (lastData.name.replace(/\s/g, '') === 'disgust') {
                 lastData.name = 'disgusted';
-              } else if (lastData.name === 'anger') {
+              } else if (lastData.name.replace(/\s/g, '') === 'anger') {
                 lastData.name = 'angry';
-              } else if (lastData.name === 'joy') {
+              } else if (lastData.name.replace(/\s/g, '') === 'joy') {
                 lastData.name = 'joyful';
-              } else if (lastData.name === 'fear') {
+              } else if (lastData.name.replace(/\s/g, '') === 'fear') {
                 lastData.name = 'afraid';
-              } else if (lastData.name === 'surprise') {
+              } else if (lastData.name.replace(/\s/g, '') === 'surprise') {
                 lastData.name = 'surprised';
               }
 

@@ -174,6 +174,8 @@ export class ProfileDataBehaviorComponent implements OnInit {
         } else if (this.selectedChart.id == 'pie') {
             this.buildActivityDataSourceChartPie(this.selectedChart.id).then((chart) => {
             this.customChart = chart;
+              this.customChart2 = null;
+              this.customChart3 = null;
           });
         } else if (this.selectedChart.id == 'bar') {
           this.buildActivityDataSourceChartBar(this.selectedChart.id).then((chart) => {
@@ -201,27 +203,59 @@ export class ProfileDataBehaviorComponent implements OnInit {
    * @param type: the chart type.
    */
   private buildActivityDataSourceChartPie(type?: string): Promise<Chart | any> {
-    return this.statsService.getActivityTypeDataFitbit(this.filter).then(
+    return this.statsService.getActivityTypeDataFitbitLine(this.filter).then(
       (stats) => {
 
 
-        stats = stats.filter(function( obj ) {
-            return obj.name !== 'steps';
-         });
+        let i;
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== 'distance';
+          return obj.nameActivity !== 'distance';
         });
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== 'calories';
+          return obj.nameActivity !== 'steps';
+        });
+
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== 'floors';
         });
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== null;
+          return obj.nameActivity !== 'elevation';
         });
 
-       this.chartsLoading = false;
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== null;
+        });
+
+        const arrayMinutesVeryActive = [];
+        let sumveryActive = 0, sumfairly = 0, summinutesSedentary = 0, summinutesLightlyActive = 0;
+
+        for (i = 0; i < stats.length; i++) {
+
+          if (stats[i].nameActivity == 'veryActive') {
+            sumveryActive = sumveryActive + stats[i].minutesVeryActive;
+
+          }
+          if (stats[i].nameActivity == 'fairly') {
+            sumfairly = sumfairly + stats[i].minutesFairlyActive;
+          }
+          if (stats[i].nameActivity == 'minutesSedentary') {
+            summinutesSedentary = summinutesSedentary + stats[i].minutesSedentary;
+          }
+          if (stats[i].nameActivity == 'minutesLightlyActive') {
+            summinutesLightlyActive = summinutesLightlyActive + stats[i].minutesLightlyActive;
+          }
+
+        }
+        arrayMinutesVeryActive.push({name: 'MinutesVeryActive', value: sumveryActive},
+          {name: 'MinutesFairly', value: sumfairly},
+          {name: 'MinutesSedentary', value: summinutesSedentary},
+          {name: 'MinutesLightlyActive', value: summinutesLightlyActive});
+
+        this.chartsLoading = false;
         if (stats && stats.length > 0) {
           const chart = new Chart({
             chart: {
@@ -237,7 +271,8 @@ export class ProfileDataBehaviorComponent implements OnInit {
               enabled: false
             },
             series: [{
-              data: stats.map((stat) => ({name: stat.name, y: stat.value}))
+              name: 'Total minutes',
+              data: arrayMinutesVeryActive.map((stat) => ({name: stat.name, y: stat.value}))
             }]
           });
 
@@ -256,39 +291,56 @@ export class ProfileDataBehaviorComponent implements OnInit {
    * @param type: the chart type.
    */
   private buildActivityDataSourceChartBar(type?: string): Promise<Chart | any> {
-    return this.statsService.getActivityTypeDataFitbit(this.filter).then(
+    return this.statsService.getActivityTypeDataFitbitLine(this.filter).then(
       (stats) => {
 
+        let i;
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== 'distance';
+          return obj.nameActivity !== 'distance';
         });
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== 'elevation';
-        });
-
-        stats = stats.filter(function( obj ) {
-          return obj.name !== 'floors';
-        });
-
-        stats = stats.filter(function( obj ) {
-          return obj.name !== 'floors';
-        });
-
-        stats = stats.filter(function( obj ) {
-          return obj.name !== 'calories';
+          return obj.nameActivity !== 'steps';
         });
 
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== 'steps';
+          return obj.nameActivity !== 'floors';
         });
-
 
         stats = stats.filter(function( obj ) {
-          return obj.name !== null;
+          return obj.nameActivity !== 'elevation';
         });
+
+        stats = stats.filter(function( obj ) {
+          return obj.nameActivity !== null;
+        });
+
+        const arrayMinutesVeryActive = [];
+        let sumveryActive = 0, sumfairly = 0, summinutesSedentary = 0, summinutesLightlyActive = 0;
+
+        for (i = 0; i < stats.length; i++) {
+
+          if (stats[i].nameActivity == 'veryActive') {
+            sumveryActive = sumveryActive + stats[i].minutesVeryActive;
+
+          }
+          if (stats[i].nameActivity == 'fairly') {
+            sumfairly = sumfairly + stats[i].minutesFairlyActive;
+          }
+          if (stats[i].nameActivity == 'minutesSedentary') {
+            summinutesSedentary = summinutesSedentary + stats[i].minutesSedentary;
+          }
+          if (stats[i].nameActivity == 'minutesLightlyActive') {
+            summinutesLightlyActive = summinutesLightlyActive + stats[i].minutesLightlyActive;
+          }
+
+        }
+        arrayMinutesVeryActive.push({name: 'MinutesVeryActive', value: sumveryActive},
+          {name: 'MinutesFairly', value: sumfairly},
+          {name: 'MinutesSedentary', value: summinutesSedentary},
+          {name: 'MinutesLightlyActive', value: summinutesLightlyActive});
 
 
         this.chartsLoading = false;
@@ -298,28 +350,28 @@ export class ProfileDataBehaviorComponent implements OnInit {
               type: 'bar'
             },
             title: {
-              text: 'MINUTES OF ACTIVITIES'
+              text: 'ACTIVITIES'
             },
             subtitle: {
               text: 'This graph shows the distribution of the minutes of the activities'
             },
-            credits: {
-              enabled: false
+            yAxis: {
+              title: {
+                text: 'MINUTES OF ACTIVITY'
+              },
             },
             xAxis: {
               title: {
-                text: 'TYPE OF ACTIVITY'
+                text: 'TYPE ACTIVITIES'
               },
-              categories: ['VeryActive', 'MinutesFairlyActive', 'MinutesLightlyActive', 'MinutesSedentary']
+              categories: ['MinutesVeryActive', 'MinutesFairly', 'MinutesSedentary', 'MinutesLightlyActive']
             },
-            yAxis: {
-              title: {
-                text: 'QUANTITY'
-              },
+            credits: {
+              enabled: false
             },
             series: [{
-              name: 'TYPE OF ACTIVITY',
-              data: stats.map((stat) => ({name: stat.name, y: stat.value}))
+              name: 'Total minutes',
+              data: arrayMinutesVeryActive.map((stat) => ({name: stat.name, y: stat.value}))
             }]
           });
 
@@ -342,10 +394,13 @@ export class ProfileDataBehaviorComponent implements OnInit {
 
         const arrayData = [];
         let i;
-        for (i = 0; i < stats.length; i++) {
+        if (stats && stats.length > 0) {
 
-          arrayData.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
-
+          for (i = 0; i < stats.length; i++) {
+            if (stats[i].timestamp) {
+              arrayData.push(new Date(stats[i].timestamp).toDateString());
+            }
+          }
         }
 
         stats = stats.filter(function( obj ) {
@@ -417,7 +472,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
               enabled: false
             },
             series: [{
-              name: 'Steps',
+              name: 'Total steps',
               data: stats.map((stat) => ({name: 'Steps', y: stat.steps}))
             }]
           });
@@ -475,15 +530,16 @@ export class ProfileDataBehaviorComponent implements OnInit {
           return obj.name !== null;
         });
 
+        const arrayData = [];
 
-        const arrayData2 = [];
         let i;
         if (stats && stats.length > 0) {
 
-            for (i = 0; i < stats.length; i++) {
-
-              arrayData2.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
+          for (i = 0; i < stats.length; i++) {
+            if (stats[i].timestamp) {
+              arrayData.push(new Date(stats[i].timestamp).toDateString());
             }
+          }
         }
 
         this.chartsLoading = false;
@@ -507,13 +563,13 @@ export class ProfileDataBehaviorComponent implements OnInit {
               title: {
                 text: 'DATE'
               },
-              categories: arrayData2
+              categories: arrayData
             },
             credits: {
               enabled: false
             },
             series: [{
-              name: 'Calories',
+              name: 'kcal',
               data: stats.map((stat) => ({name: 'Calories', y: stat.activityCalories}))
             }]
           });
@@ -537,13 +593,14 @@ export class ProfileDataBehaviorComponent implements OnInit {
     return this.statsService.getActivityTypeDataFitbitLine(this.filter).then(
       (stats) => {
 
-        const arrayData2 = [];
+        const arrayData = [];
+        const date = new Date(this.filter.dateFrom);
         let i;
         if (stats && stats.length > 0) {
 
           for (i = 0; i < stats.length; i++) {
 
-            arrayData2.push(new Date(this.filter.dateFrom.setDate(this.filter.dateFrom.getDate() + 1)).toDateString());
+            arrayData.push(new Date(date.setDate(date.getDate() + 1)).toDateString());
           }
         }
 
@@ -604,7 +661,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
               text: 'ACTIVITIES'
             },
             subtitle: {
-              text: 'This graph shows the distribution of steps'
+              text: 'This graph shows the distribution of activity'
             },
             yAxis: {
               title: {
@@ -615,18 +672,18 @@ export class ProfileDataBehaviorComponent implements OnInit {
               title: {
                 text: 'DATE'
               },
-              categories: arrayData2
+              categories: arrayData
             },
             credits: {
               enabled: false
             },
             series: [{
               name: 'Very Active',
-              data: arrayMinutesVeryActive.map((stat) => ({name: 'Very Active', y: stat.value}))
+              data: arrayMinutesVeryActive.map((stat) => ({name: 'Minutes Very Active', y: stat.value}))
             },
             {
               name: 'Fairly',
-              data: arrayMinutesFairlyActive.map((stat) => ({name: 'Fairly', y: stat.value}))
+              data: arrayMinutesFairlyActive.map((stat) => ({name: 'Minutes Fairly', y: stat.value}))
             },
             {
               name: 'Minutes Sedentary',
@@ -656,6 +713,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
       (stats) => {
 
         const arrayData = [];
+
         let i;
         if (stats && stats.length > 0) {
 
@@ -664,7 +722,6 @@ export class ProfileDataBehaviorComponent implements OnInit {
               arrayData.push(new Date(stats[i].timestamp).toDateString());
             }
           }
-
         }
 
         this.chartsLoading = false;
@@ -694,7 +751,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
               enabled: false
             },
             series: [{
-              name: 'Steps',
+              name: 'Total steps',
               data: stats.map((stat) => ({name: 'Steps', y: stat.steps}))
             }]
           });
@@ -757,7 +814,7 @@ export class ProfileDataBehaviorComponent implements OnInit {
               enabled: false
             },
             series: [{
-              name: 'Calories',
+              name: 'Total kcal',
               data: stats.map((stat) => ({name: 'Calories', y: stat.activityCalories}))
             }]
           });
